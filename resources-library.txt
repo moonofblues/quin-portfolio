@@ -1,0 +1,6 @@
+tech stack:
+
+- react
+- vite
+- animations: motion.dev
+- css: tailwind css
