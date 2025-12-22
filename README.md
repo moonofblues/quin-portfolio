@@ -11,7 +11,6 @@ The site showcases my work as a front-end developer, UI/UX designer, and multime
 
 This portfolio is a central place to show what I do, my experience, and the projects I’ve worked on. It’s designed to be easy to navigate, responsive, and visually engaging, with a focus on user experience and clean design.
 
----
 
 ## Sections
 
