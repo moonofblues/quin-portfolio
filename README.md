@@ -4,7 +4,9 @@ This repository contains the source code for my personal portfolio website.
 
 The site showcases my work as a front-end developer, UI/UX designer, and multimedia creator. It’s built as a fast, modern single-page application with a focus on clean visuals, smooth interactions, and responsiveness.
 
+
 ---
+
 
 ## About
 
@@ -20,7 +22,9 @@ The project is continuously updated as I improve the design and add new work.
 - **Creative Work** – Visual and multimedia projects  
 - **Contact** – Ways to get in touch  
 
+
 ---
+
 
 ## Tech Stack
 
