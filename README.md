@@ -2,25 +2,24 @@
 
 This repository contains the source code for my personal portfolio website.
 
-The site showcases my work as a front-end developer, UI/UX designer, and multimedia creator. It’s built as a fast, modern single-page application with a focus on clean visuals, smooth interactions, and responsiveness.
-
+The site showcases my work as a front-end developer, UI/UX designer, and multimedia creator.
 
 ---
 
 
 ## About
 
-This portfolio serves as a central place to present selected projects, skills, and creative work. It’s designed to be simple and easy to navigate, while still highlighting attention to detail in layout, animation, and user experience.
+This portfolio is a central place to show what I do, my experience, and the projects I’ve worked on. It’s designed to be easy to navigate, responsive, and visually engaging, with a focus on user experience and clean design.
 
-The project is continuously updated as I improve the design and add new work.
+---
 
 ## Sections
 
-- **About** – Background and professional overview  
-- **Projects** – Selected development and design work  
-- **Skills** – Tools, technologies, and areas of focus  
-- **Creative Work** – Visual and multimedia projects  
-- **Contact** – Ways to get in touch  
+- **Featured Work** – Highlighting UI/UX and web development projects  
+- **Other Works** – Graphic design, video editing, and other creative projects  
+- **What I Do** – Services I offer as a developer and designer  
+- **About Me** – Background, work experience, and professional overview  
+- **What People Say** – Testimonials and feedback from clients or collaborators  
 
 
 ---
