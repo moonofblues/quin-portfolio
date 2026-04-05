@@ -54,7 +54,7 @@ export function Hero() {
       />
 
       {/* Content */}
-      <div className="container relative z-10 text-center flex flex-col items-center pt-24">
+      <div className="container relative z-10 text-center flex flex-col items-center pt-24 ">
         {/* Skills tags */}
         <motion.div
           className="flex flex-wrap justify-center max-w-2xl gap-2 mb-8"
@@ -127,7 +127,7 @@ export function Hero() {
       </div>
 
       {/* Project previews floating at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-64 pointer-events-none overflow-hidden">
+      <div className="absolute -bottom-10 left-0 right-0 h-64 pointer-events-none overflow-hidden">
         <motion.div
           className="absolute bottom-[-20%] left-[5%] w-[280px] md:w-[500px] rounded-xl overflow-hidden shadow-2xl"
           initial={{ opacity: 0, y: 100, rotate: -6 }}

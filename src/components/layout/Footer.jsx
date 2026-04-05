@@ -1,12 +1,11 @@
-import { motion } from "framer-motion";
-import { useTheme } from "../context/ThemeContext";
-import { cn } from "../utils/cn";
+import { Link } from "react-router-dom";
+import { useTheme } from "../../context/ThemeContext";
+import { cn } from "../../utils/cn";
 
 const footerLinks = [
-  { label: "Work", href: "#work" },
-  { label: "Services", href: "#services" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Work", href: "/work" },
+  { label: "About", href: "/#about" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export function Footer() {
@@ -20,10 +19,9 @@ export function Footer() {
         theme === "light" ? "border-[#e5e0d8]" : "border-[#1a2a3f]",
       )}
     >
-      <div className="container">
+      <div className="w-full max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Logo */}
-          <a href="#home" className="font-display text-xl">
+          <Link to="/" className="font-display text-xl">
             <span
               className={
                 theme === "light" ? "text-[#0a1628]" : "text-[#f5f0e8]"
@@ -39,14 +37,13 @@ export function Footer() {
               {" "}
               Ledesma
             </span>
-          </a>
+          </Link>
 
-          {/* Navigation */}
           <nav className="flex items-center gap-6">
             {footerLinks.map((link) => (
-              <a
+              <Link
                 key={link.href}
-                href={link.href}
+                to={link.href}
                 className={cn(
                   "text-sm transition-colors duration-200",
                   theme === "light"
@@ -55,11 +52,10 @@ export function Footer() {
                 )}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
-          {/* Copyright */}
           <p
             className={cn(
               "text-sm",

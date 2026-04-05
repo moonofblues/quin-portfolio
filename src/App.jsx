@@ -1,33 +1,24 @@
-import { ThemeProvider } from './context/ThemeContext';
-import { Navigation } from './components/Navigation';
-import { Hero } from './components/Hero';
-import { Introduction } from './components/Introduction';
-import { FeaturedWork } from './components/FeaturedWork';
-import { OtherWork } from './components/OtherWork';
-import { Services } from './components/Services';
-import { About } from './components/About';
-import { Testimonials } from './components/Testimonials';
-import { Contact } from './components/Contact';
-import { Footer } from './components/Footer';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "./context/ThemeContext";
+import { Layout } from "./components/layout/Layout";
+import { HomePage } from "./pages/HomePage";
+import { WorkPage } from "./pages/WorkPage";
+import { CaseStudyPage } from "./pages/CaseStudyPage";
 
 function App() {
   return (
-    <ThemeProvider>
-      <div className="relative min-h-screen overflow-hidden noise-overlay">
-        <Navigation />
-        <main>
-          <Hero />
-          <Introduction />
-          <FeaturedWork />
-          <OtherWork />
-          <Services />
-          <About />
-          <Testimonials />
-          <Contact />
-        </main>
-        <Footer />
-      </div>
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/work" element={<WorkPage />} />
+            <Route path="/work/category/:category" element={<WorkPage />} />
+            <Route path="/work/:slug" element={<CaseStudyPage />} />
+          </Routes>
+        </Layout>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 

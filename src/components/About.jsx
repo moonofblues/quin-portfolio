@@ -72,14 +72,14 @@ export function About() {
               <div
                 className={cn(
                   "aspect-square rounded-2xl overflow-hidden",
-                  theme === "light" ? "bg-[#e5e0d8]" : "bg-[#1a2a3f]"
+                  theme === "light" ? "bg-[#e5e0d8]" : "bg-[#1a2a3f]",
                 )}
               >
                 <div className="w-full h-full flex items-center justify-center">
                   <span
                     className={cn(
                       "font-display text-4xl",
-                      theme === "light" ? "text-[#b8954f]" : "text-[#c9a96e]"
+                      theme === "light" ? "text-[#b8954f]" : "text-[#c9a96e]",
                     )}
                   >
                     QL
@@ -93,7 +93,7 @@ export function About() {
               <div
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-full",
-                  theme === "light" ? "bg-[#e5e0d8]" : "bg-[#1a2a3f]"
+                  theme === "light" ? "bg-[#e5e0d8]" : "bg-[#1a2a3f]",
                 )}
               >
                 <MapPin
@@ -105,7 +105,7 @@ export function About() {
                 <span
                   className={cn(
                     "text-sm",
-                    theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]"
+                    theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]",
                   )}
                 >
                   Zamboanga City, PH
@@ -114,13 +114,13 @@ export function About() {
               <div
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-full",
-                  theme === "light" ? "bg-[#e5e0d8]" : "bg-[#1a2a3f]"
+                  theme === "light" ? "bg-[#e5e0d8]" : "bg-[#1a2a3f]",
                 )}
               >
                 <span
                   className={cn(
                     "text-sm",
-                    theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]"
+                    theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]",
                   )}
                 >
                   Open to Remote Work
@@ -141,7 +141,7 @@ export function About() {
               <p
                 className={cn(
                   "text-lg leading-relaxed mb-4",
-                  theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]"
+                  theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]",
                 )}
               >
                 I'm a designer who codes and a developer who designs. My journey
@@ -152,7 +152,7 @@ export function About() {
               <p
                 className={cn(
                   "text-lg leading-relaxed mb-4",
-                  theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]"
+                  theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]",
                 )}
               >
                 Working in healthcare tech has taught me that good design isn't
@@ -163,7 +163,7 @@ export function About() {
               <p
                 className={cn(
                   "text-lg leading-relaxed",
-                  theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]"
+                  theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]",
                 )}
               >
                 When I'm not designing or coding, you might find me teaching the
@@ -177,7 +177,7 @@ export function About() {
               <h4
                 className={cn(
                   "font-display text-sm uppercase tracking-wider mb-4",
-                  theme === "light" ? "text-[#718096]" : "text-[#6b7280]"
+                  theme === "light" ? "text-[#718096]" : "text-[#6b7280]",
                 )}
               >
                 Experience
@@ -188,7 +188,7 @@ export function About() {
                   key={index}
                   className={cn(
                     "flex gap-4 p-4 rounded-xl",
-                    theme === "light" ? "bg-[#f0ece4]" : "bg-[#111d2e]"
+                    theme === "light" ? "bg-[#f0ece4]" : "bg-[#111d2e]",
                   )}
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -198,7 +198,7 @@ export function About() {
                   <div
                     className={cn(
                       "w-10 h-10 rounded-lg flex items-center justify-center shrink-0",
-                      theme === "light" ? "bg-[#b8954f]/10" : "bg-[#c9a96e]/10"
+                      theme === "light" ? "bg-[#b8954f]/10" : "bg-[#c9a96e]/10",
                     )}
                   >
                     {item.type === "education" ? (
@@ -225,7 +225,7 @@ export function About() {
                     <p
                       className={cn(
                         "text-xs mb-1",
-                        theme === "light" ? "text-[#718096]" : "text-[#6b7280]"
+                        theme === "light" ? "text-[#718096]" : "text-[#6b7280]",
                       )}
                     >
                       {item.period}
@@ -233,7 +233,7 @@ export function About() {
                     <p
                       className={cn(
                         "font-medium",
-                        theme === "light" ? "text-[#0a1628]" : "text-[#f5f0e8]"
+                        theme === "light" ? "text-[#0a1628]" : "text-[#f5f0e8]",
                       )}
                     >
                       {item.role}
@@ -241,7 +241,7 @@ export function About() {
                     <p
                       className={cn(
                         "text-sm",
-                        theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]"
+                        theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]",
                       )}
                     >
                       {item.company}
