@@ -16,10 +16,15 @@ export function Introduction() {
           transition={{ duration: 0.6 }}
         >
           <motion.p className="text-xl md:text-2xl lg:text-3xl leading-relaxed text-text-secondary">
-            I started designing vectors in high school, then discovered I could{" "}
-            <span className="text-accent">build what I designed</span> when I
-            pursued Information Technology. Now I bridge both worlds — creating
-            interfaces that are as functional as they are intentional.
+            I began with visuals, but I stayed for the systems behind them. Now
+            I{" "}
+            <span className="text-accent">
+              {" "}
+              design with structure, build with intention, and test with a
+              critical eye
+            </span>{" "}
+            —bridging UI/UX, development, and QA to create products that hold up
+            beyond the mockups.
           </motion.p>
 
           <motion.div

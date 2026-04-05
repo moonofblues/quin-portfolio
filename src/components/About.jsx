@@ -6,7 +6,13 @@ import { cn } from "../utils/cn";
 
 const timeline = [
   {
-    period: "2025 – Present",
+    period: "Dec 2025 – Present",
+    role: "Information Systems Analyst II",
+    company: "Zamboanga City Medical Center",
+    type: "work",
+  },
+  {
+    period: "Aug 2025 – Nov 2025",
     role: "Computer Programmer II",
     company: "Zamboanga City Medical Center",
     type: "work",
