@@ -28,6 +28,7 @@ export function Hero() {
     <section
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      aria-label="hero section"
     >
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-radial" />
@@ -75,18 +76,30 @@ export function Hero() {
         </motion.div>
 
         {/* Headline */}
+        {/* Headline */}
         <motion.h1
-          className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-6xl leading-tight mb-6"
+          className="font-display text-3xl md:text-5xl lg:text-6xl xl:text-6xl leading-tight mb-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          {/*   */}
+          <span
+            className={theme === "light" ? "text-[#0a1628]" : "text-[#f5f0e8]"}
+          >
+            Designing Systems
+          </span>
+          <br />
+          <span
+            className={theme === "light" ? "text-[#0a1628]" : "text-[#f5f0e8]"}
+          >
+            That{" "}
+          </span>
+          <span className="text-gradient">Actually Work</span>
         </motion.h1>
 
         {/* Tagline */}
         <motion.p
-          className="text-lg md:text-xl max-w-2xl mx-auto mb-10 text-text-secondary"
+          className="text-md md:text-xl max-w-2xl mx-auto mb-10 text-text-secondary"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
@@ -127,7 +140,7 @@ export function Hero() {
       </div>
 
       {/* Project previews floating at bottom */}
-      <div className="absolute -bottom-10 left-0 right-0 h-64 pointer-events-none overflow-hidden">
+      <div className="absolute -bottom-40 left-0 right-0 h-64 pointer-events-none overflow-hidden">
         <motion.div
           className="absolute bottom-[-20%] left-[5%] w-[280px] md:w-[500px] rounded-xl overflow-hidden shadow-2xl"
           initial={{ opacity: 0, y: 100, rotate: -6 }}
