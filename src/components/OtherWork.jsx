@@ -4,6 +4,9 @@ import { SectionTitle } from "./ui/SectionTitle";
 // import { useTheme } from "../context/ThemeContext";
 import { cn } from "../utils/cn";
 import gdConverse from "../assets/other-work/gd-converse.png";
+import gdBirthday from "../assets/other-work/birthday.png";
+import gdITannouncement from "../assets/other-work/IT-announcement.png";
+import gdITnews from "../assets/other-work/IT-news.png";
 
 const categories = ["All", "Graphic Design", "Video", "Web Dev", "UI/UX"];
 
@@ -14,14 +17,14 @@ const otherProjects = [
     category: "Graphic Design",
     image: null,
   },
-  { id: 2, title: "Promotional Video", category: "Video", image: null },
-  { id: 3, title: "E-commerce Landing", category: "Web Dev", image: null },
+  { id: 2, title: "News", category: "Graphic Design", image: gdITnews },
+  { id: 3, title: "Birthday", category: "Graphic Design", image: gdBirthday },
   { id: 4, title: "Mobile App Prototype", category: "UI/UX", image: null },
   {
     id: 5,
-    title: "Event Poster Series",
+    title: "Announcement",
     category: "Graphic Design",
-    image: null,
+    image: gdITannouncement,
   },
   { id: 6, title: "Product Demo Video", category: "Video", image: null },
   { id: 7, title: "Dashboard Interface", category: "UI/UX", image: null },
@@ -63,7 +66,7 @@ export function OtherWork() {
                 "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:bg-accent-hover ",
                 activeFilter === category
                   ? "bg-accent text-text-primary text-lg"
-                  : "bg-bg-tertiary text-text-secondary "
+                  : "bg-bg-tertiary text-text-secondary ",
               )}
             >
               {category}

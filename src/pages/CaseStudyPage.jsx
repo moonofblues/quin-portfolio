@@ -71,7 +71,7 @@ export function CaseStudyPage() {
           <div className="flex items-start gap-4 mb-6">
             <Star size={36} className="mt-2 shrink-0" />
             <div>
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl mb-4">
+              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl mb-4 white text-text-primary">
                 {project.title}
               </h1>
               {project.subtitle && (

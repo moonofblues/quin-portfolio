@@ -41,7 +41,7 @@ export function WorkPage() {
 
           <div className="flex items-center gap-3 mb-4">
             <Star size={32} />
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl">
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl dark:text-white">
               {activeCategory === "all" ? "All Work" : currentCategory?.label}
             </h1>
           </div>
