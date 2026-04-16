@@ -4,6 +4,16 @@ import leonora from "../assets/leonora-02.png";
 import dusc from "../assets/dusc-website.png";
 import hospitalDashboard from "../assets/hospital-operations-dashboard.png";
 import hospitalErp from "../assets/hospital-erp.png";
+import gdConverse from "../assets/other-work/gd-converse.png";
+import gdBirthday from "../assets/other-work/birthday.png";
+import gdITannouncement from "../assets/other-work/IT-announcement.png";
+import gdITnews from "../assets/other-work/IT-news.png";
+// Get only showcase projects (for Other Works section)
+export function getOtherWorkProjects() {
+  return projects.filter(
+    (p) => p.category !== "ui-ux" && p.type === "showcase",
+  );
+}
 // All projects data
 export const projects = [
   // Featured Case Studies
@@ -117,160 +127,160 @@ export const projects = [
     id: "hospital-operations-dashboard",
     slug: "hospital-operations-dashboard",
     title: "Hospital Operations Dashboard",
-    subtitle: "Enterprise Resource Planning for Healthcare",
+    subtitle: "Unified Command Center for Healthcare Management",
     category: "ui-ux",
     type: "case-study",
     featured: true,
-    tags: ["UI/UX Design", "Design System", "Healthcare"],
+    tags: ["UI/UX Design", "Dashboard Design", "Healthcare", "Enterprise"],
     thumbnail: hospitalDashboard,
     description:
-      "Comprehensive enterprise resource planning system for hospital operations. Designed and developed UI workflows, process documentation, and reusable component library.",
+      "A centralized operations dashboard unifying 15+ hospital information systems into a single, intuitive interface. Designed to reduce cognitive load for healthcare administrators managing employee records, supply chain, finance, and clinical operations.",
     impact: "60% reduction in task completion time",
     year: "2023-2025",
     role: "UI/UX Designer & Front-End Developer",
     client: "Zamboanga City Medical Center",
     duration: "2 years",
     overview:
-      "The ZCMC ERP System is a comprehensive hospital information system designed to streamline administrative and clinical operations. As the lead UI/UX designer and front-end developer, I was responsible for creating intuitive interfaces that reduced cognitive load for healthcare workers.",
+      "ZCMC needed a unified command center to replace fragmented legacy systems scattered across multiple platforms. Healthcare administrators were juggling 15+ separate applications daily — from employee management to supply chain to financial reporting. I designed and developed a centralized dashboard that brings all critical hospital operations into one cohesive interface, enabling faster decision-making and reducing the learning curve for new staff.",
     challenge:
-      "Healthcare workers were spending excessive time navigating complex legacy systems, leading to inefficiencies and potential errors. The existing system lacked consistency, had poor information hierarchy, and required extensive training for new staff.",
+      "Hospital administrators were navigating between 15+ disconnected systems daily, each with different interfaces, login credentials, and workflows. This fragmentation caused delays in critical operations, increased error rates, and required extensive training for every new system. Staff working in PPE on shared desktop stations needed larger touch targets and clearer visual hierarchy.",
     process: [
       {
-        title: "Research & Discovery",
+        title: "User Research & Shadowing",
         description:
-          "Conducted user interviews with nurses, doctors, and administrative staff. Shadowed workflows to understand pain points and inefficiencies in the existing system.",
+          "Conducted contextual interviews with nurses, administrators, and department heads. Shadowed daily workflows to identify which systems were accessed most frequently and where bottlenecks occurred. Discovered that 80% of tasks involved just 5 core modules.",
       },
       {
         title: "Information Architecture",
         description:
-          "Restructured the navigation and information hierarchy based on task frequency and user mental models. Created user flows for critical processes like patient registration and inventory management.",
+          "Mapped all 15+ systems and reorganized them into logical clusters: Employee Management, Supply Chain & Inventory, Finance & Budgeting, and Clinical Operations. Prioritized placement based on usage frequency and task urgency.",
       },
       {
-        title: "Design System Creation",
+        title: "Visual Design System",
         description:
-          "Developed a comprehensive UI library with reusable components, ensuring consistency across all modules. Established design tokens for colors, typography, and spacing.",
+          "Created a dark-theme interface optimized for long work sessions and reducing eye strain. Developed a modular card-based layout with consistent iconography, color-coded categories, and clear typography hierarchy using the hospital's brand colors.",
       },
       {
-        title: "Prototyping & Testing",
+        title: "Prototyping & Validation",
         description:
-          "Created interactive prototypes and conducted usability testing with actual hospital staff. Iterated based on feedback to optimize task completion times.",
+          "Built interactive Figma prototypes and tested with actual hospital staff on their workstation monitors. Iterated on card sizes, button placement, and navigation patterns based on feedback from users wearing PPE gloves.",
       },
     ],
     solution:
-      "Delivered a cohesive design system with 50+ reusable components, streamlined workflows that reduced average task completion time by 60%, and comprehensive documentation for ongoing development.",
+      "Delivered a unified operations dashboard featuring a modular card-based interface, role-based access views, and one-click navigation to all hospital systems. The design includes a dark theme for reduced eye strain, large touch targets for PPE accessibility, and a consistent visual language across all modules.",
     results: [
-      { metric: "60%", label: "Reduction in task time" },
-      { metric: "50+", label: "UI components created" },
-      { metric: "15+", label: "Systems integrated" },
+      { metric: "60%", label: "Faster task completion" },
+      { metric: "15+", label: "Systems unified" },
+      { metric: "0", label: "No login required" },
     ],
     images: [],
-    tools: ["Figma", "React", "Tailwind CSS", "Documentation"],
+    tools: ["Figma", "React", "Tailwind CSS", "Shadcn UI"],
   },
   {
     id: "leonora-financial",
     slug: "leonora-financial",
-    title: "Leonora Financial Platform",
-    subtitle: "University Systems Integration",
+    title: "Leonora",
+    subtitle: "Personal Finance & Budget Management App",
     category: "ui-ux",
     type: "case-study",
     featured: true,
-    tags: ["UI/UX Design", "Prototyping", "Education"],
+    tags: ["UI/UX Design", "Fintech", "Mobile App", "Live Product"],
     thumbnail: leonora,
     description:
-      "Led UI/UX design and prototyping for the university's internal systems portal. Created intuitive interfaces for students, faculty, and administrative staff.",
-    impact: null,
-    year: "2023-2025",
-    role: "Lead UI/UX Designer",
-    client: "Ateneo de Zamboanga University",
-    duration: "2 years",
+      "A personal finance application helping users track expenses, manage budgets, and achieve financial goals. Some modules are now live and actively used by real users.",
+    impact: "Active users on live modules",
+    year: "2024",
+    role: "UI/UX Designer & Front-End Developer",
+    client: "Product Development",
+    duration: "6 months",
     overview:
-      "A unified portal bringing together multiple university systems including enrollment, grades, faculty tools, and administrative functions into a cohesive user experience.",
+      "Leonora is a fintech application that empowers users to take control of their finances. The app combines expense tracking, budget management, savings goals, and spending insights into a cohesive mobile-first experience. What started as a design concept has evolved into a live product with active users on core modules.",
     challenge:
-      "Students and faculty had to navigate multiple disconnected systems with inconsistent interfaces. This led to confusion, support tickets, and wasted time.",
+      "Most finance apps overwhelm users with complex charts and endless categorization. Users abandon budgeting tools because they feel like chores rather than helpful companions. The challenge was to design — and ship — an interface that makes financial management feel approachable while providing depth for power users.",
     process: [
       {
-        title: "Stakeholder Interviews",
+        title: "Competitive Analysis",
         description:
-          "Met with students, faculty, and administrators to understand their daily workflows and pain points with existing systems.",
+          "Analyzed leading fintech apps like Mint, YNAB, and Money Lover to identify UX patterns that work and pain points users commonly report — particularly around onboarding complexity and data overload.",
       },
       {
-        title: "System Mapping",
+        title: "User Flow Mapping",
         description:
-          "Documented all existing systems and identified opportunities for integration and workflow improvements.",
+          "Mapped core user journeys: logging expenses, checking budget status, setting savings goals, and reviewing spending insights. Prioritized reducing taps for the most frequent actions.",
       },
       {
-        title: "Prototyping",
+        title: "Visual Design System",
         description:
-          "Created high-fidelity prototypes for key user flows, testing with representative users from each group.",
+          "Developed a dark-theme interface with green accents to convey financial growth and stability. Created a modular component library for consistent implementation across all screens.",
       },
       {
-        title: "Design Handoff",
+        title: "Development & Launch",
         description:
-          "Delivered comprehensive design specifications and collaborated with developers throughout implementation.",
+          "Collaborated with developers to implement core modules. Conducted user testing with early adopters and iterated based on real usage patterns. Successfully launched initial modules to active users.",
       },
     ],
     solution:
-      "Created a unified design language and component library that could be applied across all university systems, with role-based dashboards for different user types.",
+      "Delivered a comprehensive finance app featuring an intuitive dashboard, quick-add expense logging, visual budget progress bars, savings goal tracking, and detailed spending breakdowns. Core modules are now live with real users providing ongoing feedback for iteration.",
     results: [
-      { metric: "10+", label: "Systems unified" },
-      { metric: "300+", label: "Bugs documented" },
-      { metric: "3", label: "User role types" },
+      { metric: "20+", label: "Screens designed" },
+      { metric: "Live", label: "Product status" },
+      { metric: "5", label: "Core modules shipped" },
     ],
     images: [],
-    tools: ["Figma", "Prototyping", "User Testing"],
+    tools: ["Figma", "React", "Tailwind CSS", "User Testing"],
   },
   {
     id: "dusc-landing",
     slug: "dusc-landing",
     title: "Desert United Soccer Club",
-    subtitle: "University Systems Integration",
+    subtitle: "Sports Club Website Redesign",
     category: "ui-ux",
     type: "case-study",
     featured: true,
-    tags: ["UI/UX Design", "Prototyping", "Education"],
+    tags: ["Web Design", "UI/UX Design", "Sports", "Landing Page"],
     thumbnail: dusc,
     description:
-      "Led UI/UX design and prototyping for the university's internal systems portal. Created intuitive interfaces for students, faculty, and administrative staff.",
+      "Designed and wireframed a modern, user-friendly website for Desert United Soccer Club to showcase their teams, events, programs, and achievements while improving user navigation and brand consistency.",
     impact: null,
-    year: "2023-2025",
-    role: "Lead UI/UX Designer",
-    client: "Ateneo de Zamboanga University",
-    duration: "2 years",
+    year: "2024",
+    role: "Web Designer & UI/UX Designer",
+    client: "Desert United Soccer Club",
+    duration: "1 month",
     overview:
-      "A unified portal bringing together multiple university systems including enrollment, grades, faculty tools, and administrative functions into a cohesive user experience.",
+      "Desert United Soccer Club needed a modern website that effectively communicates their club identity, showcases their teams and achievements, and makes it easy for parents and young athletes to learn about programs and sign up. The redesign focused on creating a clean, engaging interface that reflects the club's energetic brand.",
     challenge:
-      "Students and faculty had to navigate multiple disconnected systems with inconsistent interfaces. This led to confusion, support tickets, and wasted time.",
+      "The initial website lacked visual appeal, had poor information hierarchy, and didn't effectively showcase the club's achievements or programs. Navigation was confusing, and the branding felt inconsistent. The client also had concerns about payment processing, timeline flexibility, and ongoing collaboration.",
     process: [
       {
-        title: "Stakeholder Interviews",
+        title: "Understanding the Needs",
         description:
-          "Met with students, faculty, and administrators to understand their daily workflows and pain points with existing systems.",
+          "Held discussions with the client to clarify requirements, timeline, and brand preferences. Addressed concerns about payment structure, framework flexibility, and developer collaboration.",
       },
       {
-        title: "System Mapping",
+        title: "Design & Wireframing",
         description:
-          "Documented all existing systems and identified opportunities for integration and workflow improvements.",
+          "Created a structured wireframe to outline the site's architecture. Designed multiple pages beyond the initial scope including Teams, Events, Programs, and About — ensuring a cohesive experience.",
       },
       {
-        title: "Prototyping",
+        title: "Visual Design",
         description:
-          "Created high-fidelity prototypes for key user flows, testing with representative users from each group.",
+          "Developed a bold red and white color scheme matching the club's brand. Implemented modern UI principles for accessibility, responsiveness, and engagement with dynamic imagery of athletes in action.",
       },
       {
-        title: "Design Handoff",
+        title: "Client Collaboration",
         description:
-          "Delivered comprehensive design specifications and collaborated with developers throughout implementation.",
+          "Adapted when the client's situation changed, requiring them to find a developer independently. Maintained professionalism and rapport, ensuring potential future collaboration.",
       },
     ],
     solution:
-      "Created a unified design language and component library that could be applied across all university systems, with role-based dashboards for different user types.",
+      "Delivered a complete website redesign featuring a dynamic hero section, featured achievements showcase, team roster displays, upcoming events calendar, programs breakdown by skill level, and a compelling About section — all with consistent branding and improved navigation.",
     results: [
-      { metric: "10+", label: "Systems unified" },
-      { metric: "300+", label: "Bugs documented" },
-      { metric: "3", label: "User role types" },
+      { metric: "5+", label: "Pages designed" },
+      { metric: "100%", label: "Brand consistency" },
+      { metric: "2x", label: "Improved navigation" },
     ],
     images: [],
-    tools: ["Figma", "Prototyping", "User Testing"],
+    tools: ["Figma", "Wireframing", "UI Design"],
   },
   {
     id: "adzu-portal",
@@ -378,112 +388,6 @@ export const projects = [
     images: [],
     tools: ["Figma", "Storybook", "Documentation"],
   },
-  {
-    id: "leonora",
-    slug: "leonora-financial-platform",
-    title: "Leonora Financial Platform",
-    subtitle: "Personal Finance Empowerment",
-    category: "ui-ux",
-    type: "case-study",
-    featured: true,
-    tags: ["UI/UX Design", "Fintech", "Dashboard"],
-    thumbnail: null,
-    description:
-      "All-in-one financial empowerment platform featuring budgeting tools, savings tracking, and financial education. Complex dashboard UI with intuitive data visualization.",
-    impact: null,
-    year: "2024",
-    role: "UI/UX Designer",
-    client: "Personal Project",
-    duration: "3 months",
-    overview:
-      "Leonora is a concept fintech platform designed to help users take control of their finances through intuitive budgeting, savings goals, and financial literacy resources.",
-    challenge:
-      "Many existing finance apps are either too complex for beginners or too simple for users who want deeper insights. The goal was to create something that grows with the user.",
-    process: [
-      {
-        title: "Competitive Analysis",
-        description:
-          "Analyzed existing fintech apps to identify gaps and opportunities for differentiation.",
-      },
-      {
-        title: "User Personas",
-        description:
-          "Created personas representing different financial literacy levels and goals.",
-      },
-      {
-        title: "Dashboard Design",
-        description:
-          "Designed data visualizations that make complex financial information digestible and actionable.",
-      },
-      {
-        title: "Prototyping",
-        description:
-          "Built interactive prototypes to test the onboarding flow and key features.",
-      },
-    ],
-    solution:
-      "A comprehensive fintech UI featuring progressive disclosure, gamified savings goals, and educational content integrated seamlessly into the user journey.",
-    results: [
-      { metric: "15+", label: "Screens designed" },
-      { metric: "100%", label: "Responsive" },
-      { metric: "5", label: "Key features" },
-    ],
-    images: [],
-    tools: ["Figma", "Prototyping", "Data Visualization"],
-  },
-  {
-    id: "desert-united",
-    slug: "desert-united-soccer-club",
-    title: "Desert United Soccer Club",
-    subtitle: "Community Sports Website",
-    category: "web-dev",
-    type: "case-study",
-    featured: true,
-    tags: ["Web Design", "Branding", "Sports"],
-    thumbnail: null,
-    description:
-      "Website design for a youth soccer club featuring team showcases, event management, and program information. Modern, energetic design reflecting the club's community spirit.",
-    impact: null,
-    year: "2024",
-    role: "Web Designer",
-    client: "Desert United Soccer Club",
-    duration: "2 months",
-    overview:
-      "A vibrant, community-focused website for a youth soccer club that needed to showcase their teams, manage events, and attract new members.",
-    challenge:
-      "The club had no online presence and relied on word-of-mouth and physical flyers. They needed a professional website that could handle registrations and keep parents informed.",
-    process: [
-      {
-        title: "Brand Discovery",
-        description:
-          "Worked with club leadership to understand their values, target audience, and competitive positioning.",
-      },
-      {
-        title: "Visual Direction",
-        description:
-          "Developed an energetic, youthful visual language that appeals to both young athletes and their parents.",
-      },
-      {
-        title: "Information Architecture",
-        description:
-          "Organized content around key user needs: finding programs, registering, and staying updated.",
-      },
-      {
-        title: "Design Delivery",
-        description:
-          "Created responsive designs for all key pages with detailed specifications for development.",
-      },
-    ],
-    solution:
-      "A dynamic, mobile-first website design that captures the energy of youth sports while providing practical functionality for parents and administrators.",
-    results: [
-      { metric: "8", label: "Pages designed" },
-      { metric: "100%", label: "Mobile-first" },
-      { metric: "Modern", label: "Brand refresh" },
-    ],
-    images: [],
-    tools: ["Figma", "Web Design", "Branding"],
-  },
 
   // Other Works - Graphic Design
   {
@@ -494,11 +398,11 @@ export const projects = [
     type: "showcase",
     featured: false,
     tags: ["Branding", "Logo Design", "Identity"],
-    thumbnail: null,
+    thumbnail: gdConverse,
     description:
       "Complete brand identity system including logo, color palette, typography, and brand guidelines.",
     year: "2023",
-    images: [],
+    images: gdConverse,
   },
   {
     id: "event-posters",
@@ -508,11 +412,11 @@ export const projects = [
     type: "showcase",
     featured: false,
     tags: ["Print Design", "Posters", "Events"],
-    thumbnail: null,
+    thumbnail: gdBirthday,
     description:
       "A series of event posters designed for university and community events.",
     year: "2023",
-    images: [],
+    images: gdBirthday,
   },
   {
     id: "social-media-kit",
@@ -536,11 +440,25 @@ export const projects = [
     type: "showcase",
     featured: false,
     tags: ["Infographics", "Data Visualization", "Print"],
-    thumbnail: null,
+    thumbnail: gdITnews,
     description:
       "Educational and informational infographics for healthcare and academic contexts.",
     year: "2024",
-    images: [],
+    images: gdITnews,
+  },
+  {
+    id: "infographic-design",
+    slug: "infographic-design",
+    title: "Infographic Design",
+    category: "graphic-design",
+    type: "showcase",
+    featured: false,
+    tags: ["Infographics", "Data Visualization", "Print"],
+    thumbnail: gdITannouncement,
+    description:
+      "Educational and informational infographics for healthcare and academic contexts.",
+    year: "2024",
+    images: gdITannouncement,
   },
 
   // Other Works - Video

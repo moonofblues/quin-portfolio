@@ -3,38 +3,40 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SectionTitle } from "./ui/SectionTitle";
 // import { useTheme } from "../context/ThemeContext";
 import { cn } from "../utils/cn";
-import gdConverse from "../assets/other-work/gd-converse.png";
-import gdBirthday from "../assets/other-work/birthday.png";
-import gdITannouncement from "../assets/other-work/IT-announcement.png";
-import gdITnews from "../assets/other-work/IT-news.png";
+
+import { projects } from "../data/projects";
+import { getOtherWorkProjects } from "../data/projects";
+
+// Inside component:
+const otherWorkProjects = getOtherWorkProjects();
 
 const categories = ["All", "Graphic Design", "Video", "Web Dev", "UI/UX"];
 
-const otherProjects = [
-  {
-    id: 1,
-    title: "Brand Identity System",
-    category: "Graphic Design",
-    image: null,
-  },
-  { id: 2, title: "News", category: "Graphic Design", image: gdITnews },
-  { id: 3, title: "Birthday", category: "Graphic Design", image: gdBirthday },
-  { id: 4, title: "Mobile App Prototype", category: "UI/UX", image: null },
-  {
-    id: 5,
-    title: "Announcement",
-    category: "Graphic Design",
-    image: gdITannouncement,
-  },
-  { id: 6, title: "Product Demo Video", category: "Video", image: null },
-  { id: 7, title: "Dashboard Interface", category: "UI/UX", image: null },
-  {
-    id: 8,
-    title: "Social Media Kit",
-    category: "Graphic Design",
-    image: gdConverse,
-  },
-];
+// const otherProjects = [
+//   {
+//     id: 1,
+//     title: "Brand Identity System",
+//     category: "Graphic Design",
+//     image: null,
+//   },
+//   { id: 2, title: "News", category: "Graphic Design", image: gdITnews },
+//   { id: 3, title: "Birthday", category: "Graphic Design", image: gdBirthday },
+//   { id: 4, title: "Mobile App Prototype", category: "UI/UX", image: null },
+//   {
+//     id: 5,
+//     title: "Announcement",
+//     category: "Graphic Design",
+//     image: gdITannouncement,
+//   },
+//   { id: 6, title: "Product Demo Video", category: "Video", image: null },
+//   { id: 7, title: "Dashboard Interface", category: "UI/UX", image: null },
+//   {
+//     id: 8,
+//     title: "Social Media Kit",
+//     category: "Graphic Design",
+//     image: gdConverse,
+//   },
+// ];
 
 export function OtherWork() {
   // const { theme } = useTheme();
@@ -42,8 +44,8 @@ export function OtherWork() {
 
   const filteredProjects =
     activeFilter === "All"
-      ? otherProjects
-      : otherProjects.filter((p) => p.category === activeFilter);
+      ? otherWorkProjects
+      : otherWorkProjects.filter((p) => p.category === activeFilter);
 
   return (
     <section className="section relative">
@@ -90,9 +92,9 @@ export function OtherWork() {
                 transition={{ duration: 0.3 }}
                 className="group relative aspect-square rounded-xl overflow-hidden cursor-pointer card-hover bg-bg-tertiary"
               >
-                {project.image ? (
+                {project.thumbnail ? (
                   <img
-                    src={project.image}
+                    src={project.thumbnail}
                     alt={project.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-100"
                   />
