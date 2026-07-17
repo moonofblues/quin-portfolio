@@ -19,9 +19,7 @@ export function Navigation() {
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -31,12 +29,7 @@ export function Navigation() {
   }, [location]);
 
   const handleNavClick = (href) => {
-    if (href.startsWith("/#")) {
-      // If we're not on home page, navigate there first
-      if (location.pathname !== "/") {
-        return; // Link component will handle navigation
-      }
-      // Scroll to section
+    if (href.startsWith("/#") && location.pathname === "/") {
       const element = document.querySelector(href.replace("/", ""));
       element?.scrollIntoView({ behavior: "smooth" });
     }
@@ -48,32 +41,17 @@ export function Navigation() {
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
           scrolled ? "glass py-4" : "py-6",
-          theme === "light" && scrolled && "bg-white/80",
         )}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <div className="w-full max-w-7xl mx-auto px-6 flex items-center justify-between">
-          {/* Logo */}
           <Link to="/" className="font-display text-xl">
-            <span
-              className={
-                theme === "light" ? "text-[#0a1628]" : "text-[#f5f0e8]"
-              }
-            >
-              Q
-            </span>
-            <span
-              className={
-                theme === "light" ? "text-[#b8954f]" : "text-[#c9a96e]"
-              }
-            >
-              L
-            </span>
+            <span className="text-text-primary">Q</span>
+            <span className="text-accent">L</span>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
@@ -81,14 +59,11 @@ export function Navigation() {
                 to={link.href}
                 onClick={() => handleNavClick(link.href)}
                 className={cn(
-                  "text-sm font-medium transition-colors duration-200",
-                  theme === "light"
-                    ? "text-[#4a5568] hover:text-[#b8954f]"
-                    : "text-[#a8a39c] hover:text-[#c9a96e]",
+                  "text-sm font-medium transition-colors duration-200 text-text-secondary hover:text-accent",
                   (location.pathname === link.href ||
                     (link.href === "/work" &&
                       location.pathname.startsWith("/work"))) &&
-                    (theme === "light" ? "text-[#b8954f]" : "text-[#c9a96e]"),
+                    "text-accent",
                 )}
               >
                 {link.label}
@@ -96,16 +71,10 @@ export function Navigation() {
             ))}
           </div>
 
-          {/* Actions */}
           <div className="flex items-center gap-4">
             <motion.button
               onClick={toggleTheme}
-              className={cn(
-                "p-2 rounded-full transition-colors duration-200",
-                theme === "light"
-                  ? "hover:bg-[#e5e0d8] text-[#4a5568]"
-                  : "hover:bg-[#1a2a3f] text-[#a8a39c]",
-              )}
+              className="p-2 rounded-full text-text-secondary hover:bg-bg-tertiary transition-colors duration-200"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               aria-label="Toggle theme"
@@ -115,15 +84,11 @@ export function Navigation() {
 
             <motion.button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={cn(
-                "md:hidden p-2 rounded-full transition-colors duration-200",
-                theme === "light"
-                  ? "hover:bg-[#e5e0d8] text-[#4a5568]"
-                  : "hover:bg-[#1a2a3f] text-[#a8a39c]",
-              )}
+              className="md:hidden p-2 rounded-full text-text-secondary hover:bg-bg-tertiary transition-colors duration-200"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               aria-label="Toggle menu"
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </motion.button>
@@ -131,14 +96,10 @@ export function Navigation() {
         </div>
       </motion.nav>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            className={cn(
-              "fixed inset-0 z-40 pt-20 md:hidden",
-              theme === "light" ? "bg-[#faf8f5]" : "bg-[#0a1628]",
-            )}
+            className="fixed inset-0 z-40 pt-20 md:hidden bg-bg-primary"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -154,12 +115,7 @@ export function Navigation() {
                 >
                   <Link
                     to={link.href}
-                    className={cn(
-                      "text-2xl font-display",
-                      theme === "light"
-                        ? "text-[#0a1628] hover:text-[#b8954f]"
-                        : "text-[#f5f0e8] hover:text-[#c9a96e]",
-                    )}
+                    className="text-2xl font-display text-text-primary hover:text-accent transition-colors duration-200"
                   >
                     {link.label}
                   </Link>

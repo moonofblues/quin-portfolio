@@ -21,6 +21,8 @@
   --color-bg-secondary: #111d2e;
   --color-bg-tertiary: #1a2a3f;
   --color-bg-elevated: #0f1f33;
+  --color-bg-card: #111d2e;
+  --color-bg-hover: #243347;
 
   --color-text-primary: #f5f0e8;
   --color-text-secondary: #a8a39c;
@@ -28,6 +30,11 @@
 
   --color-accent: #c9a96e;
   --color-accent-hover: #dfc07a;
+  --color-accent-muted: #9a7d4a;
+  --color-accent-subtle: rgba(201, 169, 110, 0.15);
+
+  --color-border: rgba(201, 169, 110, 0.15);
+  --color-border-hover: rgba(201, 169, 110, 0.3);
 }
 
 @theme {
@@ -40,6 +47,10 @@
   --color-text-primary: #0a1628;
   --color-text-secondary: #4a5568;
   --color-text-muted: #718096;
+
+  --color-bg-card: #ffffff;
+  --color-bg-hover: #d5d0c8;
+  --color-on-accent: #0a1628;
 
   --color-accent: #b8954f;
   --color-accent-hover: #a07f3a;
@@ -124,7 +135,7 @@ body {
 }
 
 /* Light Mode */
-body.light {
+html.light {
   background-color: var(--color-light-bg-primary);
   /* color: var(--color-light-text-primary); */
 }
@@ -157,7 +168,7 @@ body.light {
   background: var(--color-accent);
 }
 
-body.light::-webkit-scrollbar-track {
+html.light::-webkit-scrollbar-track {
   background: var(--color-light-bg-secondary);
 }
 
@@ -191,7 +202,7 @@ body.light::-webkit-scrollbar-track {
   );
 }
 
-body.light .bg-gradient-radial {
+html.light .bg-gradient-radial {
   background: radial-gradient(
     ellipse at top,
     var(--color-light-bg-secondary) 0%,
@@ -331,8 +342,17 @@ img {
   -webkit-backdrop-filter: blur(12px);
 }
 
-body.light .glass {
+html.light .glass {
   background: rgba(255, 255, 255, 0.8);
+}
+
+/* Card Shadow (theme-aware) */
+.shadow-card {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.dark .shadow-card {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
 /* Noise Texture Overlay */

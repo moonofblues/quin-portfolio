@@ -1,8 +1,6 @@
 import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
 import { SectionTitle } from "./ui/SectionTitle";
-import { useTheme } from "../context/ThemeContext";
-import { cn } from "../utils/cn";
 
 const testimonials = [
   {
@@ -29,8 +27,6 @@ const testimonials = [
 ];
 
 export function Testimonials() {
-  const { theme } = useTheme();
-
   return (
     <section className="section relative overflow-hidden">
       <div className="container">
@@ -40,63 +36,21 @@ export function Testimonials() {
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={testimonial.id}
-              className={cn(
-                "relative p-6 md:p-8 rounded-2xl",
-                theme === "light"
-                  ? "bg-[#ffffff] border border-[#e5e0d8]"
-                  : "bg-[#111d2e] border border-[#1a2a3f]"
-              )}
+              className="relative p-6 md:p-8 rounded-2xl bg-bg-card border border-bg-tertiary border-l-4 border-l-accent shadow-card"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
-              style={{
-                borderLeft: `4px solid ${
-                  theme === "light" ? "#b8954f" : "#c9a96e"
-                }`,
-                boxShadow:
-                  theme === "light"
-                    ? "0 4px 24px rgba(0, 0, 0, 0.06)"
-                    : "0 4px 24px rgba(0, 0, 0, 0.2)",
-              }}
             >
-              {/* Quote icon */}
-              <Quote
-                size={32}
-                className={cn(
-                  "mb-4 opacity-20",
-                  theme === "light" ? "text-[#b8954f]" : "text-[#c9a96e]"
-                )}
-              />
+              <Quote size={32} className="mb-4 opacity-20 text-accent" />
 
-              {/* Quote text */}
-              <p
-                className={cn(
-                  "text-base leading-relaxed mb-6",
-                  theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]"
-                )}
-              >
+              <p className="text-base leading-relaxed mb-6 text-text-secondary">
                 "{testimonial.quote}"
               </p>
 
-              {/* Attribution */}
               <div>
-                <p
-                  className={cn(
-                    "font-medium",
-                    theme === "light" ? "text-[#0a1628]" : "text-[#f5f0e8]"
-                  )}
-                >
-                  {testimonial.name}
-                </p>
-                <p
-                  className={cn(
-                    "text-sm",
-                    theme === "light" ? "text-[#718096]" : "text-[#6b7280]"
-                  )}
-                >
-                  {testimonial.role}
-                </p>
+                <p className="font-medium text-text-primary">{testimonial.name}</p>
+                <p className="text-sm text-text-muted">{testimonial.role}</p>
               </div>
             </motion.div>
           ))}

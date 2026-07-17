@@ -2,132 +2,67 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Tag } from "./ui/Tag";
-import { useTheme } from "../context/ThemeContext";
 import { cn } from "../utils/cn";
 
 export function ProjectCard({ project, index = 0 }) {
-  const { theme } = useTheme();
-
   return (
     <motion.article
-      className={cn(
-        "group relative rounded-2xl overflow-hidden",
-        "transition-all duration-300 hover:-translate-y-1",
-        // theme === "light"
-        //   ? "bg-[#ffffff] border border-[#e5e0d8]"
-        //   : "bg-[#111d2e] border border-[#1a2a3f]",
-      )}
+      className="group relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-card"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      style={{
-        boxShadow:
-          theme === "light"
-            ? "0 4px 24px rgba(0, 0, 0, 0.06)"
-            : "0 4px 24px rgba(0, 0, 0, 0.2)",
-      }}
     >
       <Link to={`/work/${project.slug}`}>
-        {/* Project Image */}
         <div className="relative aspect-[16/9] overflow-hidden">
-          <div
-            className={cn(
-              "absolute inset-0 transition-transform duration-500 group-hover:scale-105",
-            )}
-          >
+          <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-105">
             {project.thumbnail ? (
               <img
                 src={project.thumbnail}
                 alt={project.title}
                 className="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <span
-                  className={cn(
-                    "font-display text-2xl",
-                    theme === "light" ? "text-[#a8a39c]" : "text-[#4a5568]",
-                  )}
-                >
+              <div className="w-full h-full bg-bg-tertiary flex items-center justify-center">
+                <span className="font-display text-2xl text-text-muted">
                   {project.title}
                 </span>
               </div>
             )}
           </div>
 
-          {/* Overlay on hover */}
-          <div
-            className={cn(
-              "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300",
-              "flex items-center justify-center",
-              theme === "light" ? "bg-[#0a1628]/60" : "bg-[#0a1628]/80",
-            )}
-          >
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center bg-bg-primary/80">
             <motion.div
-              className="flex items-center gap-2 px-6 py-3 rounded-full font-medium bg-[#c9a96e] text-[#0a1628]"
+              className="flex items-center gap-2 px-6 py-3 rounded-full font-medium bg-accent text-on-accent"
               whileHover={{ scale: 1.05 }}
             >
-              {project.type === "case-study"
-                ? "View Case Study"
-                : "View Project"}
+              {project.type === "case-study" ? "View Case Study" : "View Project"}
               <ArrowUpRight size={18} />
             </motion.div>
           </div>
         </div>
 
-        {/* Project Info */}
-        <div className="p-6">
-          {/* Tags */}
+        <div className="p-6 bg-bg-secondary">
           <div className="flex flex-wrap gap-2 mb-4">
             {project.tags?.slice(0, 3).map((tag) => (
               <Tag key={tag}>{tag}</Tag>
             ))}
           </div>
 
-          {/* Title */}
-          <h3
-            className={cn(
-              "font-display text-xl md:text-2xl mb-3",
-              theme === "light" ? "text-[#0a1628]" : "text-[#f5f0e8]",
-            )}
-          >
+          <h3 className="font-display text-xl md:text-2xl mb-3 text-text-primary">
             {project.title}
           </h3>
 
-          {/* Description */}
-          <p
-            className={cn(
-              "text-base leading-relaxed line-clamp-2",
-              theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]",
-            )}
-          >
+          <p className="text-base leading-relaxed line-clamp-2 text-text-secondary">
             {project.description}
           </p>
 
-          {/* Impact metric */}
           {project.impact && (
-            <div
-              className={cn(
-                "mt-4 pt-4 border-t",
-                theme === "light" ? "border-[#e5e0d8]" : "border-[#1a2a3f]",
-              )}
-            >
-              <span
-                className={cn(
-                  "text-sm",
-                  theme === "light" ? "text-[#718096]" : "text-[#6b7280]",
-                )}
-              >
-                Impact:{" "}
-              </span>
-              <span
-                className={
-                  theme === "light" ? "text-[#b8954f]" : "text-[#c9a96e]"
-                }
-              >
-                {project.impact}
-              </span>
+            <div className="mt-4 pt-4 border-t border-bg-tertiary">
+              <span className="text-sm text-text-muted">Impact: </span>
+              <span className="text-accent">{project.impact}</span>
             </div>
           )}
         </div>

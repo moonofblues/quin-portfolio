@@ -1,5 +1,3 @@
-import { ThemeProvider } from "../context/ThemeContext";
-
 import { Hero } from "../components/Hero";
 import { Introduction } from "../components/Introduction";
 import { FeaturedWork } from "../components/FeaturedWork";
@@ -11,19 +9,17 @@ import { Contact } from "../components/Contact";
 
 export function HomePage() {
   return (
-    <ThemeProvider>
-      <div className="relative min-h-screen overflow-hidden noise-overlay">
-        <main>
-          <Hero />
-          <Introduction />
-          <FeaturedWork />
-          <OtherWork />
-          <Services />
-          <About />
-          <Testimonials />
-          <Contact />
-        </main>
-      </div>
-    </ThemeProvider>
+    <div className="relative min-h-screen overflow-hidden noise-overlay">
+      <main>
+        <Hero />
+        <Introduction />
+        <FeaturedWork />
+        <OtherWork />
+        <Services />
+        <About />
+        <Testimonials />
+        <Contact />
+      </main>
+    </div>
   );
 }

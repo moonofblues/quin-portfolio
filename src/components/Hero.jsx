@@ -4,13 +4,9 @@ import { Button } from "./ui/Button";
 import { Tag } from "./ui/Tag";
 import { Moon } from "./decorative/Moon";
 import { Star } from "./decorative/Stars";
-import { useTheme } from "../context/ThemeContext";
-// import { cn } from "../utils/cn";
-import zcmcWebsiteLight from "../assets/zcmc-website-hero-light.png";
-import zcmcWebsiteDark from "../assets/zcmc-website-hero-dark.png";
-import duscWebsite from "../assets/dusc-website.png";
-import adzuPortal from "../assets/adzu-portal-home.png";
-import erpDashboard from "../assets/erp-dashboard.png";
+import zcmcWebsiteDark from "../assets/zcmc-website-hero-dark.webp";
+import adzuPortal from "../assets/adzu-portal-home.webp";
+import erpDashboard from "../assets/erp-dashboard.webp";
 
 const skills = [
   "UI/UX Design",
@@ -22,41 +18,20 @@ const skills = [
 ];
 
 export function Hero() {
-  const { theme } = useTheme();
-
   return (
     <section
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
       aria-label="hero section"
     >
-      {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-radial" />
 
-      {/* Decorative elements */}
-      <Moon
-        className="absolute top-22 sm:top-48 left-8 md:left-16 lg:left-24 z-0"
-        size={250}
-      />
-      <Star
-        className="absolute top-32 right-12 md:right-24"
-        size={28}
-        delay={0}
-      />
-      <Star
-        className="absolute top-48 right-8 md:right-16"
-        size={16}
-        delay={0.5}
-      />
-      <Star
-        className="absolute bottom-32 left-16 md:left-32"
-        size={20}
-        delay={1}
-      />
+      <Moon className="absolute top-22 sm:top-48 left-8 md:left-16 lg:left-24 z-0" size={250} />
+      <Star className="absolute top-32 right-12 md:right-24" size={28} delay={0} />
+      <Star className="absolute top-48 right-8 md:right-16" size={16} delay={0.5} />
+      <Star className="absolute bottom-32 left-16 md:left-32" size={20} delay={1} />
 
-      {/* Content */}
-      <div className="container relative z-10 text-center flex flex-col items-center pt-24 ">
-        {/* Skills tags */}
+      <div className="container relative z-10 text-center flex flex-col items-center pt-24">
         <motion.div
           className="flex flex-wrap justify-center max-w-2xl gap-2 mb-8"
           initial={{ opacity: 0, y: 20 }}
@@ -75,29 +50,17 @@ export function Hero() {
           ))}
         </motion.div>
 
-        {/* Headline */}
-        {/* Headline */}
         <motion.h1
-          className="font-display text-3xl md:text-5xl lg:text-6xl xl:text-6xl leading-tight mb-6"
+          className="font-display text-3xl md:text-5xl lg:text-6xl xl:text-6xl leading-tight mb-6 text-text-primary"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <span
-            className={theme === "light" ? "text-[#0a1628]" : "text-[#f5f0e8]"}
-          >
-            Designing Systems
-          </span>
+          Designing Systems
           <br />
-          <span
-            className={theme === "light" ? "text-[#0a1628]" : "text-[#f5f0e8]"}
-          >
-            That{" "}
-          </span>
-          <span className="text-gradient">Actually Work</span>
+          That <span className="text-gradient">Actually Work</span>
         </motion.h1>
 
-        {/* Tagline */}
         <motion.p
           className="text-md md:text-xl max-w-2xl mx-auto mb-10 text-text-secondary"
           initial={{ opacity: 0, y: 20 }}
@@ -108,7 +71,6 @@ export function Hero() {
           interfaces that are as functional as they are beautiful.
         </motion.p>
 
-        {/* CTAs */}
         <motion.div
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
           initial={{ opacity: 0, y: 20 }}
@@ -123,7 +85,6 @@ export function Hero() {
           </Button>
         </motion.div>
 
-        {/* Scroll indicator */}
         <motion.div
           className="absolute top-105 lg:top-120 left-1/2 -translate-x-1/2"
           initial={{ opacity: 0 }}
@@ -139,29 +100,21 @@ export function Hero() {
         </motion.div>
       </div>
 
-      {/* Project previews floating at bottom */}
       <div className="absolute -bottom-40 left-0 right-0 h-64 pointer-events-none overflow-hidden">
         <motion.div
           className="absolute bottom-[-20%] left-[5%] w-[280px] md:w-[500px] rounded-xl overflow-hidden shadow-2xl"
           initial={{ opacity: 0, y: 100, rotate: -6 }}
           animate={{ opacity: 0.9, y: 0, rotate: -6 }}
           transition={{ duration: 0.8, delay: 1 }}
-          style={{
-            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.4)",
-          }}
+          style={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.4)" }}
         >
           <div className="aspect-video">
-            <img src={adzuPortal} alt="ZCMC Website Landing Page Screenshot" />
-            {/* <div className="w-full h-full flex items-center justify-center">
-              <span
-                className={cn(
-                  "font-display text-sm",
-                  theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]"
-                )}
-              >
-                ZCMC ERP
-              </span>
-            </div> */}
+            <img
+              src={adzuPortal}
+              alt="AdZU Institutional Portal Screenshot"
+              fetchpriority="low"
+              loading="lazy"
+            />
           </div>
         </motion.div>
 
@@ -170,14 +123,13 @@ export function Hero() {
           initial={{ opacity: 0, y: 100, rotate: 0 }}
           animate={{ opacity: 1, y: 0, rotate: 0 }}
           transition={{ duration: 0.8, delay: 1.1 }}
-          style={{
-            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
-          }}
+          style={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)" }}
         >
           <div className="aspect-video">
             <img
               src={zcmcWebsiteDark}
-              alt="ZCMC Website Landing Page Screenshot"
+              alt="ZCMC Website Redesign Screenshot"
+              fetchpriority="high"
             />
           </div>
         </motion.div>
@@ -187,25 +139,15 @@ export function Hero() {
           initial={{ opacity: 0, y: 100, rotate: 6 }}
           animate={{ opacity: 0.9, y: 0, rotate: 6 }}
           transition={{ duration: 0.8, delay: 1.2 }}
-          style={{
-            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.4)",
-          }}
+          style={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.4)" }}
         >
           <div className="aspect-video">
             <img
               src={erpDashboard}
-              alt="ZCMC Website Landing Page Screenshot"
+              alt="Hospital ERP Dashboard Screenshot"
+              fetchpriority="low"
+              loading="lazy"
             />
-            {/* <div className="w-full h-full flex items-center justify-center">
-              <span
-                className={cn(
-                  "font-display text-sm",
-                  theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]"
-                )}
-              >
-                AdZU Portal
-              </span>
-            </div> */}
           </div>
         </motion.div>
       </div>

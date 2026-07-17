@@ -1,10 +1,6 @@
 import { motion } from "framer-motion";
-import { useTheme } from "../context/ThemeContext";
-import { cn } from "../utils/cn";
 
 export function Introduction() {
-  const { theme } = useTheme();
-
   return (
     <section className="section relative">
       <div className="container">
@@ -28,10 +24,6 @@ export function Introduction() {
           </motion.p>
 
           <motion.div
-            // className={cn(
-            //   "mt-8 pt-8 border-t",
-            //   theme === "light" ? "border-[#e5e0d8]" : "border-[#1a2a3f]"
-            // )}
             className="mt-8 pt-8 border-t border-bg-tertiary"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}

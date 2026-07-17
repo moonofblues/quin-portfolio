@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
@@ -6,11 +6,9 @@ import { ProjectCard } from "../components/ProjectCard";
 import { Star } from "../components/decorative/Stars";
 import { Button } from "../components/ui/Button";
 import { projects, categories, getProjectsByCategory } from "../data/projects";
-import { useTheme } from "../context/ThemeContext";
 import { cn } from "../utils/cn";
 
 export function WorkPage() {
-  const { theme } = useTheme();
   const { category } = useParams();
   const navigate = useNavigate();
 
@@ -25,7 +23,6 @@ export function WorkPage() {
   return (
     <div className="min-h-screen pt-24 pb-20">
       <div className="w-full max-w-7xl mx-auto px-6">
-        {/* Header */}
         <motion.div
           className="mb-12"
           initial={{ opacity: 0, y: 20 }}
@@ -46,18 +43,12 @@ export function WorkPage() {
             </h1>
           </div>
 
-          <p
-            className={cn(
-              "text-lg max-w-2xl",
-              theme === "light" ? "text-[#4a5568]" : "text-[#a8a39c]",
-            )}
-          >
+          <p className="text-lg max-w-2xl text-text-secondary">
             {currentCategory?.description ||
               "Browse all my projects across different disciplines"}
           </p>
         </motion.div>
 
-        {/* Category filters */}
         <motion.div
           className="flex flex-wrap gap-2 mb-10"
           initial={{ opacity: 0, y: 20 }}
@@ -68,19 +59,13 @@ export function WorkPage() {
             <button
               key={cat.id}
               onClick={() =>
-                navigate(
-                  cat.id === "all" ? "/work" : `/work/category/${cat.id}`,
-                )
+                navigate(cat.id === "all" ? "/work" : `/work/category/${cat.id}`)
               }
               className={cn(
                 "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
                 activeCategory === cat.id
-                  ? theme === "light"
-                    ? "bg-[#b8954f] text-[#faf8f5]"
-                    : "bg-[#c9a96e] text-[#0a1628]"
-                  : theme === "light"
-                    ? "bg-[#e5e0d8] text-[#4a5568] hover:bg-[#d5d0c8]"
-                    : "bg-[#1a2a3f] text-[#a8a39c] hover:bg-[#243347]",
+                  ? "bg-accent text-on-accent"
+                  : "bg-bg-tertiary text-text-secondary hover:bg-bg-hover",
               )}
             >
               {cat.label}
@@ -95,7 +80,6 @@ export function WorkPage() {
           ))}
         </motion.div>
 
-        {/* Projects grid */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           layout
@@ -113,12 +97,7 @@ export function WorkPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <p
-              className={cn(
-                "text-lg",
-                theme === "light" ? "text-[#718096]" : "text-[#6b7280]",
-              )}
-            >
+            <p className="text-lg text-text-muted">
               No projects found in this category.
             </p>
           </motion.div>

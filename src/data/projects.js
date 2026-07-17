@@ -1,13 +1,13 @@
-import zcmcWebsiteDark from "../assets/zcmc-website-hero-dark.png";
-import adzuPortalDark from "../assets/adzu-portal.png";
-import leonora from "../assets/leonora-02.png";
-import dusc from "../assets/dusc-website.png";
-import hospitalDashboard from "../assets/hospital-operations-dashboard.png";
-import hospitalErp from "../assets/hospital-erp.png";
-import gdConverse from "../assets/other-work/gd-converse.png";
-import gdBirthday from "../assets/other-work/birthday.png";
-import gdITannouncement from "../assets/other-work/IT-announcement.png";
-import gdITnews from "../assets/other-work/IT-news.png";
+import zcmcWebsiteDark from "../assets/zcmc-website-hero-dark.webp";
+import adzuPortalDark from "../assets/adzu-portal.webp";
+import leonora from "../assets/leonora-02.webp";
+import dusc from "../assets/dusc-website.webp";
+import hospitalDashboard from "../assets/hospital-operations-dashboard.webp";
+import hospitalErp from "../assets/hospital-erp.webp";
+import gdConverse from "../assets/other-work/gd-converse.webp";
+import gdBirthday from "../assets/other-work/birthday.webp";
+import gdITannouncement from "../assets/other-work/IT-announcement.webp";
+import gdITnews from "../assets/other-work/IT-news.webp";
 // Get only showcase projects (for Other Works section)
 export function getOtherWorkProjects() {
   return projects.filter(
@@ -447,8 +447,8 @@ export const projects = [
     images: gdITnews,
   },
   {
-    id: "infographic-design",
-    slug: "infographic-design",
+    id: "infographic-design-2",
+    slug: "infographic-design-announcement",
     title: "Infographic Design",
     category: "graphic-design",
     type: "showcase",

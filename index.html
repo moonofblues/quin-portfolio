@@ -2,13 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="./src/assets/logos/qv-logo.png"
-    />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quin Ledesma | Portfolio</title>
+    <title>Quin Ledesma | UI/UX Designer & Front-End Developer</title>
+    <meta name="description" content="Portfolio of Quin Ledesma — UI/UX Designer and Front-End Developer based in Zamboanga City, Philippines. Designing systems that actually work." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Quin Ledesma | UI/UX Designer & Front-End Developer" />
+    <meta property="og:description" content="Portfolio of Quin Ledesma — UI/UX Designer and Front-End Developer based in Zamboanga City, Philippines. Designing systems that actually work." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Quin Ledesma | UI/UX Designer & Front-End Developer" />
+    <meta name="twitter:description" content="Portfolio of Quin Ledesma — UI/UX Designer and Front-End Developer based in Zamboanga City, Philippines." />
+    <script>
+      (function() {
+        var saved = localStorage.getItem('theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = saved || (prefersDark ? 'dark' : 'light');
+        document.documentElement.className = theme;
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
