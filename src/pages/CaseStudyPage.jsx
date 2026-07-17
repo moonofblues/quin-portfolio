@@ -1,6 +1,13 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Calendar, User, Clock } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Calendar,
+  User,
+  Clock,
+  ExternalLink,
+} from "lucide-react";
 import { Tag } from "../components/ui/Tag";
 import { Button } from "../components/ui/Button";
 import { Star } from "../components/decorative/Stars";
@@ -23,7 +30,9 @@ export function CaseStudyPage() {
     return (
       <div className="min-h-screen pt-24 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="font-display text-2xl mb-4 text-text-primary">Project not found</h1>
+          <h1 className="font-display text-2xl mb-4 text-text-primary">
+            Project not found
+          </h1>
           <Link to="/work">
             <Button>Back to Work</Button>
           </Link>
@@ -40,7 +49,9 @@ export function CaseStudyPage() {
       <meta name="description" content={project.description} />
       <meta property="og:title" content={`${project.title} — Quin Ledesma`} />
       <meta property="og:description" content={project.description} />
-      {project.thumbnail && <meta property="og:image" content={project.thumbnail} />}
+      {project.thumbnail && (
+        <meta property="og:image" content={project.thumbnail} />
+      )}
 
       {/* Hero Section */}
       <section className="w-full max-w-7xl mx-auto px-6 mb-16">
@@ -80,22 +91,57 @@ export function CaseStudyPage() {
             {project.client && (
               <div className="flex items-center gap-2">
                 <User size={18} className="text-accent" />
-                <span className="text-sm text-text-secondary">{project.client}</span>
+                <span className="text-sm text-text-secondary">
+                  {project.client}
+                </span>
               </div>
             )}
             {project.year && (
               <div className="flex items-center gap-2">
                 <Calendar size={18} className="text-accent" />
-                <span className="text-sm text-text-secondary">{project.year}</span>
+                <span className="text-sm text-text-secondary">
+                  {project.year}
+                </span>
               </div>
             )}
             {project.duration && (
               <div className="flex items-center gap-2">
                 <Clock size={18} className="text-accent" />
-                <span className="text-sm text-text-secondary">{project.duration}</span>
+                <span className="text-sm text-text-secondary">
+                  {project.duration}
+                </span>
               </div>
             )}
           </div>
+
+          {(project.liveUrl || project.behanceUrl) && (
+            <div className="flex flex-wrap gap-3 mb-10">
+              {project.liveUrl && (
+                <Button
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="primary"
+                  size="small"
+                >
+                  Visit Live Site
+                  <ExternalLink size={16} />
+                </Button>
+              )}
+              {project.behanceUrl && (
+                <Button
+                  href={project.behanceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="secondary"
+                  size="small"
+                >
+                  View Full UI showcase on Behance
+                  <ExternalLink size={16} />
+                </Button>
+              )}
+            </div>
+          )}
 
           <div className="aspect-video rounded-2xl overflow-hidden mb-10 bg-bg-tertiary">
             {project.thumbnail ? (
@@ -127,7 +173,9 @@ export function CaseStudyPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                <h2 className="font-display text-2xl mb-6 text-text-primary">Overview</h2>
+                <h2 className="font-display text-2xl mb-6 text-text-primary">
+                  Overview
+                </h2>
                 <p className="text-lg leading-relaxed text-text-secondary">
                   {project.overview}
                 </p>
@@ -148,7 +196,9 @@ export function CaseStudyPage() {
                   <h3 className="font-display text-sm uppercase tracking-wider mb-3 text-text-muted">
                     My Role
                   </h3>
-                  <p className="font-medium text-text-primary">{project.role}</p>
+                  <p className="font-medium text-text-primary">
+                    {project.role}
+                  </p>
                 </div>
               )}
               {project.tools && (
@@ -179,7 +229,9 @@ export function CaseStudyPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                <h2 className="font-display text-2xl mb-6 text-text-primary">The Challenge</h2>
+                <h2 className="font-display text-2xl mb-6 text-text-primary">
+                  The Challenge
+                </h2>
                 <p className="text-lg leading-relaxed text-text-secondary">
                   {project.challenge}
                 </p>
@@ -195,7 +247,9 @@ export function CaseStudyPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                <h2 className="font-display text-2xl mb-8 text-text-primary">The Process</h2>
+                <h2 className="font-display text-2xl mb-8 text-text-primary">
+                  The Process
+                </h2>
                 <div className="space-y-8">
                   {project.process.map((step, index) => (
                     <motion.div
@@ -232,7 +286,9 @@ export function CaseStudyPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                <h2 className="font-display text-2xl mb-6 text-text-primary">The Solution</h2>
+                <h2 className="font-display text-2xl mb-6 text-text-primary">
+                  The Solution
+                </h2>
                 <p className="text-lg leading-relaxed text-text-secondary">
                   {project.solution}
                 </p>
@@ -248,7 +304,9 @@ export function CaseStudyPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                <h2 className="font-display text-2xl mb-8 text-text-primary">Results</h2>
+                <h2 className="font-display text-2xl mb-8 text-text-primary">
+                  Results
+                </h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                   {project.results.map((result, index) => (
                     <motion.div
@@ -262,7 +320,9 @@ export function CaseStudyPage() {
                       <div className="font-display text-3xl md:text-4xl mb-2 text-accent">
                         {result.metric}
                       </div>
-                      <div className="text-sm text-text-secondary">{result.label}</div>
+                      <div className="text-sm text-text-secondary">
+                        {result.label}
+                      </div>
                     </motion.div>
                   ))}
                 </div>
@@ -304,7 +364,9 @@ export function CaseStudyPage() {
                 />
                 <span className="text-sm">Previous</span>
               </Button>
-              <p className="font-display mt-1 text-text-primary">{prev.title}</p>
+              <p className="font-display mt-1 text-text-primary">
+                {prev.title}
+              </p>
             </Link>
           ) : (
             <div />
@@ -319,7 +381,9 @@ export function CaseStudyPage() {
                   className="transition-transform group-hover:translate-x-1"
                 />
               </Button>
-              <p className="font-display mt-1 text-text-primary">{next.title}</p>
+              <p className="font-display mt-1 text-text-primary">
+                {next.title}
+              </p>
             </Link>
           ) : (
             <div />

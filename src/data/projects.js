@@ -53,20 +53,20 @@ export const projects = [
           "I evaluated the legacy UI and conducted heuristic evaluations to identify bottlenecks. I discovered that the deeply nested multi-step forms were the root cause of both the engineering team's technical struggles and the end-users' cognitive overload.",
       },
       {
-        title: "Information Architecture",
+        title: "Information Architecture & Restructuring",
         description:
-          "Restructured the navigation and information hierarchy based on task frequency and user mental models. Created user flows for critical processes like patient registration and inventory management.",
+          "I structurally separated the administrative 'Master Item Library' from the 'End-User Requests' to prevent security risks and declutter the workspace. I then redesigned the heavy PPMP scheduling interface, replacing tedious circular inputs with familiar, bulk-editable data tables.",
       },
       {
-        title: "Design System Creation",
+        title: "Dynamic Logic & Validation",
         description:
-          "Developed a comprehensive UI library with reusable components, ensuring consistency across all modules. Established design tokens for colors, typography, and spacing.",
+          "To simplify the UI without losing data integrity, I implemented conditional rendering logic in the AOP modals (hiding irrelevant fields until needed). Finally, I established strict global UX standards for real-time system feedback, ensuring users received immediate success/error modals after every transaction.s",
       },
-      {
-        title: "Prototyping & Testing",
-        description:
-          "Created interactive prototypes and conducted usability testing with actual hospital staff. Iterated based on feedback to optimize task completion times.",
-      },
+      // {
+      //   title: "Prototyping & Testing",
+      //   description:
+      //     "Created interactive prototypes and conducted usability testing with actual hospital staff. Iterated based on feedback to optimize task completion times.",
+      // },
     ],
     solution:
       "Delivered a cohesive design system with 50+ reusable components, streamlined workflows that reduced average task completion time by 60%, and comprehensive documentation for ongoing development.",
@@ -139,6 +139,7 @@ export const projects = [
     category: "ui-ux",
     type: "case-study",
     featured: true,
+
     tags: ["UI/UX Design", "Dashboard Design", "Healthcare", "Enterprise"],
     thumbnail: hospitalDashboard,
     description:
@@ -149,33 +150,33 @@ export const projects = [
     client: "Zamboanga City Medical Center",
     duration: "2 years",
     overview:
-      "ZCMC needed a unified command center to replace fragmented legacy systems scattered across multiple platforms. Healthcare administrators were juggling 15+ separate applications daily — from employee management to supply chain to financial reporting. I designed and developed a centralized dashboard that brings all critical hospital operations into one cohesive interface, enabling faster decision-making and reducing the learning curve for new staff.",
+      "This project showcases the design of a centralized operations dashboard unifying fragmented clinical, financial, and logistical data into a single, real-time command center. Built as an overarching enterprise web system, the platform transforms complex institutional metrics into an intuitive, highly scannable interface. By harmonizing these disparate data streams, the dashboard empowers hospital leadership to continuously monitor critical operational health and make swift, data-driven decisions without suffering from reporting fatigue.",
     challenge:
       "Hospital administrators were navigating between 15+ disconnected systems daily, each with different interfaces, login credentials, and workflows. This fragmentation caused delays in critical operations, increased error rates, and required extensive training for every new system. Staff working in PPE on shared desktop stations needed larger touch targets and clearer visual hierarchy.",
     process: [
       {
-        title: "User Research & Shadowing",
+        title: "Adaptive UX Research",
         description:
-          "Conducted contextual interviews with nurses, administrators, and department heads. Shadowed daily workflows to identify which systems were accessed most frequently and where bottlenecks occurred. Discovered that 80% of tasks involved just 5 core modules.",
+          "Conducted a rigorous deconstruction of the stakeholder-provided executive requirements list. Mapped raw clinical, financial, and logistical metrics to core operational goals to determine exactly which data points were critical for high-level daily hospital management.",
       },
       {
         title: "Information Architecture",
         description:
-          "Mapped all 15+ systems and reorganized them into logical clusters: Employee Management, Supply Chain & Inventory, Finance & Budgeting, and Clinical Operations. Prioritized placement based on usage frequency and task urgency.",
+          "Translated the synthesized data categories into modular wireframes. Reorganized disjointed departmental databases into four logical, highly scannable clusters: Clinical Operations, Claims, Logistics, and Finance—prioritizing spatial memory and visual hierarchy.",
       },
       {
         title: "Visual Design System",
         description:
-          "Created a dark-theme interface optimized for long work sessions and reducing eye strain. Developed a modular card-based layout with consistent iconography, color-coded categories, and clear typography hierarchy using the hospital's brand colors.",
+          "Developed a high-density interface optimized for clinical precision and legibility from a distance. Created a modular card-based layout featuring semantic color-coding (Critical, Low, Normal) and progressive percentage bars to communicate operational health without requiring mental math.",
       },
       {
         title: "Prototyping & Validation",
         description:
-          "Built interactive Figma prototypes and tested with actual hospital staff on their workstation monitors. Iterated on card sizes, button placement, and navigation patterns based on feedback from users wearing PPE gloves.",
+          "Presented structural prototypes to executive leadership, which revealed a critical dual-device viewing constraint. Pivoted the UI architecture to seamlessly bridge interactive desktop analysis with a strict 'no-scroll' layout optimized for native Smart TV browsers and remote control navigation.",
       },
     ],
     solution:
-      "Delivered a unified operations dashboard featuring a modular card-based interface, role-based access views, and one-click navigation to all hospital systems. The design includes a dark theme for reduced eye strain, large touch targets for PPE accessibility, and a consistent visual language across all modules.",
+      "A unified, single-screen dashboard that utilizes progressive disclosure to eliminate the traditional sidebar, maximizing horizontal real estate. By introducing a flexible chart/table data toggle and high-contrast semantic status tracking, the design allows executives to instantly spot supply emergencies and operational trends from across the room without ever touching a mouse.",
     results: [
       { metric: "60%", label: "Faster task completion" },
       { metric: "15+", label: "Systems unified" },
@@ -183,6 +184,9 @@ export const projects = [
     ],
     images: [],
     tools: ["Figma", "React", "Tailwind CSS", "Shadcn UI"],
+    liveUrl: "https://dashboard.zcmc.online/",
+    behanceUrl:
+      "https://www.behance.net/gallery/247033883/Hospital-Operations-Dashboard-UIUX-Case-Study",
   },
   {
     id: "leonora-financial",
@@ -219,12 +223,12 @@ export const projects = [
       {
         title: "Visual Design System",
         description:
-          "Developed a dark-theme interface with green accents to convey financial growth and stability. Created a modular component library for consistent implementation across all screens.",
+          "Developed a dark-theme interface with yellow and red accents to convey financial importance to growth and stability. Created a modular component library for consistent implementation across all screens.",
       },
       {
         title: "Development & Launch",
         description:
-          "Collaborated with developers to implement core modules. Conducted user testing with early adopters and iterated based on real usage patterns. Successfully launched initial modules to active users.",
+          "Collaborated with developer to implement core modules. Conducted user testing with early adopters and iterated based on real usage patterns. Successfully launched initial modules to active users.",
       },
     ],
     solution:
@@ -236,6 +240,8 @@ export const projects = [
     ],
     images: [],
     tools: ["Figma", "React", "Tailwind CSS", "User Testing"],
+    behanceUrl:
+      "https://www.behance.net/gallery/217538059/Leonora-Web-Design-(UIUX)-Financial-App",
   },
   {
     id: "dusc-landing",
@@ -289,6 +295,8 @@ export const projects = [
     ],
     images: [],
     tools: ["Figma", "Wireframing", "UI Design"],
+    behanceUrl:
+      "https://www.behance.net/gallery/220704165/Soccer-Club-Web-Design-(UIUX-Design)",
   },
   {
     id: "adzu-portal",
@@ -342,6 +350,8 @@ export const projects = [
     ],
     images: [],
     tools: ["Figma", "Prototyping", "User Testing"],
+    behanceUrl:
+      "https://www.behance.net/gallery/212850521/Modern-UIUX-Redesign-for-University-Portals",
   },
   {
     id: "zcmc-ui-library",

@@ -26,10 +26,25 @@ export function Hero() {
     >
       <div className="absolute inset-0 bg-gradient-radial" />
 
-      <Moon className="absolute top-22 sm:top-48 left-8 md:left-16 lg:left-24 z-0" size={250} />
-      <Star className="absolute top-32 right-12 md:right-24" size={28} delay={0} />
-      <Star className="absolute top-48 right-8 md:right-16" size={16} delay={0.5} />
-      <Star className="absolute bottom-32 left-16 md:left-32" size={20} delay={1} />
+      <Moon
+        className="absolute top-22 sm:top-48 left-8 md:left-16 lg:left-24 z-0"
+        size={250}
+      />
+      <Star
+        className="absolute top-32 right-12 md:right-24"
+        size={28}
+        delay={0}
+      />
+      <Star
+        className="absolute top-48 right-8 md:right-16"
+        size={16}
+        delay={0.5}
+      />
+      <Star
+        className="absolute bottom-32 left-16 md:left-32"
+        size={20}
+        delay={1}
+      />
 
       <div className="container relative z-10 text-center flex flex-col items-center pt-24">
         <motion.div
@@ -69,9 +84,9 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          Designing Systems
+          Designing Systems and Visuals That
           <br />
-          That <span className="text-gradient">Actually Work</span>
+          <span className="text-gradient">Actually Work</span>
         </motion.h1>
 
         <motion.p
