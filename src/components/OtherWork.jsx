@@ -4,46 +4,29 @@ import { SectionTitle } from "./ui/SectionTitle";
 // import { useTheme } from "../context/ThemeContext";
 import { cn } from "../utils/cn";
 
-import { projects } from "../data/projects";
 import { getOtherWorkProjects } from "../data/projects";
 
 // Inside component:
 const otherWorkProjects = getOtherWorkProjects();
 
-const categories = ["All", "Graphic Design", "Video", "Web Dev", "UI/UX"];
-
-// const otherProjects = [
-//   {
-//     id: 1,
-//     title: "Brand Identity System",
-//     category: "Graphic Design",
-//     image: null,
-//   },
-//   { id: 2, title: "News", category: "Graphic Design", image: gdITnews },
-//   { id: 3, title: "Birthday", category: "Graphic Design", image: gdBirthday },
-//   { id: 4, title: "Mobile App Prototype", category: "UI/UX", image: null },
-//   {
-//     id: 5,
-//     title: "Announcement",
-//     category: "Graphic Design",
-//     image: gdITannouncement,
-//   },
-//   { id: 6, title: "Product Demo Video", category: "Video", image: null },
-//   { id: 7, title: "Dashboard Interface", category: "UI/UX", image: null },
-//   {
-//     id: 8,
-//     title: "Social Media Kit",
-//     category: "Graphic Design",
-//     image: gdConverse,
-//   },
-// ];
+// Only offer tabs for categories that actually have showcase work
+const categories = [
+  { id: "all", label: "All" },
+  { id: "graphic-design", label: "Graphic Design" },
+  { id: "video", label: "Video" },
+  { id: "web-dev", label: "Web Dev" },
+  { id: "ui-ux", label: "UI/UX" },
+].filter(
+  (c) =>
+    c.id === "all" || otherWorkProjects.some((p) => p.category === c.id),
+);
 
 export function OtherWork() {
   // const { theme } = useTheme();
-  const [activeFilter, setActiveFilter] = useState("All");
+  const [activeFilter, setActiveFilter] = useState("all");
 
   const filteredProjects =
-    activeFilter === "All"
+    activeFilter === "all"
       ? otherWorkProjects
       : otherWorkProjects.filter((p) => p.category === activeFilter);
 
@@ -62,16 +45,16 @@ export function OtherWork() {
         >
           {categories.map((category) => (
             <button
-              key={category}
-              onClick={() => setActiveFilter(category)}
+              key={category.id}
+              onClick={() => setActiveFilter(category.id)}
               className={cn(
                 "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:bg-accent-hover ",
-                activeFilter === category
+                activeFilter === category.id
                   ? "bg-accent text-text-primary text-lg"
                   : "bg-bg-tertiary text-text-secondary ",
               )}
             >
-              {category}
+              {category.label}
             </button>
           ))}
         </motion.div>

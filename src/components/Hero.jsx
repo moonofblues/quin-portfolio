@@ -33,6 +33,19 @@ export function Hero() {
 
       <div className="container relative z-10 text-center flex flex-col items-center pt-24">
         <motion.div
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs md:text-sm bg-bg-tertiary text-text-secondary mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <span className="relative flex h-2 w-2" aria-hidden="true">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+          </span>
+          Portfolio in progress — more of my works are still being added
+        </motion.div>
+
+        <motion.div
           className="flex flex-wrap justify-center max-w-2xl gap-2 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

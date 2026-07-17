@@ -8,11 +8,19 @@ import gdConverse from "../assets/other-work/gd-converse.webp";
 import gdBirthday from "../assets/other-work/birthday.webp";
 import gdITannouncement from "../assets/other-work/IT-announcement.webp";
 import gdITnews from "../assets/other-work/IT-news.webp";
+import gdImissUnification from "../assets/other-work/imiss-unification.webp";
+import zcmcUmisFeature from "../assets/other-work/zcmc-post-1.webp";
+import zcmcFhir from "../assets/other-work/zcmc-post-2.webp";
+import zcmcCongrats from "../assets/other-work/zcmc-post-3.webp";
+import zcmcHygiene from "../assets/other-work/zcmc-post-4.webp";
+import zcmcImissLaunch from "../assets/other-work/zcmc-post-5.webp";
+import ffbbLaunch from "../assets/other-work/ffbb-post-1.webp";
+import ffbbGraduation from "../assets/other-work/ffbb-post-2.webp";
+import ffbbCorentaso from "../assets/other-work/ffbb-post-3.webp";
+import ffbbDecember from "../assets/other-work/ffbb-post-4.webp";
 // Get only showcase projects (for Other Works section)
 export function getOtherWorkProjects() {
-  return projects.filter(
-    (p) => p.category !== "ui-ux" && p.type === "showcase",
-  );
+  return projects.filter((p) => p.type === "showcase");
 }
 // All projects data
 export const projects = [
@@ -20,7 +28,7 @@ export const projects = [
   {
     id: "zcmc-erp",
     slug: "zcmc-erp-system",
-    title: "ZCMC ERP System",
+    title: "Planning and Procurement System",
     subtitle: "Enterprise Resource Planning for Healthcare",
     category: "ui-ux",
     type: "case-study",
@@ -35,14 +43,14 @@ export const projects = [
     client: "Zamboanga City Medical Center",
     duration: "2 years",
     overview:
-      "The ZCMC ERP System is a comprehensive hospital information system designed to streamline administrative and clinical operations. As the lead UI/UX designer and front-end developer, I was responsible for creating intuitive interfaces that reduced cognitive load for healthcare workers.",
+      "The Planning and Procurement System is a comprehensive enterprise application designed to digitize, strictly regulate, and streamline the financial and procurement workflows of a major medical center. By transforming manual Annual Operational Plans (AOP) and Project Procurement Management Plans (PPMP) into a centralized digital pipeline, the system ensures hospital resources are properly planned, budgeted, and dispersed while maintaining absolute compliance and auditability.",
     challenge:
-      "Healthcare workers were spending excessive time navigating complex legacy systems, leading to inefficiencies and potential errors. The existing system lacked consistency, had poor information hierarchy, and required extensive training for new staff.",
+      "Healthcare procurement involves highly complex, regulation-heavy processes. The primary challenge was converting massive amounts of strict financial data, multi-level approval routing, and inventory tracking into an interface that was intuitive for users of varying technical proficiencies. <br>Beyond the user experience, there was a major technical roadblock. The initial UI drafted by a previous designer relied on deeply nested, multi-step wizard forms to handle the massive amount of required fields. This approach proved incredibly difficult for the engineering team to actually build. Front-end developers struggled with the complex state management required to carry strict financial data and dynamic logic across so many disjointed screens without causing data leaks or performance drops. The system needed a complete structural overhaul to make it both technically feasible for the devs to build, and easy for the end-users to navigate.",
     process: [
       {
-        title: "Research & Discovery",
+        title: "Systems Audit & Analysis",
         description:
-          "Conducted user interviews with nurses, doctors, and administrative staff. Shadowed workflows to understand pain points and inefficiencies in the existing system.",
+          "I evaluated the legacy UI and conducted heuristic evaluations to identify bottlenecks. I discovered that the deeply nested multi-step forms were the root cause of both the engineering team's technical struggles and the end-users' cognitive overload.",
       },
       {
         title: "Information Architecture",
@@ -391,165 +399,176 @@ export const projects = [
 
   // Other Works - Graphic Design
   {
-    id: "brand-identity-1",
-    slug: "brand-identity-system",
-    title: "Brand Identity System",
+    id: "converse-poster",
+    slug: "converse-concept-poster",
+    title: "Converse All Star Concept Poster",
     category: "graphic-design",
     type: "showcase",
     featured: false,
-    tags: ["Branding", "Logo Design", "Identity"],
+    tags: ["Poster Design", "Advertising", "Print"],
     thumbnail: gdConverse,
     description:
-      "Complete brand identity system including logo, color palette, typography, and brand guidelines.",
+      "Concept advertising poster for the Converse Chuck 70, blending archival product photography with torn-paper collage. Presented as a flat print layout and a sidewalk A-frame mockup — a personal piece published under my design handle, qvsions.",
     year: "2023",
     images: gdConverse,
   },
   {
-    id: "event-posters",
-    slug: "event-poster-series",
-    title: "Event Poster Series",
+    id: "imiss-birthday-greetings",
+    slug: "imiss-birthday-greetings",
+    title: "IMISS Birthday Greetings",
     category: "graphic-design",
     type: "showcase",
     featured: false,
-    tags: ["Print Design", "Posters", "Events"],
+    tags: ["Social Media", "Digital Design", "Events"],
     thumbnail: gdBirthday,
     description:
-      "A series of event posters designed for university and community events.",
-    year: "2023",
+      "Monthly birthday greeting graphic for Zamboanga City Medical Center's IMISS section, designed around a Philippine calendar motif with celebratory confetti and balloons for the section's official Facebook page.",
+    year: "2026",
     images: gdBirthday,
   },
   {
-    id: "social-media-kit",
-    slug: "social-media-kit",
-    title: "Social Media Kit",
+    id: "imiss-launch-campaign",
+    slug: "imiss-launch-campaign",
+    title: "IMISS Launch Campaign",
     category: "graphic-design",
     type: "showcase",
     featured: false,
-    tags: ["Social Media", "Digital Design", "Templates"],
-    thumbnail: null,
+    tags: ["Social Media", "Campaign", "Branding"],
+    thumbnail: zcmcImissLaunch,
     description:
-      "Comprehensive social media template kit for consistent brand presence across platforms.",
+      "Four-slide launch carousel introducing ZCMC's new Integrated Management Information System Section (IMISS) — announcing the merger of the IISU and IHOMP units, the services under one roof, and how staff can reach the section.",
     year: "2024",
-    images: [],
+    images: [zcmcImissLaunch, gdITannouncement, gdImissUnification],
   },
   {
-    id: "infographic-design",
-    slug: "infographic-design",
-    title: "Infographic Design",
+    id: "imiss-it-news",
+    slug: "imiss-it-news-series",
+    title: "IT News Series",
     category: "graphic-design",
     type: "showcase",
     featured: false,
-    tags: ["Infographics", "Data Visualization", "Print"],
+    tags: ["Social Media", "Infographics", "Editorial"],
     thumbnail: gdITnews,
     description:
-      "Educational and informational infographics for healthcare and academic contexts.",
+      "Social media news card series covering technology topics for ZCMC's IMISS section — this issue highlights a report on AI-driven cyber attacks outpacing traditional enterprise defenses.",
     year: "2024",
     images: gdITnews,
   },
   {
-    id: "infographic-design-2",
-    slug: "infographic-design-announcement",
-    title: "Infographic Design",
+    id: "zcmc-umis-feature",
+    slug: "umis-feature-highlights",
+    title: "UMIS Feature Highlights",
     category: "graphic-design",
     type: "showcase",
     featured: false,
-    tags: ["Infographics", "Data Visualization", "Print"],
-    thumbnail: gdITannouncement,
+    tags: ["Social Media", "Carousel", "Tech"],
+    thumbnail: zcmcUmisFeature,
     description:
-      "Educational and informational infographics for healthcare and academic contexts.",
-    year: "2024",
-    images: gdITannouncement,
+      "System-feature carousel for ZCMC's User Management Information System (UMIS), walking hospital staff through tracking their DTR and flag ceremony attendance online — from daily logs to exporting full attendance history.",
+    year: "2026",
+    images: zcmcUmisFeature,
+  },
+  {
+    id: "zcmc-fhir-2026",
+    slug: "fhir-2026-connectathon",
+    title: "FHIR 2026 Connectathon Highlights",
+    category: "graphic-design",
+    type: "showcase",
+    featured: false,
+    tags: ["Social Media", "Event Coverage", "Photo Layout"],
+    thumbnail: zcmcFhir,
+    description:
+      "Event highlights carousel for ZCMC IMISS at the FHIR 2026 Connectathon in Boracay, combining event photography with branded layouts to showcase the team's interoperable referral system.",
+    year: "2026",
+    images: zcmcFhir,
+  },
+  {
+    id: "zcmc-cse-congrats",
+    slug: "civil-service-congratulations",
+    title: "Civil Service Congratulations Post",
+    category: "graphic-design",
+    type: "showcase",
+    featured: false,
+    tags: ["Social Media", "Recognition", "Photo Manipulation"],
+    thumbnail: zcmcCongrats,
+    description:
+      "Gamified 'achievement unlocked' congratulations graphic celebrating an IMISS team member passing the Civil Service Examination, styled as a system-update HUD with cut-out portrait treatment.",
+    year: "2026",
+    images: zcmcCongrats,
+  },
+  {
+    id: "zcmc-tech-tip-hygiene",
+    slug: "social-media-hygiene-tech-tip",
+    title: "Social Media Hygiene Tech Tip",
+    category: "graphic-design",
+    type: "showcase",
+    featured: false,
+    tags: ["Social Media", "Infographics", "Cybersecurity"],
+    thumbnail: zcmcHygiene,
+    description:
+      "Cybersecurity awareness carousel for ZCMC's IMISS Tech Tip series — a practical checklist on account security at work, from spotting suspicious messages to enabling multi-factor authentication.",
+    year: "2026",
+    images: zcmcHygiene,
+  },
+  {
+    id: "ffbb-launch-giveaway",
+    slug: "fuzzy-fleur-launch-giveaway",
+    title: "Fuzzy Fleur Launch & Giveaway",
+    category: "graphic-design",
+    type: "showcase",
+    featured: false,
+    tags: ["Social Media", "Branding", "Small Business"],
+    thumbnail: ffbbLaunch,
+    description:
+      "'Blooming Soon' teaser and in-store giveaway announcement for Fuzzy Fleur by Bia, an artisan crochet flower and gift shop — elegant serif typography over a soft floral illustration system.",
+    year: "2026",
+    images: ffbbLaunch,
+  },
+  {
+    id: "ffbb-graduation",
+    slug: "fuzzy-fleur-graduation-campaign",
+    title: "Fuzzy Fleur Graduation Campaign",
+    category: "graphic-design",
+    type: "showcase",
+    featured: false,
+    tags: ["Social Media", "Campaign", "Product Photography"],
+    thumbnail: ffbbGraduation,
+    description:
+      "'Celebrate Graduation' campaign for Fuzzy Fleur by Bia's Class of 2026 collection, pairing envelope-motif layouts with product photography of handmade crochet bouquets and graduation flower pins.",
+    year: "2026",
+    images: ffbbGraduation,
+  },
+  {
+    id: "ffbb-corentaso",
+    slug: "fuzzy-fleur-corentaso-popup",
+    title: "Corentaso Pop-up Booth Poster",
+    category: "graphic-design",
+    type: "showcase",
+    featured: false,
+    tags: ["Social Media", "Poster Design", "Illustration"],
+    thumbnail: ffbbCorentaso,
+    description:
+      "Illustrated announcement poster for Fuzzy Fleur by Bia's pop-up booth at Ateneo de Zamboanga University's Corentaso fair, building a festive campus-market scene with string lights and event mascots.",
+    year: "2026",
+    images: ffbbCorentaso,
+  },
+  {
+    id: "ffbb-december-events",
+    slug: "fuzzy-fleur-december-events",
+    title: "December Pop-ups & Events",
+    category: "graphic-design",
+    type: "showcase",
+    featured: false,
+    tags: ["Social Media", "Layout Design", "Events"],
+    thumbnail: ffbbDecember,
+    description:
+      "Holiday schedule graphic for Fuzzy Fleur by Bia's December pop-ups, organizing school events and mall dates across Zamboanga into a festive envelope-invitation layout.",
+    year: "2025",
+    images: ffbbDecember,
   },
 
-  // Other Works - Video
-  {
-    id: "promo-video-1",
-    slug: "promotional-video",
-    title: "Promotional Video",
-    category: "video",
-    type: "showcase",
-    featured: false,
-    tags: ["Video Editing", "Motion Graphics", "Promotional"],
-    thumbnail: null,
-    description:
-      "Promotional video content for institutional and commercial purposes.",
-    year: "2023",
-    videoUrl: null,
-    images: [],
-  },
-  {
-    id: "product-demo",
-    slug: "product-demo-video",
-    title: "Product Demo Video",
-    category: "video",
-    type: "showcase",
-    featured: false,
-    tags: ["Video Editing", "Demo", "Tutorial"],
-    thumbnail: null,
-    description:
-      "Product demonstration and tutorial video with motion graphics.",
-    year: "2024",
-    videoUrl: null,
-    images: [],
-  },
-  {
-    id: "event-coverage",
-    slug: "event-coverage",
-    title: "Event Coverage",
-    category: "video",
-    type: "showcase",
-    featured: false,
-    tags: ["Videography", "Event", "Editing"],
-    thumbnail: null,
-    description:
-      "Event documentation and highlight reels for various occasions.",
-    year: "2024",
-    videoUrl: null,
-    images: [],
-  },
-
-  // Other Works - Web Development
-  {
-    id: "ecommerce-landing",
-    slug: "ecommerce-landing-page",
-    title: "E-commerce Landing Page",
-    category: "web-dev",
-    type: "showcase",
-    featured: false,
-    tags: ["Web Development", "Landing Page", "E-commerce"],
-    thumbnail: null,
-    description: "High-converting landing page design for e-commerce products.",
-    year: "2024",
-    images: [],
-    liveUrl: null,
-  },
-  {
-    id: "dashboard-ui",
-    slug: "dashboard-interface",
-    title: "Dashboard Interface",
-    category: "web-dev",
-    type: "showcase",
-    featured: false,
-    tags: ["Dashboard", "React", "Data Visualization"],
-    thumbnail: null,
-    description:
-      "Administrative dashboard with complex data visualization components.",
-    year: "2024",
-    images: [],
-  },
-  {
-    id: "mobile-app-proto",
-    slug: "mobile-app-prototype",
-    title: "Mobile App Prototype",
-    category: "ui-ux",
-    type: "showcase",
-    featured: false,
-    tags: ["Mobile", "Prototype", "UI/UX"],
-    thumbnail: null,
-    description: "Interactive mobile app prototype with user flow animations.",
-    year: "2024",
-    images: [],
-  },
+  // Other Works — Video, Web Dev, and UI/UX showcase entries are coming soon
+  // (assets still being organized); re-add them here once files are ready.
 ];
 
 // Category definitions
