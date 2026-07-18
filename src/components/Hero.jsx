@@ -21,7 +21,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex flex-col overflow-hidden pt-24 md:pt-28"
       aria-label="hero section"
     >
       <div className="absolute inset-0 bg-gradient-radial" />
@@ -46,7 +46,7 @@ export function Hero() {
         delay={1}
       />
 
-      <div className="container relative z-10 text-center flex flex-col items-center pt-24">
+      <div className="container relative z-10 text-center flex flex-col items-center justify-center grow">
         <motion.div
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs md:text-sm bg-bg-tertiary text-text-secondary mb-6"
           initial={{ opacity: 0, y: 20 }}
@@ -128,9 +128,9 @@ export function Hero() {
         </motion.div>
       </div>
 
-      <div className="absolute -bottom-40 left-0 right-0 h-64 pointer-events-none overflow-hidden">
+      <div className="relative w-full h-44 md:h-72 mt-10 pointer-events-none overflow-hidden">
         <motion.div
-          className="absolute bottom-[-20%] left-[5%] w-[280px] md:w-[500px] rounded-xl overflow-hidden shadow-2xl"
+          className="absolute bottom-[-10%] left-[5%] w-[280px] md:w-[500px] rounded-xl overflow-hidden shadow-2xl"
           initial={{ opacity: 0, y: 100, rotate: -6 }}
           animate={{ opacity: 0.9, y: 0, rotate: -6 }}
           transition={{ duration: 0.8, delay: 1 }}
@@ -147,7 +147,7 @@ export function Hero() {
         </motion.div>
 
         <motion.div
-          className="absolute bottom-[-15%] left-1/2 -translate-x-1/2 w-[300px] md:w-[520px] rounded-xl overflow-hidden shadow-2xl z-10"
+          className="absolute bottom-[-5%] left-1/2 -translate-x-1/2 w-[300px] md:w-[520px] rounded-xl overflow-hidden shadow-2xl z-10"
           initial={{ opacity: 0, y: 100, rotate: 0 }}
           animate={{ opacity: 1, y: 0, rotate: 0 }}
           transition={{ duration: 0.8, delay: 1.1 }}
@@ -163,7 +163,7 @@ export function Hero() {
         </motion.div>
 
         <motion.div
-          className="absolute bottom-[-20%] right-[5%] w-[280px] md:w-[500px] rounded-xl overflow-hidden shadow-2xl"
+          className="absolute bottom-[-10%] right-[5%] w-[280px] md:w-[500px] rounded-xl overflow-hidden shadow-2xl"
           initial={{ opacity: 0, y: 100, rotate: 6 }}
           animate={{ opacity: 0.9, y: 0, rotate: 6 }}
           transition={{ duration: 0.8, delay: 1.2 }}
