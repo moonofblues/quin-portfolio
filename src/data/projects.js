@@ -38,10 +38,10 @@ export const projects = [
     description:
       "Comprehensive enterprise resource planning system for hospital operations. Designed and developed UI workflows, process documentation, and reusable component library.",
     impact: "60% reduction in task completion time",
-    year: "2023-2025",
+    year: "2025-2026",
     role: "UI/UX Designer & Front-End Developer",
-    client: "Zamboanga City Medical Center",
-    duration: "2 years",
+    client: "A Medical Center",
+    duration: "6 months",
     overview:
       "The Planning and Procurement System is a digital platform built to replace the heavy, paper-based financial workflows of a major medical center. It brings the hospital's Annual Operational Plans (AOP) and Project Procurement Management Plans (PPMP) online, making it vastly easier for departments to manage their budgets, request resources, and maintain strict audit compliance without the traditional bottlenecks.",
     challenge:
@@ -55,7 +55,7 @@ export const projects = [
       {
         title: "Information Architecture & Restructuring",
         description:
-          "I structurally separated the administrative 'Master Item Library' from the 'End-User Requests' to prevent security risks and declutter the workspace. I then redesigned the heavy PPMP scheduling interface, replacing tedious circular inputs with familiar, bulk-editable data tables.",
+          "I structurally separated the AOP creation in isolated ways to declutter the workspace and not overwhelm the users. I then redesigned the heavy PPMP interface, replacing tedious circular inputs with familiar, bulk-editable data tables.",
       },
       {
         title: "Dynamic Logic & Validation",
@@ -82,7 +82,7 @@ export const projects = [
     id: "zcmc-website",
     slug: "zcmc-website-redesign",
     title: "ZCMC Website Redesign",
-    subtitle: "Public-Facing Healthcare Portal",
+    subtitle: "Public-Facing Healthcare Website",
     category: "ui-ux",
     type: "case-study",
     featured: true,
@@ -145,10 +145,10 @@ export const projects = [
     description:
       "A centralized operations dashboard unifying 15+ hospital information systems into a single, intuitive interface. Designed to reduce cognitive load for healthcare administrators managing employee records, supply chain, finance, and clinical operations.",
     impact: "60% reduction in task completion time",
-    year: "2023-2025",
+    year: "2025",
     role: "UI/UX Designer & Front-End Developer",
-    client: "Zamboanga City Medical Center",
-    duration: "2 years",
+    client: "A Medical Center",
+    duration: "1 month",
     overview:
       "This project showcases the design of a centralized operations dashboard unifying fragmented clinical, financial, and logistical data into a single, real-time command center. Built as an overarching enterprise web system, the platform transforms complex institutional metrics into an intuitive, highly scannable interface. By harmonizing these disparate data streams, the dashboard empowers hospital leadership to continuously monitor critical operational health and make swift, data-driven decisions without suffering from reporting fatigue.",
     challenge:
@@ -203,8 +203,8 @@ export const projects = [
     impact: "Active users on live modules",
     year: "2024",
     role: "UI/UX Designer & Front-End Developer",
-    client: "Product Development",
-    duration: "6 months",
+    client: "Startup",
+    duration: "1 year",
     overview:
       "Leonora is a fintech application that empowers users to take control of their finances. The app combines expense tracking, budget management, savings goals, and spending insights into a cohesive mobile-first experience. What started as a design concept has evolved into a live product with active users on core modules.",
     challenge:
@@ -421,6 +421,7 @@ export const projects = [
       "Concept advertising poster for the Converse Chuck 70, blending archival product photography with torn-paper collage. Presented as a flat print layout and a sidewalk A-frame mockup — a personal piece published under my design handle, qvsions.",
     year: "2023",
     images: gdConverse,
+    fbPostUrl: null,
   },
   {
     id: "imiss-birthday-greetings",
@@ -435,6 +436,7 @@ export const projects = [
       "Monthly birthday greeting graphic for Zamboanga City Medical Center's IMISS section, designed around a Philippine calendar motif with celebratory confetti and balloons for the section's official Facebook page.",
     year: "2026",
     images: gdBirthday,
+    fbPostUrl: null,
   },
   {
     id: "imiss-launch-campaign",
@@ -449,6 +451,8 @@ export const projects = [
       "Four-slide launch carousel introducing ZCMC's new Integrated Management Information System Section (IMISS) — announcing the merger of the IISU and IHOMP units, the services under one roof, and how staff can reach the section.",
     year: "2024",
     images: [zcmcImissLaunch, gdITannouncement, gdImissUnification],
+    fbPostUrl:
+      "https://www.facebook.com/zcmcimiss/posts/pfbid0rYFLxcuoTfyGTBpiMgxibH6gxSa6qd3ZtWtU1Nm6FPtzbYEs2S5tNeHLRGy8ugscl?rdid=EoGAYn4R3EU3vIeP#",
   },
   {
     id: "imiss-it-news",
@@ -463,6 +467,7 @@ export const projects = [
       "Social media news card series covering technology topics for ZCMC's IMISS section — this issue highlights a report on AI-driven cyber attacks outpacing traditional enterprise defenses.",
     year: "2024",
     images: gdITnews,
+    fbPostUrl: null,
   },
   {
     id: "zcmc-umis-feature",
@@ -477,6 +482,8 @@ export const projects = [
       "System-feature carousel for ZCMC's User Management Information System (UMIS), walking hospital staff through tracking their DTR and flag ceremony attendance online — from daily logs to exporting full attendance history.",
     year: "2026",
     images: zcmcUmisFeature,
+    fbPostUrl:
+      "https://www.facebook.com/zcmcimiss/posts/pfbid02Upj7c2es9PW5QN7zJBAXYUbKHUfVqyTXG8jhEdQdy1Z5gtNrn2vSAz9F1YXVWCg4l",
   },
   {
     id: "zcmc-fhir-2026",
@@ -491,6 +498,8 @@ export const projects = [
       "Event highlights carousel for ZCMC IMISS at the FHIR 2026 Connectathon in Boracay, combining event photography with branded layouts to showcase the team's interoperable referral system.",
     year: "2026",
     images: zcmcFhir,
+    fbPostUrl:
+      "https://www.facebook.com/zcmcimiss/posts/pfbid0e7nibcvb1SNP7gy25TTJh758yR7jPKMBSfFYFpsHQmVuidVYgJvBjjJ8CcwyvfHLl",
   },
   {
     id: "zcmc-cse-congrats",
@@ -505,6 +514,8 @@ export const projects = [
       "Gamified 'achievement unlocked' congratulations graphic celebrating an IMISS team member passing the Civil Service Examination, styled as a system-update HUD with cut-out portrait treatment.",
     year: "2026",
     images: zcmcCongrats,
+    fbPostUrl:
+      "https://www.facebook.com/zcmcimiss/posts/pfbid0RvDXQXzn6q9mhdnPmsWQFpaiLDGSSasQecm4SwY5qQ6ugup3bXsUcuUEf9k6h9Eul",
   },
   {
     id: "zcmc-tech-tip-hygiene",
@@ -519,6 +530,8 @@ export const projects = [
       "Cybersecurity awareness carousel for ZCMC's IMISS Tech Tip series — a practical checklist on account security at work, from spotting suspicious messages to enabling multi-factor authentication.",
     year: "2026",
     images: zcmcHygiene,
+    fbPostUrl:
+      "https://www.facebook.com/zcmcimiss/posts/pfbid096yExiDMm2PYDF5Pcc9QL6NBAXNN2WbMfAj4WvytCR9MMfiUK342j5AxJC2X1Gxhl?rdid=i9OTe6N67v9d6th8#",
   },
   {
     id: "ffbb-launch-giveaway",
@@ -533,6 +546,8 @@ export const projects = [
       "'Blooming Soon' teaser and in-store giveaway announcement for Fuzzy Fleur by Bia, an artisan crochet flower and gift shop — elegant serif typography over a soft floral illustration system.",
     year: "2026",
     images: ffbbLaunch,
+    fbPostUrl:
+      "https://www.facebook.com/fuzzyfleur.bybia/posts/pfbid0mHzH2kabBo44AswNcwVevi3JX1n44LpoxVoDFdAppvP8gEVrdacZ9GYMzPrqnFYQl?rdid=ZXaAfnSOt8w9f8iN#",
   },
   {
     id: "ffbb-graduation",
@@ -547,6 +562,7 @@ export const projects = [
       "'Celebrate Graduation' campaign for Fuzzy Fleur by Bia's Class of 2026 collection, pairing envelope-motif layouts with product photography of handmade crochet bouquets and graduation flower pins.",
     year: "2026",
     images: ffbbGraduation,
+    fbPostUrl: null,
   },
   {
     id: "ffbb-corentaso",
@@ -561,6 +577,7 @@ export const projects = [
       "Illustrated announcement poster for Fuzzy Fleur by Bia's pop-up booth at Ateneo de Zamboanga University's Corentaso fair, building a festive campus-market scene with string lights and event mascots.",
     year: "2026",
     images: ffbbCorentaso,
+    fbPostUrl: null,
   },
   {
     id: "ffbb-december-events",
@@ -575,6 +592,7 @@ export const projects = [
       "Holiday schedule graphic for Fuzzy Fleur by Bia's December pop-ups, organizing school events and mall dates across Zamboanga into a festive envelope-invitation layout.",
     year: "2025",
     images: ffbbDecember,
+    fbPostUrl: null,
   },
 
   // Other Works — Video, Web Dev, and UI/UX showcase entries are coming soon

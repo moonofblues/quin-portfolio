@@ -42,6 +42,10 @@ export function CaseStudyPage() {
   }
 
   const isCaseStudy = project.type === "case-study";
+  // All of a showcase project's images except the one already shown as the hero
+  const galleryImages = [project.images]
+    .flat()
+    .filter((image) => image && image !== project.thumbnail);
 
   return (
     <div className="min-h-screen pt-24 pb-20">
@@ -143,12 +147,21 @@ export function CaseStudyPage() {
             </div>
           )}
 
-          <div className="aspect-video rounded-2xl overflow-hidden mb-10 bg-bg-tertiary">
+          <div
+            className={cn(
+              "rounded-2xl overflow-hidden mb-10 bg-bg-tertiary",
+              (isCaseStudy || !project.thumbnail) && "aspect-video",
+            )}
+          >
             {project.thumbnail ? (
               <img
                 src={project.thumbnail}
                 alt={project.title}
-                className="w-full h-full object-cover"
+                className={
+                  isCaseStudy
+                    ? "w-full h-full object-cover"
+                    : "w-auto max-w-full max-h-[85vh] mx-auto object-contain"
+                }
                 loading="lazy"
                 decoding="async"
               />
@@ -344,6 +357,53 @@ export function CaseStudyPage() {
               {project.description}
             </p>
           </motion.div>
+
+          {galleryImages.length > 0 && (
+            <div className="mt-10 space-y-8">
+              {galleryImages.map((image, index) => (
+                <motion.img
+                  key={index}
+                  src={image}
+                  alt={`${project.title} — view ${index + 2}`}
+                  className="w-full h-auto rounded-2xl"
+                  loading="lazy"
+                  decoding="async"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5 }}
+                />
+              ))}
+            </div>
+          )}
+
+          {project.fbPostUrl && (
+            <motion.div
+              className="mt-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <h2 className="font-display text-2xl mb-6 text-text-primary">
+                See the Post Live
+              </h2>
+              <div className="flex justify-center rounded-2xl p-4 md:p-8 bg-bg-secondary">
+                <iframe
+                  src={`https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(
+                    project.fbPostUrl,
+                  )}&show_text=true&width=500`}
+                  width="500"
+                  height="720"
+                  className="max-w-full border-0 overflow-hidden rounded-xl bg-white"
+                  scrolling="no"
+                  allowFullScreen
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                  title={`Facebook post — ${project.title}`}
+                />
+              </div>
+            </motion.div>
+          )}
         </section>
       )}
 
