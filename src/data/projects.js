@@ -18,6 +18,7 @@ import ffbbLaunch from "../assets/other-work/ffbb-post-1.webp";
 import ffbbGraduation from "../assets/other-work/ffbb-post-2.webp";
 import ffbbCorentaso from "../assets/other-work/ffbb-post-3.webp";
 import ffbbDecember from "../assets/other-work/ffbb-post-4.webp";
+import hodSlide1 from "../assets/showcase/hod/slide-01.png";
 // Get only showcase projects (for Other Works section)
 export function getOtherWorkProjects() {
   return projects.filter((p) => p.type === "showcase");
@@ -39,7 +40,7 @@ export const projects = [
       "Comprehensive enterprise resource planning system for hospital operations. Designed and developed UI workflows, process documentation, and reusable component library.",
     impact: "60% reduction in task completion time",
     year: "2025-2026",
-    role: "UI/UX Designer & Front-End Developer",
+    role: "UI/UX Designer",
     client: "A Medical Center",
     duration: "6 months",
     overview:
@@ -182,7 +183,7 @@ export const projects = [
       { metric: "15+", label: "Systems unified" },
       { metric: "0", label: "No login required" },
     ],
-    images: [],
+    images: [hodSlide1],
     tools: ["Figma", "React", "Tailwind CSS", "Shadcn UI"],
     liveUrl: "https://dashboard.zcmc.online/",
     behanceUrl:

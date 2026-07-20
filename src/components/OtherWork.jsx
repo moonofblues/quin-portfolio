@@ -1,29 +1,27 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionTitle } from "./ui/SectionTitle";
-// import { useTheme } from "../context/ThemeContext";
 import { cn } from "../utils/cn";
+import { useProjects } from "../context/ProjectsContext";
 
-import { getOtherWorkProjects } from "../data/projects";
-
-// Inside component:
-const otherWorkProjects = getOtherWorkProjects();
-
-// Only offer tabs for categories that actually have showcase work
-const categories = [
+const FILTER_TABS = [
   { id: "all", label: "All" },
   { id: "graphic-design", label: "Graphic Design" },
   { id: "video", label: "Video" },
   { id: "web-dev", label: "Web Dev" },
   { id: "ui-ux", label: "UI/UX" },
-].filter(
-  (c) =>
-    c.id === "all" || otherWorkProjects.some((p) => p.category === c.id),
-);
+];
 
 export function OtherWork() {
-  // const { theme } = useTheme();
+  const { getOtherWorkProjects, loading } = useProjects();
   const [activeFilter, setActiveFilter] = useState("all");
+
+  if (loading) return null;
+
+  const otherWorkProjects = getOtherWorkProjects();
+  const categories = FILTER_TABS.filter(
+    (c) => c.id === "all" || otherWorkProjects.some((p) => p.category === c.id),
+  );
 
   const filteredProjects =
     activeFilter === "all"

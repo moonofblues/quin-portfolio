@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -7,24 +8,46 @@ import {
   User,
   Clock,
   ExternalLink,
+  X,
+  Expand,
 } from "lucide-react";
 import { Tag } from "../components/ui/Tag";
 import { Button } from "../components/ui/Button";
 import { Star } from "../components/decorative/Stars";
 import { ProjectCard } from "../components/ProjectCard";
-import {
-  getProjectBySlug,
-  getNextPrevProjects,
-  getRelatedProjects,
-} from "../data/projects";
+import { useProjects } from "../context/ProjectsContext";
 import { cn } from "../utils/cn";
 
 export function CaseStudyPage() {
   const { slug } = useParams();
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const { getProjectBySlug, getNextPrevProjects, getRelatedProjects, loading } = useProjects();
 
   const project = getProjectBySlug(slug);
   const { prev, next } = getNextPrevProjects(slug);
   const relatedProjects = getRelatedProjects(slug, 2);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-24 flex items-center justify-center">
+        <p className="font-display text-lg animate-pulse text-text-muted">Loading...</p>
+      </div>
+    );
+  }
+
+  const showcaseImages = [project?.images].flat().filter(Boolean);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const handleKey = (e) => { if (e.key === "Escape") setLightboxOpen(false); };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [lightboxOpen]);
+
+  useEffect(() => {
+    document.body.style.overflow = lightboxOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [lightboxOpen]);
 
   if (!project) {
     return (
@@ -341,6 +364,71 @@ export function CaseStudyPage() {
                 </div>
               </motion.div>
             </section>
+          )}
+
+          {showcaseImages.length > 0 && (
+            <section className="w-full max-w-7xl mx-auto px-6 mb-16">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
+                <h2 className="font-display text-2xl mb-6 text-text-primary">
+                  Design Showcase
+                </h2>
+                <div
+                  className="relative cursor-pointer group rounded-2xl overflow-hidden"
+                  onClick={() => setLightboxOpen(true)}
+                >
+                  <img
+                    src={showcaseImages[0]}
+                    alt={`${project.title} — design showcase`}
+                    className="w-full h-auto"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-3">
+                    <Expand size={32} className="text-white" />
+                    <span className="font-display text-white text-lg">
+                      View Full Showcase
+                    </span>
+                    {showcaseImages.length > 1 && (
+                      <span className="text-white/70 text-sm">
+                        {showcaseImages.length} frames
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            </section>
+          )}
+
+          {lightboxOpen && (
+            <div
+              className="fixed inset-0 z-50 bg-black/95 overflow-y-auto"
+              onClick={(e) => { if (e.target === e.currentTarget) setLightboxOpen(false); }}
+            >
+              <button
+                onClick={() => setLightboxOpen(false)}
+                className="fixed top-4 right-4 z-50 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
+                aria-label="Close showcase"
+              >
+                <X size={24} />
+              </button>
+              <div className="max-w-5xl mx-auto py-16 px-4 space-y-3">
+                {showcaseImages.map((img, i) => (
+                  <img
+                    key={i}
+                    src={img}
+                    alt={`${project.title} — frame ${i + 1}`}
+                    className="w-full h-auto rounded-lg"
+                    loading={i === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                  />
+                ))}
+              </div>
+            </div>
           )}
         </>
       )}

@@ -91,11 +91,13 @@ import { ArrowRight } from "lucide-react";
 import { SectionTitle } from "./ui/SectionTitle";
 import { ProjectCard } from "./ProjectCard";
 import { Button } from "./ui/Button";
-import { getFeaturedProjects } from "../data/projects";
+import { useProjects } from "../context/ProjectsContext";
 import { useTheme } from "../context/ThemeContext";
 
 export function FeaturedWork() {
   const { theme } = useTheme();
+  const { getFeaturedProjects, loading } = useProjects();
+  if (loading) return null;
   const featuredProjects = getFeaturedProjects().slice(0, 6);
 
   return (

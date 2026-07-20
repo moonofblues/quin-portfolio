@@ -5,20 +5,30 @@ import { ArrowLeft } from "lucide-react";
 import { ProjectCard } from "../components/ProjectCard";
 import { Star } from "../components/decorative/Stars";
 import { Button } from "../components/ui/Button";
-import { projects, categories, getProjectsByCategory } from "../data/projects";
+import { categories } from "../data/categories";
+import { useProjects } from "../context/ProjectsContext";
 import { cn } from "../utils/cn";
 
 export function WorkPage() {
   const { category } = useParams();
   const navigate = useNavigate();
+  const { projects, getProjectsByCategory, loading } = useProjects();
 
   const activeCategory = category || "all";
 
   const filteredProjects = useMemo(() => {
     return getProjectsByCategory(activeCategory);
-  }, [activeCategory]);
+  }, [activeCategory, projects]);
 
   const currentCategory = categories.find((c) => c.id === activeCategory);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-24 flex items-center justify-center">
+        <p className="font-display text-lg animate-pulse text-text-muted">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen pt-24 pb-20">
