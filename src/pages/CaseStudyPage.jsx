@@ -23,20 +23,7 @@ export function CaseStudyPage() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const { getProjectBySlug, getNextPrevProjects, getRelatedProjects, loading } = useProjects();
 
-  const project = getProjectBySlug(slug);
-  const { prev, next } = getNextPrevProjects(slug);
-  const relatedProjects = getRelatedProjects(slug, 2);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen pt-24 flex items-center justify-center">
-        <p className="font-display text-lg animate-pulse text-text-muted">Loading...</p>
-      </div>
-    );
-  }
-
-  const showcaseImages = [project?.images].flat().filter(Boolean);
-
+  // All hooks must come before any early returns
   useEffect(() => {
     if (!lightboxOpen) return;
     const handleKey = (e) => { if (e.key === "Escape") setLightboxOpen(false); };
@@ -48,6 +35,19 @@ export function CaseStudyPage() {
     document.body.style.overflow = lightboxOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [lightboxOpen]);
+
+  const project = getProjectBySlug(slug);
+  const { prev, next } = getNextPrevProjects(slug);
+  const relatedProjects = getRelatedProjects(slug, 2);
+  const showcaseImages = [project?.images].flat().filter(Boolean);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-24 flex items-center justify-center">
+        <p className="font-display text-lg animate-pulse text-text-muted">Loading...</p>
+      </div>
+    );
+  }
 
   if (!project) {
     return (
@@ -416,17 +416,19 @@ export function CaseStudyPage() {
               >
                 <X size={24} />
               </button>
-              <div className="max-w-5xl mx-auto py-16 px-4 space-y-3">
-                {showcaseImages.map((img, i) => (
-                  <img
-                    key={i}
-                    src={img}
-                    alt={`${project.title} — frame ${i + 1}`}
-                    className="w-full h-auto rounded-lg"
-                    loading={i === 0 ? "eager" : "lazy"}
-                    decoding="async"
-                  />
-                ))}
+              <div className="max-w-5xl mx-auto py-12 px-4">
+                <div className="flex flex-col">
+                  {showcaseImages.map((img, i) => (
+                    <img
+                      key={i}
+                      src={img}
+                      alt={`${project.title} — frame ${i + 1}`}
+                      className="w-full h-auto block"
+                      loading={i === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           )}

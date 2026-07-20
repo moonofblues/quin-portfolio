@@ -516,7 +516,12 @@ async function migrate() {
         ...fields,
         slug: { _type: "slug", current: p.slug },
         ...(thumbnail && { thumbnail }),
-        ...(showcaseImages.length > 0 && { showcaseImages }),
+        ...(showcaseImages.length > 0 && {
+          showcaseImages: showcaseImages.map((img, i) => ({
+            _key: `showcase_${i}`,
+            ...img,
+          })),
+        }),
         process: (p.process || []).map((step, i) => ({
           _key: `step_${i}`,
           ...step,
