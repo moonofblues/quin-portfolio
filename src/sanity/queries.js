@@ -25,6 +25,33 @@ const PROJECT_FIELDS = `
   solution,
   results[] { metric, label },
   "images": showcaseImages[].asset->url,
+  background,
+  researchObjectives,
+  researchMethods[] { title, description },
+  researchFindings,
+  painPoints[] { title, description },
+  quote,
+  persona {
+    "photo": photo.asset->url,
+    name,
+    role,
+    location,
+    tools
+  },
+  howMightWe,
+  ideation {
+    description,
+    "diagramImage": diagramImage.asset->url
+  },
+  wireframes {
+    description,
+    "images": images[].asset->url
+  },
+  solutionHighlights[] { title, description },
+  keyFunctions[] {
+    "image": image.asset->url,
+    caption
+  },
   liveUrl,
   behanceUrl,
   fbPostUrl

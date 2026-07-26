@@ -189,6 +189,162 @@ export const projectSchema = {
       of: [{ type: "image", options: { hotspot: true } }],
       description: "Full Behance-style frames shown in the lightbox",
     },
+    // Optional research/UX sections — all unrequired. Each renders on the
+    // case study page only when filled in; otherwise the section is omitted
+    // entirely. See docs/adr/0002-optional-research-sections-for-case-studies.md
+    {
+      name: "background",
+      title: "Background (optional)",
+      type: "text",
+      rows: 5,
+      description:
+        "Org/product framing shown side-by-side with The Challenge. Leave empty to render Challenge full-width as before.",
+    },
+    {
+      name: "researchObjectives",
+      title: "Research Objectives (optional)",
+      type: "array",
+      of: [{ type: "string" }],
+      description: "Bullet list of what the research set out to learn",
+    },
+    {
+      name: "researchMethods",
+      title: "Research Methods (optional)",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "method",
+          fields: [
+            { name: "title", title: "Method Title", type: "string", description: 'e.g. "User Interviews"' },
+            { name: "description", title: "Description", type: "text", rows: 3 },
+          ],
+          preview: {
+            select: { title: "title", subtitle: "description" },
+          },
+        },
+      ],
+    },
+    {
+      name: "researchFindings",
+      title: "Research Findings (optional)",
+      type: "text",
+      rows: 5,
+    },
+    {
+      name: "painPoints",
+      title: "Pain Points (optional)",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "painPoint",
+          fields: [
+            { name: "title", title: "Title", type: "string" },
+            { name: "description", title: "Description", type: "text", rows: 3 },
+          ],
+          preview: {
+            select: { title: "title", subtitle: "description" },
+          },
+        },
+      ],
+    },
+    {
+      name: "quote",
+      title: "Pull Quote (optional)",
+      type: "text",
+      rows: 2,
+      description: "A short participant quote shown as a full-width banner",
+    },
+    {
+      name: "persona",
+      title: "Persona (optional)",
+      type: "object",
+      description: "A real research participant — leave empty if no participant research was conducted",
+      fields: [
+        { name: "photo", title: "Photo", type: "image", options: { hotspot: true } },
+        { name: "name", title: "Name", type: "string" },
+        { name: "role", title: "Role", type: "string", description: 'e.g. "Digital Marketing, 33"' },
+        { name: "location", title: "Location", type: "string" },
+        {
+          name: "tools",
+          title: "Current Tools/Apps",
+          type: "array",
+          of: [{ type: "string" }],
+          options: { layout: "tags" },
+        },
+      ],
+      preview: {
+        select: { title: "name", subtitle: "role" },
+      },
+    },
+    {
+      name: "howMightWe",
+      title: "How Might We (optional)",
+      type: "array",
+      of: [{ type: "string" }],
+      description: "Reframed design opportunities, shown as a card grid",
+    },
+    {
+      name: "ideation",
+      title: "Ideation (optional)",
+      type: "object",
+      fields: [
+        { name: "description", title: "Description", type: "text", rows: 5 },
+        { name: "diagramImage", title: "Flow Diagram", type: "image", options: { hotspot: true } },
+      ],
+    },
+    {
+      name: "wireframes",
+      title: "Wireframes (optional)",
+      type: "object",
+      fields: [
+        { name: "description", title: "Description", type: "text", rows: 3 },
+        {
+          name: "images",
+          title: "Wireframe Images",
+          type: "array",
+          of: [{ type: "image", options: { hotspot: true } }],
+        },
+      ],
+    },
+    {
+      name: "solutionHighlights",
+      title: "Solution Highlights (optional)",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "highlight",
+          fields: [
+            { name: "title", title: "Title", type: "string" },
+            { name: "description", title: "Description", type: "text", rows: 3 },
+          ],
+          preview: {
+            select: { title: "title", subtitle: "description" },
+          },
+        },
+      ],
+      description: "Value-prop cards shown instead of plain Solution prose when filled in",
+    },
+    {
+      name: "keyFunctions",
+      title: "Key Functions (optional)",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "keyFunction",
+          fields: [
+            { name: "image", title: "Image", type: "image", options: { hotspot: true } },
+            { name: "caption", title: "Caption", type: "string" },
+          ],
+          preview: {
+            select: { title: "caption", media: "image" },
+          },
+        },
+      ],
+    },
     // External links
     {
       name: "liveUrl",

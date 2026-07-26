@@ -37,8 +37,43 @@ The portfolio is built using the following tools:
 
 ## Development Setup
 
+This project uses [Sanity](https://www.sanity.io/) as a headless CMS. `sanity` and `@sanity/vision` are already listed in `package.json`, so `npm install` pulls them in — no separate install step needed.
+
 To run the project locally:
+
+1. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+2. **Set up environment variables**
+
+   Sanity's project ID/dataset are read from env vars, and `.env.local` is gitignored (not committed), so you need to create it yourself on every new machine:
+
+   ```bash
+   cp .env.local.example .env.local
+   ```
+
+   Then fill in `VITE_SANITY_PROJECT_ID` with your project ID from [sanity.io/manage](https://www.sanity.io/manage) (dataset defaults to `production`).
+
+3. **Run the dev server**
+
+   ```bash
+   npm run dev
+   ```
+
+4. **(Optional) Run the Sanity Studio**
+
+   The Studio is embedded via `sanity.config.js` and served through the same Vite dev server — visit `/studio` once `npm run dev` is running. It also needs the same `.env.local` values to connect to your dataset.
+
+### Troubleshooting
+
+**`Failed to resolve import "@sanity/..."` (or any other package) after pulling:** your local `node_modules` is out of sync with `package-lock.json` — usually because a pull brought in new/updated dependencies (like the Sanity integration) and `npm install` wasn't rerun afterward. Fix:
 
 ```bash
 npm install
-npm run dev
+```
+
+As a habit, rerun `npm install` after every `git pull` that touches `package.json` or `package-lock.json`.
+
