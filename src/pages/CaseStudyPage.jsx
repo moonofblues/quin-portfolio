@@ -16,6 +16,7 @@ import { Star } from "../components/decorative/Stars";
 import { ProjectCard } from "../components/ProjectCard";
 import { HeroCollage } from "../components/case-study/HeroCollage";
 import { StatRing } from "../components/case-study/StatRing";
+import { ProcessTimeline } from "../components/case-study/ProcessTimeline";
 import { useProjects } from "../context/ProjectsContext";
 import { cn } from "../utils/cn";
 
@@ -292,33 +293,10 @@ export function CaseStudyPage() {
           {project.process && project.process.length > 0 && (
             <section className="w-full max-w-4xl mx-auto px-6 mb-16">
               <motion.div {...fadeUp}>
-                <h2 className="font-display text-2xl mb-8 text-text-primary">
+                <h2 className="font-display text-2xl mb-8 md:mb-12 text-text-primary">
                   The Process
                 </h2>
-                <div className="space-y-8">
-                  {project.process.map((step, index) => (
-                    <motion.div
-                      key={index}
-                      className="flex gap-6"
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: index * 0.1 }}
-                    >
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 font-display text-sm bg-accent text-on-accent">
-                        {index + 1}
-                      </div>
-                      <div>
-                        <h3 className="font-display text-lg mb-2 text-text-primary">
-                          {step.title}
-                        </h3>
-                        <p className="leading-relaxed text-text-secondary">
-                          {step.description}
-                        </p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
+                <ProcessTimeline steps={project.process} />
               </motion.div>
             </section>
           )}
