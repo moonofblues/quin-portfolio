@@ -291,7 +291,7 @@ export function CaseStudyPage() {
 
           {/* Process */}
           {project.process && project.process.length > 0 && (
-            <section className="w-full max-w-4xl mx-auto px-6 mb-16">
+            <section className="w-full max-w-7xl mx-auto px-6 mb-16">
               <motion.div {...fadeUp}>
                 <h2 className="font-display text-2xl mb-8 md:mb-12 text-text-primary">
                   The Process
@@ -304,12 +304,12 @@ export function CaseStudyPage() {
           {/* Research Objectives */}
           {project.researchObjectives?.length > 0 && (
             <section className="w-full mb-16 py-16 bg-accent text-on-accent">
-              <div className="max-w-4xl mx-auto px-6">
+              <div className="max-w-6xl mx-auto px-6">
                 <motion.div {...fadeUp}>
                   <h2 className="font-display text-xl md:text-2xl uppercase tracking-wide mb-8">
                     Research Objectives
                   </h2>
-                  <ul className="space-y-3">
+                  <ul className="grid gap-3 md:grid-cols-2 md:gap-x-12">
                     {project.researchObjectives.map((objective, i) => (
                       <li key={i} className="flex gap-3 text-lg leading-relaxed">
                         <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-current shrink-0" />
@@ -324,10 +324,10 @@ export function CaseStudyPage() {
 
           {/* Research Methods + Findings */}
           {(project.researchMethods?.length > 0 || project.researchFindings) && (
-            <section className="w-full max-w-4xl mx-auto px-6 mb-16">
+            <section className="w-full max-w-6xl mx-auto px-6 mb-16">
               <motion.div {...fadeUp}>
                 {project.researchMethods?.length > 0 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
                     {project.researchMethods.map((method, i) => (
                       <div key={i} className="p-6 rounded-xl bg-bg-secondary">
                         <h3 className="font-display text-sm uppercase tracking-wider mb-3 text-text-muted">
@@ -341,7 +341,7 @@ export function CaseStudyPage() {
                   </div>
                 )}
                 {project.researchFindings && (
-                  <div>
+                  <div className="max-w-4xl">
                     <h2 className="font-display text-2xl mb-4 text-text-primary">
                       Research Findings
                     </h2>
@@ -356,10 +356,10 @@ export function CaseStudyPage() {
 
           {/* Results */}
           {project.results && project.results.length > 0 && (
-            <section className="w-full max-w-4xl mx-auto px-6 mb-16">
+            <section className="w-full max-w-6xl mx-auto px-6 mb-16">
               <motion.div {...fadeUp}>
                 <h2 className="font-display text-2xl mb-10 text-text-primary">Results</h2>
-                <div className="flex flex-wrap justify-center gap-10">
+                <div className="flex flex-wrap justify-center gap-10 md:gap-16">
                   {project.results.map((result, index) => (
                     <StatRing
                       key={index}
@@ -376,7 +376,7 @@ export function CaseStudyPage() {
           {/* Common Pain Points */}
           {project.painPoints?.length > 0 && (
             <section className="w-full mb-16 py-16 bg-accent-subtle">
-              <div className="max-w-6xl mx-auto px-6">
+              <div className="max-w-7xl mx-auto px-6">
                 <motion.div {...fadeUp}>
                   <h2 className="font-display text-2xl mb-10 text-text-primary">
                     Common Pain Points
@@ -412,7 +412,7 @@ export function CaseStudyPage() {
                 </div>
               )}
               {project.persona?.name && (
-                <div className="max-w-3xl mx-auto px-6 mt-10">
+                <div className="max-w-5xl mx-auto px-6 mt-10">
                   <motion.div
                     className="rounded-2xl overflow-hidden shadow-card bg-bg-elevated grid grid-cols-1 sm:grid-cols-[10rem_1fr]"
                     {...fadeUp}
@@ -450,7 +450,7 @@ export function CaseStudyPage() {
           {/* How Might We */}
           {project.howMightWe?.length > 0 && (
             <section className="w-full mb-16 py-16 bg-accent-subtle">
-              <div className="max-w-6xl mx-auto px-6">
+              <div className="max-w-7xl mx-auto px-6">
                 <motion.div {...fadeUp}>
                   <h2 className="font-display text-2xl mb-10 text-text-primary">
                     How Might We
@@ -472,11 +472,11 @@ export function CaseStudyPage() {
 
           {/* Ideation */}
           {(project.ideation?.description || project.ideation?.diagramImage) && (
-            <section className="w-full max-w-5xl mx-auto px-6 mb-16">
+            <section className="w-full max-w-7xl mx-auto px-6 mb-16">
               <motion.div {...fadeUp}>
                 <h2 className="font-display text-2xl mb-6 text-text-primary">Ideation</h2>
                 {project.ideation.description && (
-                  <p className="text-lg leading-relaxed text-text-secondary mb-8">
+                  <p className="max-w-4xl text-lg leading-relaxed text-text-secondary mb-8">
                     {project.ideation.description}
                   </p>
                 )}
@@ -495,13 +495,13 @@ export function CaseStudyPage() {
 
           {/* Wireframes */}
           {(project.wireframes?.description || project.wireframes?.images?.length > 0) && (
-            <section className="w-full max-w-5xl mx-auto px-6 mb-16">
+            <section className="w-full max-w-7xl mx-auto px-6 mb-16">
               <motion.div {...fadeUp}>
                 <h2 className="font-display text-2xl mb-6 text-text-primary">
                   Laying the Foundation
                 </h2>
                 {project.wireframes.description && (
-                  <p className="text-lg leading-relaxed text-text-secondary mb-8">
+                  <p className="max-w-4xl text-lg leading-relaxed text-text-secondary mb-8">
                     {project.wireframes.description}
                   </p>
                 )}
@@ -525,7 +525,7 @@ export function CaseStudyPage() {
 
           {/* Solution */}
           {hasSolutionHighlights ? (
-            <section className="w-full max-w-6xl mx-auto px-6 mb-16">
+            <section className="w-full max-w-7xl mx-auto px-6 mb-16">
               <motion.div {...fadeUp}>
                 <h2 className="font-display text-2xl mb-10 text-text-primary text-center">
                   The Solution
@@ -561,7 +561,7 @@ export function CaseStudyPage() {
 
           {/* Key Functions */}
           {project.keyFunctions?.length > 0 && (
-            <section className="w-full max-w-6xl mx-auto px-6 mb-16">
+            <section className="w-full max-w-7xl mx-auto px-6 mb-16">
               <motion.div {...fadeUp}>
                 <h2 className="font-display text-2xl mb-10 text-text-primary">Key Functions</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -652,15 +652,15 @@ export function CaseStudyPage() {
       )}
 
       {!isCaseStudy && (
-        <section className="w-full max-w-4xl mx-auto px-6 mb-16">
+        <section className="w-full max-w-7xl mx-auto px-6 mb-16">
           <motion.div {...fadeUp}>
-            <p className="text-lg leading-relaxed text-text-secondary">
+            <p className="max-w-4xl text-lg leading-relaxed text-text-secondary">
               {project.description}
             </p>
           </motion.div>
 
           {galleryImages.length > 0 && (
-            <div className="mt-10 space-y-8">
+            <div className="mt-10 grid gap-8 lg:grid-cols-2">
               {galleryImages.map((image, index) => (
                 <motion.img
                   key={index}

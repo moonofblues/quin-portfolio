@@ -362,32 +362,13 @@ html.light .glass {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
-/* Process Timeline zigzag layout — grid-template-areas let the card swap
-   sides at the md breakpoint without duplicating markup per side. */
-.process-row {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-areas: "node card";
-}
-
+/* Process Timeline — stacks vertically on mobile, becomes a horizontal
+   stepper at md+ so all steps read across one row instead of stacking.
+   Column count comes from --process-steps, set per project. See ADR 0003. */
 @media (min-width: 768px) {
-  .process-row {
-    grid-template-columns: 1fr auto 1fr;
+  .process-stepper {
+    grid-template-columns: repeat(var(--process-steps), minmax(0, 1fr));
   }
-  .process-row--left {
-    grid-template-areas: "card node spacer";
-  }
-  .process-row--right {
-    grid-template-areas: "spacer node card";
-  }
-}
-
-.process-row__node {
-  grid-area: node;
-}
-
-.process-row__card {
-  grid-area: card;
 }
 
 /* Noise Texture Overlay */

@@ -27,10 +27,11 @@ aren't self-evident from the code alone.
   rendering fully visible on mount. See
   [ADR 0003](adr/0003-process-section-zigzag-timeline.md).
 
-- **Zigzag timeline** — the Process section layout where steps alternate
-  left/right of a center line on desktop (`md:` and up), collapsing to a
-  single left-aligned column on mobile. See
-  [ADR 0003](adr/0003-process-section-zigzag-timeline.md).
+- **Horizontal stepper** — the Process section layout where all steps sit
+  side by side in one row on desktop (`md:` and up), connected by a
+  horizontal draw-in line, collapsing to a vertical single-column timeline
+  on mobile. Chosen to use full container width and minimize scroll depth.
+  See [ADR 0003](adr/0003-process-section-zigzag-timeline.md).
 
 - **Keyword-derived icon** — a timeline node's icon, chosen at render time by
   matching substrings in the step's existing `title` text against
