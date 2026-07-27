@@ -354,25 +354,6 @@ export function CaseStudyPage() {
             </section>
           )}
 
-          {/* Results */}
-          {project.results && project.results.length > 0 && (
-            <section className="w-full max-w-6xl mx-auto px-6 mb-16">
-              <motion.div {...fadeUp}>
-                <h2 className="font-display text-2xl mb-10 text-text-primary">Results</h2>
-                <div className="flex flex-wrap justify-center gap-10 md:gap-16">
-                  {project.results.map((result, index) => (
-                    <StatRing
-                      key={index}
-                      metric={result.metric}
-                      label={result.label}
-                      delay={index * 0.1}
-                    />
-                  ))}
-                </div>
-              </motion.div>
-            </section>
-          )}
-
           {/* Common Pain Points */}
           {project.painPoints?.length > 0 && (
             <section className="w-full mb-16 py-16 bg-accent-subtle">
@@ -647,6 +628,25 @@ export function CaseStudyPage() {
                 </div>
               </div>
             </div>
+          )}
+
+          {/* Results */}
+          {project.results && project.results.length > 0 && (
+            <section className="w-full max-w-6xl mx-auto px-6 mb-16">
+              <motion.div {...fadeUp}>
+                <h2 className="font-display text-2xl mb-10 text-text-primary">Results</h2>
+                <div className="flex flex-wrap justify-center gap-10 md:gap-16">
+                  {project.results.map((result, index) => (
+                    <StatRing
+                      key={index}
+                      metric={result.metric}
+                      label={result.label}
+                      delay={index * 0.1}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            </section>
           )}
         </>
       )}
