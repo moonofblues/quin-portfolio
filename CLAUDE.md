@@ -45,6 +45,92 @@ That gives images and cards the full width while keeping text at a readable
 measure. Don't narrow the whole section just because it contains a
 paragraph.
 
+## Working process
+
+**Diagnose before acting, in detail.** Before changing code — especially for
+bugs, regressions, or "it feels slow/broken" reports — investigate first and
+report findings before touching files:
+
+- State what you observed and how you confirmed it (which file/line, which
+  command, what output). Don't guess at a cause without checking it.
+- If more than one plausible cause exists, say so, and say which one you
+  believe it is and why.
+- Before proposing a fix, lay out the options in detail: what each option
+  does, its trade-offs, and whether it's reversible.
+- Don't silently pick a side of a UX trade-off (e.g. animated vs. instant
+  scroll) without flagging that it *is* a trade-off.
+- **Ask which option to take before implementing anything.** After laying
+  out the diagnosis and the options, stop and ask the user which approach
+  to proceed with — do not go ahead on your own judgment, even if one
+  option seems clearly best. Wait for their choice, then implement only
+  that one.
+- Exception: trivial, unambiguous, single-option fixes (e.g. a typo, a
+  clear off-by-one) can just be made — this rule is for anything with more
+  than one reasonable way to solve it, or any tradeoff a person should
+  weigh in on.
+
+## Performance
+
+**Default to the fastest correct implementation.** Every new component,
+section, or animation must be written this way the first time — performance
+is not a cleanup pass. A hiring manager on a mid-range laptop or a phone is
+the target, not a dev machine.
+
+### Non-negotiables
+
+- **Nothing heavy in the entry chunk.** Anything large and route-specific
+  gets `React.lazy` + `Suspense` in `App.jsx`. The Sanity Studio is the
+  cautionary tale: a plain `import` of `StudioPage` put ~4.5 MB of CMS into
+  the chunk every visitor downloaded before the homepage could paint. Never
+  import from `sanity` or `sanity.config.js` outside `StudioPage.jsx` —
+  reading data uses `@sanity/client` via `src/sanity/`, which is small.
+- **Infinite animations are CSS, never framer-motion.** A JS-driven
+  `repeat: Infinity` wakes the main thread every frame for the whole
+  session, even offscreen. Use a keyframe class (`animate-moon-drift`,
+  `animate-star-twinkle`, `animate-scroll-hint`) and animate **only**
+  `transform` and `opacity` so the compositor owns it. Reserve
+  framer-motion for one-shot entrances and `AnimatePresence` exits.
+- **Hover/press feedback is CSS, never `whileHover`/`whileTap`.** Use
+  `hover:` / `active:` variants. `whileHover` mounts an animation
+  controller plus pointer listeners per instance, which is worst exactly
+  where it's most tempting — buttons and cards rendered in a loop.
+- **Never `transition-all`.** Name the properties
+  (`transition-[color,background-color,transform]`). `transition-all`
+  animates layout-affecting and expensive properties you didn't intend,
+  and on a fixed header it re-evaluates `backdrop-filter` every frame.
+- **Scroll listeners are `{ passive: true }` and rAF-coalesced.** A
+  non-passive listener blocks the browser from compositing the scroll
+  until JS returns — this is felt directly as sticky scrolling. See
+  `layout/Navigation.jsx`.
+- **Keep entrance delays under ~0.3s, and never delay the LCP element.**
+  The hero screenshot is the largest element on the page; a 1.1s reveal
+  delay makes the site feel slow no matter how fast the bytes arrive.
+- **Context values are memoized.** `useMemo` the provider value and
+  `useCallback` its functions. A raw object literal gives every consumer a
+  new value on each provider render and re-renders the tree below it.
+- **`whileInView` always carries `viewport={{ once: true }}`** so reveals
+  don't re-run on every scroll past.
+- **Images:** WebP, explicit `width`/`height` (prevents layout shift),
+  `decoding="async"`, `loading="lazy"` + `fetchpriority="low"` for
+  everything below the fold. Exactly one above-the-fold image may be eager
+  with `fetchpriority="high"`.
+- **Fonts load via `<link>` in `index.html`**, with `preconnect` to both
+  Google hosts. Never `@import` a font URL in `index.css` — that
+  serializes HTML → app CSS → font CSS → woff2, all render-blocking.
+- **Respect `prefers-reduced-motion`.** `index.css` has a global override;
+  add `motion-reduce:transform-none` to CSS hover transforms.
+
+### Checking your work
+
+Run `npm run build` and look at what the **homepage** pulls in — the
+`<script>` plus preloaded chunks in `dist/index.html`, not the total.
+That set is currently ~698 KB raw / ~227 KB gzipped across
+`index`, `vendor-react`, `vendor-router`, `vendor-motion`. If a change
+grows it noticeably, something got pulled into the critical path that
+should have been lazy. Vendor splitting lives in `vite.config.js`; do not
+add Sanity to `manualChunks` — it must stay inside the lazy `/studio`
+chunk Rollup derives from `App.jsx`.
+
 ## Conventions
 
 - Case-study page sections are extracted into

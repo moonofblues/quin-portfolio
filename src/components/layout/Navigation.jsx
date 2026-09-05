@@ -19,9 +19,27 @@ export function Navigation() {
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    // Scroll fires far more often than once per frame. Coalescing into a
+    // single rAF keeps the handler off the scrolling thread's critical path,
+    // and `passive` tells the browser up front that we never preventDefault —
+    // without it, Chrome must wait for this listener before compositing the
+    // scroll, which is felt directly as sticky scrolling.
+    let frame = 0;
+    const read = () => {
+      frame = 0;
+      setScrolled(window.scrollY > 50);
+    };
+    const handleScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(read);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
   }, []);
 
   useEffect(() => {
@@ -39,7 +57,10 @@ export function Navigation() {
     <>
       <motion.nav
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          // Transition only what actually changes. `transition-all` on a fixed
+          // header also animates backdrop-filter and background, forcing the
+          // blur to be re-evaluated on every frame of the 300ms cross-fade.
+          "fixed top-0 left-0 right-0 z-50 transition-[padding] duration-300",
           scrolled ? "glass py-4" : "py-6",
         )}
         initial={{ y: -100 }}
@@ -72,26 +93,26 @@ export function Navigation() {
           </div>
 
           <div className="flex items-center gap-4">
-            <motion.button
+            {/* Hover/press feedback is CSS, not framer-motion. whileHover
+                routes every pointerenter through React state and a JS
+                animation loop; hover:/active: variants are handled entirely by
+                the compositor and cost nothing on the main thread. */}
+            <button
               onClick={toggleTheme}
-              className="p-2 rounded-full text-text-secondary hover:bg-bg-tertiary transition-colors duration-200"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              className="p-2 rounded-full text-text-secondary hover:bg-bg-tertiary transition duration-200 hover:scale-110 active:scale-90 motion-reduce:transform-none"
               aria-label="Toggle theme"
             >
               {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
-            </motion.button>
+            </button>
 
-            <motion.button
+            <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-full text-text-secondary hover:bg-bg-tertiary transition-colors duration-200"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              className="md:hidden p-2 rounded-full text-text-secondary hover:bg-bg-tertiary transition duration-200 hover:scale-110 active:scale-90 motion-reduce:transform-none"
               aria-label="Toggle menu"
               aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-            </motion.button>
+            </button>
           </div>
         </div>
       </motion.nav>

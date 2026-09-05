@@ -47,7 +47,7 @@ const PROJECT_FIELDS = `
     description,
     "images": images[].asset->url
   },
-  solutionHighlights[] { title, description },
+  solutionHighlights[] { title, description, "image": image.asset->url },
   keyFunctions[] {
     "image": image.asset->url,
     caption

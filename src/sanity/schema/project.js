@@ -319,9 +319,16 @@ export const projectSchema = {
           fields: [
             { name: "title", title: "Title", type: "string" },
             { name: "description", title: "Description", type: "text", rows: 3 },
+            {
+              name: "image",
+              title: "Screenshot (optional)",
+              type: "image",
+              options: { hotspot: true },
+              description: "Shown beside this highlight in the Solution section",
+            },
           ],
           preview: {
-            select: { title: "title", subtitle: "description" },
+            select: { title: "title", subtitle: "description", media: "image" },
           },
         },
       ],
@@ -329,7 +336,7 @@ export const projectSchema = {
     },
     {
       name: "keyFunctions",
-      title: "Key Functions (optional)",
+      title: "Key Functions (legacy, unused)",
       type: "array",
       of: [
         {
@@ -344,6 +351,8 @@ export const projectSchema = {
           },
         },
       ],
+      description:
+        "No longer rendered — folded into Solution Highlights' per-card image. Field kept so existing content isn't lost; see docs/adr/0004.",
     },
     // External links
     {

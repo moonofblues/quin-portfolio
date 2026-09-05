@@ -1,23 +1,27 @@
-import { motion } from "framer-motion";
 import { cn } from "../../utils/cn";
 
 export function Moon({ className, size = 120 }) {
   return (
-    <motion.div
+    // The float loop is the CSS `animate-moon-drift` class, not framer-motion.
+    // It runs for the life of the page, and a JS-driven loop would re-enter the
+    // main thread every frame — including while the user is scrolling past it.
+    // Transform-only keyframes let the compositor own it instead.
+    <div
       className={cn(
-        "relative",
+        "relative animate-moon-drift",
         "sm:[--moon-size:var(--moon-base-size)] [--moon-size:100px] ",
-        className
+        className,
       )}
       style={{
         "--moon-base-size": `${size}px`,
         width: "var(--moon-size)",
         height: "var(--moon-size)",
       }}
-      animate={{ y: [0, -24, 0] }}
-      transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      aria-hidden="true"
     >
-      {/* Moon body */}
+      {/* Moon body — the 60px glow is painted on this static child rather than
+          the moving wrapper, so the blur is rasterized once instead of being
+          re-rendered on every frame of the drift. */}
       <div
         className="absolute inset-0 rounded-full"
         style={{
@@ -35,6 +39,6 @@ export function Moon({ className, size = 120 }) {
             "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 60%)",
         }}
       />
-    </motion.div>
+    </div>
   );
 }

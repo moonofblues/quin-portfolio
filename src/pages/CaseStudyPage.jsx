@@ -1,15 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Calendar,
-  User,
-  ExternalLink,
-  X,
-  Expand,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, X, Expand } from "lucide-react";
 import { Tag } from "../components/ui/Tag";
 import { Button } from "../components/ui/Button";
 import { Star } from "../components/decorative/Stars";
@@ -34,22 +26,39 @@ const fadeUp = {
   transition: { duration: 0.5 },
 };
 
+/** One label/value row in the hero meta card. */
+function MetaRow({ label, children }) {
+  return (
+    <div>
+      <h3 className="font-display text-xs uppercase tracking-wider mb-1 text-text-muted">
+        {label}
+      </h3>
+      <p className="text-text-primary font-medium">{children}</p>
+    </div>
+  );
+}
+
 export function CaseStudyPage() {
   const { slug } = useParams();
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const { getProjectBySlug, getNextPrevProjects, getRelatedProjects, loading } = useProjects();
+  const { getProjectBySlug, getNextPrevProjects, getRelatedProjects, loading } =
+    useProjects();
 
   // All hooks must come before any early returns
   useEffect(() => {
     if (!lightboxOpen) return;
-    const handleKey = (e) => { if (e.key === "Escape") setLightboxOpen(false); };
+    const handleKey = (e) => {
+      if (e.key === "Escape") setLightboxOpen(false);
+    };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [lightboxOpen]);
 
   useEffect(() => {
     document.body.style.overflow = lightboxOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [lightboxOpen]);
 
   const project = getProjectBySlug(slug);
@@ -60,7 +69,9 @@ export function CaseStudyPage() {
   if (loading) {
     return (
       <div className="min-h-screen pt-24 flex items-center justify-center">
-        <p className="font-display text-lg animate-pulse text-text-muted">Loading...</p>
+        <p className="font-display text-lg animate-pulse text-text-muted">
+          Loading...
+        </p>
       </div>
     );
   }
@@ -87,6 +98,30 @@ export function CaseStudyPage() {
     .filter((image) => image && image !== project.thumbnail);
   const heroImages = [project.thumbnail, ...showcaseImages].filter(Boolean);
   const hasSolutionHighlights = project.solutionHighlights?.length > 0;
+  // The Problem's big/centered treatment only reads well on a short, punchy
+  // line. Existing case studies were written as multi-sentence prose (ZCMC
+  // ERP's `challenge` is ~130 words), which would otherwise render as an
+  // oversized, centered wall of text — the opposite of the goal. Longer text
+  // falls back to a smaller, left-aligned treatment automatically, matching
+  // the "body copy over ~30 words stays left-aligned" rule already in
+  // CLAUDE.md, so no case study needs its copy rewritten to look right.
+  const isProblemStatementShort =
+    (project.challenge?.trim().split(/\s+/).length ?? 0) <= 30;
+
+  // Research section merges four optional ADR-0002 fields into one: an intro
+  // paragraph, an optional "key questions" row, and a single insight-card
+  // grid built from both research methods and pain points — they're both
+  // "things learned during research," and splitting them into three
+  // separate blocks (as the page used to) was pure text bulk with no reader
+  // benefit. See docs/adr/0004-case-study-narrative-restructure.md.
+  const insightCards = [
+    ...(project.researchMethods || []),
+    ...(project.painPoints || []),
+  ];
+  const hasResearchSection =
+    project.researchFindings ||
+    project.researchObjectives?.length > 0 ||
+    insightCards.length > 0;
 
   return (
     <div className="min-h-screen pt-24 pb-20">
@@ -98,422 +133,173 @@ export function CaseStudyPage() {
         <meta property="og:image" content={project.thumbnail} />
       )}
 
-      {/* Hero */}
-      <section className="w-full max-w-7xl mx-auto px-6 mb-16">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <Link to="/work" className="inline-block mb-8">
-            <Button variant="ghost" size="small">
-              <ArrowLeft size={16} />
-              Back to Work
-            </Button>
-          </Link>
-
-          <div className="flex flex-wrap gap-2 mb-8">
-            {project.tags?.map((tag) => (
-              <Tag key={tag}>{tag}</Tag>
-            ))}
-          </div>
-
-          {isCaseStudy ? (
-            <HeroCollage images={heroImages} title={project.title} />
-          ) : (
-            <div
-              className={cn(
-                "rounded-2xl overflow-hidden bg-bg-tertiary",
-                !project.thumbnail && "aspect-video",
-              )}
+      {isCaseStudy ? (
+        <>
+          {/* Hero: everything that says what this is comes before any
+              screenshot — title, subtitle, overview, and a compact meta card
+              all render first, with the screenshot collage as a supporting
+              visual afterward, not the opening beat. */}
+          <section className="w-full max-w-7xl mx-auto px-6 mb-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
             >
-              {project.thumbnail ? (
-                <img
-                  src={project.thumbnail}
-                  alt={project.title}
-                  className="w-auto max-w-full max-h-[85vh] mx-auto object-contain"
-                  loading="lazy"
-                  decoding="async"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <span className="font-display text-4xl text-text-muted">
-                    {project.title}
-                  </span>
-                </div>
-              )}
-            </div>
-          )}
-        </motion.div>
-      </section>
+              <Link to="/work" className="inline-block mb-8">
+                <Button variant="ghost" size="small">
+                  <ArrowLeft size={16} />
+                  Back to Work
+                </Button>
+              </Link>
 
-      {/* Brief: sticky sidebar + title/description */}
-      {isCaseStudy && (
-        <section className="w-full max-w-6xl mx-auto px-6 mb-16">
-          <motion.div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-10 md:gap-16" {...fadeUp}>
-            <aside className="md:sticky md:top-28 md:self-start space-y-8">
-              <div>
-                <h3 className="font-display text-xs uppercase tracking-wider mb-2 text-text-muted">
-                  Project Brief
-                </h3>
-                <p className="text-text-primary font-medium">
-                  {CATEGORY_LABELS[project.category] || project.category}
-                </p>
+              <div className="flex flex-wrap gap-2 mb-6">
+                {project.tags?.map((tag) => (
+                  <Tag key={tag}>{tag}</Tag>
+                ))}
               </div>
-              {project.role && (
-                <div>
-                  <h3 className="font-display text-xs uppercase tracking-wider mb-2 text-text-muted">
-                    Role
-                  </h3>
-                  <p className="text-text-primary font-medium">{project.role}</p>
-                </div>
-              )}
-              {project.duration && (
-                <div>
-                  <h3 className="font-display text-xs uppercase tracking-wider mb-2 text-text-muted">
-                    Project Duration
-                  </h3>
-                  <p className="text-text-primary font-medium">{project.duration}</p>
-                </div>
-              )}
-              {project.tools?.length > 0 && (
-                <div>
-                  <h3 className="font-display text-xs uppercase tracking-wider mb-2 text-text-muted">
-                    Tools Used
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tools.map((tool) => (
-                      <Tag key={tool}>{tool}</Tag>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {(project.liveUrl || project.behanceUrl) && (
-                <div className="flex flex-col gap-3">
-                  {project.liveUrl && (
-                    <Button
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      variant="secondary"
-                      size="small"
-                    >
-                      Visit Live Site
-                      <ExternalLink size={16} />
-                    </Button>
-                  )}
-                  {project.behanceUrl && (
-                    <Button
-                      href={project.behanceUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      variant="secondary"
-                      size="small"
-                    >
-                      View on Behance
-                      <ExternalLink size={16} />
-                    </Button>
-                  )}
-                </div>
-              )}
-            </aside>
 
-            <div>
-              <div className="flex items-start gap-4 mb-6">
-                <Star size={36} className="mt-2 shrink-0" />
-                <div>
-                  <h1 className="font-display text-4xl md:text-5xl lg:text-6xl mb-4 text-text-primary">
-                    {project.title}
-                  </h1>
+              <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10 lg:gap-16 items-start">
+                <div className="max-w-3xl">
+                  <div className="flex items-start gap-4 mb-4">
+                    <Star size={32} className="mt-2 shrink-0" />
+                    <div>
+                      <h3 className="font-display text-xs uppercase tracking-wider mb-2 text-accent">
+                        {CATEGORY_LABELS[project.category] || project.category}
+                      </h3>
+                      <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-text-primary">
+                        {project.title}
+                      </h1>
+                    </div>
+                  </div>
                   {project.subtitle && (
-                    <p className="text-xl md:text-2xl text-text-secondary">
+                    <p className="text-xl md:text-2xl mb-6 text-text-secondary">
                       {project.subtitle}
                     </p>
                   )}
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-6 mb-6">
-                {project.client && (
-                  <div className="flex items-center gap-2">
-                    <User size={18} className="text-accent" />
-                    <span className="text-sm text-text-secondary">{project.client}</span>
-                  </div>
-                )}
-                {project.year && (
-                  <div className="flex items-center gap-2">
-                    <Calendar size={18} className="text-accent" />
-                    <span className="text-sm text-text-secondary">{project.year}</span>
-                  </div>
-                )}
-              </div>
-
-              {project.overview && (
-                <p className="text-lg md:text-xl leading-relaxed text-text-secondary">
-                  {project.overview}
-                </p>
-              )}
-            </div>
-          </motion.div>
-        </section>
-      )}
-
-      {isCaseStudy && (
-        <>
-          {/* Background + Challenge */}
-          {project.background ? (
-            <section className="w-full mb-16">
-              <motion.div className="grid grid-cols-1 md:grid-cols-2" {...fadeUp}>
-                <div className="p-10 md:p-16 bg-accent text-on-accent">
-                  <h2 className="font-display text-sm uppercase tracking-wider mb-6 opacity-80">
-                    Background
-                  </h2>
-                  <p className="text-lg leading-relaxed">{project.background}</p>
-                </div>
-                <div className="p-10 md:p-16 bg-bg-secondary">
-                  <h2 className="font-display text-sm uppercase tracking-wider mb-6 text-text-muted">
-                    The Challenge
-                  </h2>
-                  <p className="text-lg leading-relaxed text-text-primary">{project.challenge}</p>
-                </div>
-              </motion.div>
-            </section>
-          ) : (
-            project.challenge && (
-              <section className="w-full max-w-4xl mx-auto px-6 mb-16">
-                <motion.div {...fadeUp}>
-                  <h2 className="font-display text-2xl mb-6 text-text-primary">
-                    The Challenge
-                  </h2>
-                  <p className="text-lg leading-relaxed text-text-secondary">
-                    {project.challenge}
-                  </p>
-                </motion.div>
-              </section>
-            )
-          )}
-
-          {/* Process */}
-          {project.process && project.process.length > 0 && (
-            <section className="w-full max-w-7xl mx-auto px-6 mb-16">
-              <motion.div {...fadeUp}>
-                <h2 className="font-display text-2xl mb-8 md:mb-12 text-text-primary">
-                  The Process
-                </h2>
-                <ProcessTimeline steps={project.process} />
-              </motion.div>
-            </section>
-          )}
-
-          {/* Research Objectives */}
-          {project.researchObjectives?.length > 0 && (
-            <section className="w-full mb-16 py-16 bg-accent text-on-accent">
-              <div className="max-w-6xl mx-auto px-6">
-                <motion.div {...fadeUp}>
-                  <h2 className="font-display text-xl md:text-2xl uppercase tracking-wide mb-8">
-                    Research Objectives
-                  </h2>
-                  <ul className="grid gap-3 md:grid-cols-2 md:gap-x-12">
-                    {project.researchObjectives.map((objective, i) => (
-                      <li key={i} className="flex gap-3 text-lg leading-relaxed">
-                        <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-current shrink-0" />
-                        {objective}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              </div>
-            </section>
-          )}
-
-          {/* Research Methods + Findings */}
-          {(project.researchMethods?.length > 0 || project.researchFindings) && (
-            <section className="w-full max-w-6xl mx-auto px-6 mb-16">
-              <motion.div {...fadeUp}>
-                {project.researchMethods?.length > 0 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-                    {project.researchMethods.map((method, i) => (
-                      <div key={i} className="p-6 rounded-xl bg-bg-secondary">
-                        <h3 className="font-display text-sm uppercase tracking-wider mb-3 text-text-muted">
-                          {method.title}
-                        </h3>
-                        <p className="leading-relaxed text-text-secondary">
-                          {method.description}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {project.researchFindings && (
-                  <div className="max-w-4xl">
-                    <h2 className="font-display text-2xl mb-4 text-text-primary">
-                      Research Findings
-                    </h2>
+                  {project.overview && (
                     <p className="text-lg leading-relaxed text-text-secondary">
-                      {project.researchFindings}
+                      {project.overview}
                     </p>
-                  </div>
-                )}
-              </motion.div>
-            </section>
-          )}
-
-          {/* Common Pain Points */}
-          {project.painPoints?.length > 0 && (
-            <section className="w-full mb-16 py-16 bg-accent-subtle">
-              <div className="max-w-7xl mx-auto px-6">
-                <motion.div {...fadeUp}>
-                  <h2 className="font-display text-2xl mb-10 text-text-primary">
-                    Common Pain Points
-                  </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {project.painPoints.map((point, i) => (
-                      <div key={i} className="p-6 rounded-xl bg-bg-elevated">
-                        <h3 className="font-display text-sm uppercase tracking-wider mb-3 text-text-primary">
-                          {point.title}
-                        </h3>
-                        <p className="leading-relaxed text-text-secondary">
-                          {point.description}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              </div>
-            </section>
-          )}
-
-          {/* Quote + Persona */}
-          {(project.quote || project.persona?.name) && (
-            <section className="w-full mb-16">
-              {project.quote && (
-                <div className="py-16 px-6 bg-accent text-on-accent text-center">
-                  <motion.blockquote
-                    className="font-display text-2xl md:text-4xl max-w-4xl mx-auto leading-snug"
-                    {...fadeUp}
-                  >
-                    &ldquo;{project.quote}&rdquo;
-                  </motion.blockquote>
+                  )}
                 </div>
-              )}
-              {project.persona?.name && (
-                <div className="max-w-5xl mx-auto px-6 mt-10">
-                  <motion.div
-                    className="rounded-2xl overflow-hidden shadow-card bg-bg-elevated grid grid-cols-1 sm:grid-cols-[10rem_1fr]"
-                    {...fadeUp}
-                  >
-                    {project.persona.photo && (
-                      <img
-                        src={project.persona.photo}
-                        alt={project.persona.name}
-                        className="w-full h-40 sm:h-full object-cover"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    )}
-                    <div className="p-6">
-                      <h3 className="font-display text-lg text-text-primary">
-                        {project.persona.name}
+
+                <div className="w-full lg:w-72 shrink-0 rounded-2xl shadow-card bg-bg-elevated p-6 md:p-8 space-y-5">
+                  {project.year && (
+                    <MetaRow label="Year">{project.year}</MetaRow>
+                  )}
+                  {project.duration && (
+                    <MetaRow label="Duration">{project.duration}</MetaRow>
+                  )}
+                  {project.role && (
+                    <MetaRow label="Role">{project.role}</MetaRow>
+                  )}
+                  {project.client && (
+                    <MetaRow label="Client">{project.client}</MetaRow>
+                  )}
+                  {project.tools?.length > 0 && (
+                    <div>
+                      <h3 className="font-display text-xs uppercase tracking-wider mb-2 text-text-muted">
+                        Tools Used
                       </h3>
-                      <p className="text-sm text-text-secondary mb-4">
-                        {[project.persona.role, project.persona.location].filter(Boolean).join(", ")}
-                      </p>
-                      {project.persona.tools?.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                          {project.persona.tools.map((tool) => (
-                            <Tag key={tool}>{tool}</Tag>
-                          ))}
-                        </div>
+                      <div className="flex flex-wrap gap-2">
+                        {project.tools.map((tool) => (
+                          <Tag key={tool}>{tool}</Tag>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {(project.liveUrl || project.behanceUrl) && (
+                    <div className="flex flex-col gap-3 pt-1">
+                      {project.liveUrl && (
+                        <Button
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          variant="secondary"
+                          size="small"
+                        >
+                          Visit Live Site
+                          <ExternalLink size={16} />
+                        </Button>
+                      )}
+                      {project.behanceUrl && (
+                        <Button
+                          href={project.behanceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          variant="secondary"
+                          size="small"
+                        >
+                          View on Behance
+                          <ExternalLink size={16} />
+                        </Button>
                       )}
                     </div>
-                  </motion.div>
+                  )}
                 </div>
-              )}
-            </section>
-          )}
-
-          {/* How Might We */}
-          {project.howMightWe?.length > 0 && (
-            <section className="w-full mb-16 py-16 bg-accent-subtle">
-              <div className="max-w-7xl mx-auto px-6">
-                <motion.div {...fadeUp}>
-                  <h2 className="font-display text-2xl mb-10 text-text-primary">
-                    How Might We
-                  </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {project.howMightWe.map((question, i) => (
-                      <div
-                        key={i}
-                        className="p-6 rounded-xl bg-bg-elevated text-text-primary leading-relaxed"
-                      >
-                        {question}
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
               </div>
-            </section>
-          )}
+            </motion.div>
+          </section>
 
-          {/* Ideation */}
-          {(project.ideation?.description || project.ideation?.diagramImage) && (
-            <section className="w-full max-w-7xl mx-auto px-6 mb-16">
-              <motion.div {...fadeUp}>
-                <h2 className="font-display text-2xl mb-6 text-text-primary">Ideation</h2>
-                {project.ideation.description && (
-                  <p className="max-w-4xl text-lg leading-relaxed text-text-secondary mb-8">
-                    {project.ideation.description}
-                  </p>
-                )}
-                {project.ideation.diagramImage && (
-                  <img
-                    src={project.ideation.diagramImage}
-                    alt={`${project.title} — ideation flow`}
-                    className="w-full h-auto rounded-2xl"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                )}
-              </motion.div>
-            </section>
-          )}
+          <section className="w-full max-w-7xl mx-auto px-6 mb-16">
+            <motion.div {...fadeUp}>
+              <HeroCollage images={heroImages} title={project.title} />
+            </motion.div>
+          </section>
 
-          {/* Wireframes */}
-          {(project.wireframes?.description || project.wireframes?.images?.length > 0) && (
-            <section className="w-full max-w-7xl mx-auto px-6 mb-16">
-              <motion.div {...fadeUp}>
-                <h2 className="font-display text-2xl mb-6 text-text-primary">
-                  Laying the Foundation
+          {/* The Problem, immediately followed by The Solution: a reader who
+              only wants the pitch gets both without scrolling past the
+              deeper-dive sections (Process/Background/Research/Persona/HMW),
+              which follow afterward for anyone still reading. */}
+          {project.challenge && (
+            <section className="w-full max-w-5xl mx-auto px-6 mb-16">
+              <motion.div
+                className={cn(
+                  "rounded-3xl bg-accent-subtle p-10 md:p-16",
+                  isProblemStatementShort && "text-center",
+                )}
+                {...fadeUp}
+              >
+                <h2
+                  className={cn(
+                    "font-display text-xs uppercase tracking-wider mb-6 text-accent",
+                    !isProblemStatementShort && "text-left",
+                  )}
+                >
+                  The Problem
                 </h2>
-                {project.wireframes.description && (
-                  <p className="max-w-4xl text-lg leading-relaxed text-text-secondary mb-8">
-                    {project.wireframes.description}
-                  </p>
-                )}
-                {project.wireframes.images?.length > 0 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    {project.wireframes.images.map((img, i) => (
-                      <img
-                        key={i}
-                        src={img}
-                        alt={`${project.title} — wireframe ${i + 1}`}
-                        className="w-full h-auto rounded-xl"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ))}
-                  </div>
-                )}
+                <p
+                  className={cn(
+                    "font-display text-text-primary",
+                    isProblemStatementShort
+                      ? "text-2xl md:text-4xl leading-snug"
+                      : "text-left text-xl md:text-2xl leading-relaxed",
+                  )}
+                >
+                  {project.challenge}
+                </p>
               </motion.div>
             </section>
           )}
 
-          {/* Solution */}
           {hasSolutionHighlights ? (
             <section className="w-full max-w-7xl mx-auto px-6 mb-16">
               <motion.div {...fadeUp}>
                 <h2 className="font-display text-2xl mb-10 text-text-primary text-center">
                   The Solution
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {project.solutionHighlights.map((highlight, i) => (
                     <div key={i}>
+                      {highlight.image && (
+                        <img
+                          src={highlight.image}
+                          alt={highlight.title || project.title}
+                          className="w-full h-auto rounded-xl mb-4"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      )}
                       <h3 className="font-display text-sm uppercase tracking-wider mb-3 text-text-primary">
                         {highlight.title}
                       </h3>
@@ -540,27 +326,160 @@ export function CaseStudyPage() {
             )
           )}
 
-          {/* Key Functions */}
-          {project.keyFunctions?.length > 0 && (
+          {/* Process */}
+          {project.process && project.process.length > 0 && (
             <section className="w-full max-w-7xl mx-auto px-6 mb-16">
               <motion.div {...fadeUp}>
-                <h2 className="font-display text-2xl mb-10 text-text-primary">Key Functions</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                  {project.keyFunctions.map((fn, i) => (
-                    <div key={i}>
-                      {fn.image && (
-                        <img
-                          src={fn.image}
-                          alt={fn.caption || project.title}
-                          className="w-full h-auto rounded-2xl mb-4"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      )}
-                      {fn.caption && (
-                        <p className="text-text-secondary text-center">{fn.caption}</p>
-                      )}
+                <h2 className="font-display text-2xl mb-8 md:mb-12 text-text-primary">
+                  The Process
+                </h2>
+                <ProcessTimeline steps={project.process} />
+              </motion.div>
+            </section>
+          )}
+
+          {/* Background — standalone context, no longer force-split with
+              Challenge (which is now "The Problem" above). The pull quote
+              renders here instead of as its own full-bleed banner. */}
+          {project.background && (
+            <section className="w-full mb-16 py-16 md:py-20 bg-bg-secondary">
+              <div className="max-w-4xl mx-auto px-6">
+                <motion.div {...fadeUp}>
+                  <h2 className="font-display text-sm uppercase tracking-wider mb-6 text-text-muted">
+                    Background
+                  </h2>
+                  <p className="text-lg leading-relaxed text-text-primary">
+                    {project.background}
+                  </p>
+                  {project.quote && (
+                    <blockquote className="mt-10 pl-6 border-l-4 border-accent font-display text-xl md:text-2xl leading-snug text-text-primary">
+                      &ldquo;{project.quote}&rdquo;
+                    </blockquote>
+                  )}
+                </motion.div>
+              </div>
+            </section>
+          )}
+
+          {/* Research: intro + optional key-questions row + one merged
+              insight-card grid (research methods + pain points together). */}
+          {hasResearchSection && (
+            <section className="w-full max-w-7xl mx-auto px-6 mb-16">
+              <motion.div {...fadeUp}>
+                <h2 className="font-display text-2xl mb-6 text-text-primary">
+                  Research
+                </h2>
+                {project.researchFindings && (
+                  <p className="max-w-4xl text-lg leading-relaxed text-text-secondary mb-10">
+                    {project.researchFindings}
+                  </p>
+                )}
+                {project.researchObjectives?.length > 0 && (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+                    {project.researchObjectives.map((question, i) => (
+                      <div
+                        key={i}
+                        className="p-5 rounded-xl bg-bg-secondary text-text-primary leading-relaxed"
+                      >
+                        {question}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {insightCards.length > 0 && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {insightCards.map((card, i) => (
+                      <div key={i} className="p-6 rounded-xl bg-accent-subtle">
+                        <h3 className="font-display text-sm uppercase tracking-wider mb-3 text-text-primary">
+                          {card.title}
+                        </h3>
+                        <p className="text-sm leading-relaxed text-text-secondary">
+                          {card.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            </section>
+          )}
+
+          {/* Persona */}
+          {project.persona?.name && (
+            <section className="w-full max-w-6xl mx-auto px-6 mb-16">
+              <motion.div
+                className="rounded-2xl overflow-hidden shadow-card bg-bg-elevated grid grid-cols-1 sm:grid-cols-[10rem_1fr]"
+                {...fadeUp}
+              >
+                {project.persona.photo && (
+                  <img
+                    src={project.persona.photo}
+                    alt={project.persona.name}
+                    className="w-full h-40 sm:h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                <div className="p-6">
+                  <h3 className="font-display text-lg text-text-primary">
+                    {project.persona.name}
+                  </h3>
+                  <p className="text-sm text-text-secondary mb-4">
+                    {[project.persona.role, project.persona.location]
+                      .filter(Boolean)
+                      .join(", ")}
+                  </p>
+                  {project.persona.tools?.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {project.persona.tools.map((tool) => (
+                        <Tag key={tool}>{tool}</Tag>
+                      ))}
                     </div>
+                  )}
+                </div>
+              </motion.div>
+            </section>
+          )}
+
+          {/* How Might We */}
+          {project.howMightWe?.length > 0 && (
+            <section className="w-full mb-16 py-16 bg-accent-subtle">
+              <div className="max-w-7xl mx-auto px-6">
+                <motion.div {...fadeUp}>
+                  <h2 className="font-display text-2xl mb-10 text-text-primary">
+                    How Might We
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {project.howMightWe.map((question, i) => (
+                      <div
+                        key={i}
+                        className="p-6 rounded-xl bg-bg-elevated text-text-primary leading-relaxed"
+                      >
+                        {question}
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+            </section>
+          )}
+
+          {/* Results — after Solution/Persona/HMW so it measures what came
+              before it, rather than front-running the reveal. */}
+          {project.results && project.results.length > 0 && (
+            <section className="w-full max-w-6xl mx-auto px-6 mb-16">
+              <motion.div {...fadeUp}>
+                <h2 className="font-display text-2xl mb-10 text-text-primary">
+                  Results
+                </h2>
+                <div className="flex flex-wrap justify-center gap-10 md:gap-16">
+                  {project.results.map((result, index) => (
+                    <StatRing
+                      key={index}
+                      metric={result.metric}
+                      label={result.label}
+                      delay={index * 0.1}
+                    />
                   ))}
                 </div>
               </motion.div>
@@ -604,7 +523,9 @@ export function CaseStudyPage() {
           {lightboxOpen && (
             <div
               className="fixed inset-0 z-50 bg-black/95 overflow-y-auto"
-              onClick={(e) => { if (e.target === e.currentTarget) setLightboxOpen(false); }}
+              onClick={(e) => {
+                if (e.target === e.currentTarget) setLightboxOpen(false);
+              }}
             >
               <button
                 onClick={() => setLightboxOpen(false)}
@@ -629,26 +550,51 @@ export function CaseStudyPage() {
               </div>
             </div>
           )}
-
-          {/* Results */}
-          {project.results && project.results.length > 0 && (
-            <section className="w-full max-w-6xl mx-auto px-6 mb-16">
-              <motion.div {...fadeUp}>
-                <h2 className="font-display text-2xl mb-10 text-text-primary">Results</h2>
-                <div className="flex flex-wrap justify-center gap-10 md:gap-16">
-                  {project.results.map((result, index) => (
-                    <StatRing
-                      key={index}
-                      metric={result.metric}
-                      label={result.label}
-                      delay={index * 0.1}
-                    />
-                  ))}
-                </div>
-              </motion.div>
-            </section>
-          )}
         </>
+      ) : (
+        <section className="w-full max-w-7xl mx-auto px-6 mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Link to="/work" className="inline-block mb-8">
+              <Button variant="ghost" size="small">
+                <ArrowLeft size={16} />
+                Back to Work
+              </Button>
+            </Link>
+
+            <div className="flex flex-wrap gap-2 mb-8">
+              {project.tags?.map((tag) => (
+                <Tag key={tag}>{tag}</Tag>
+              ))}
+            </div>
+
+            <div
+              className={cn(
+                "rounded-2xl overflow-hidden bg-bg-tertiary",
+                !project.thumbnail && "aspect-video",
+              )}
+            >
+              {project.thumbnail ? (
+                <img
+                  src={project.thumbnail}
+                  alt={project.title}
+                  className="w-auto max-w-full max-h-[85vh] mx-auto object-contain"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="font-display text-4xl text-text-muted">
+                    {project.title}
+                  </span>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </section>
       )}
 
       {!isCaseStudy && (

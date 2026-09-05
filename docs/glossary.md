@@ -6,10 +6,29 @@ aren't self-evident from the code alone.
 ## Case study page
 
 - **Case study** — a `project` document with `type: "case-study"`, rendered
-  by `CaseStudyPage.jsx` with the full set of sections (Brief, Challenge,
-  Process, Solution, Results, and the optional research sections). Contrast
-  with **Showcase**, the simpler `type: "showcase"` project which only
-  renders a description and gallery images.
+  by `CaseStudyPage.jsx` in this order: Hero (title/subtitle/overview/meta
+  card + screenshot collage), The Problem, The Solution, Process,
+  Background, Research, Persona, How Might We, Results, Design Showcase.
+  See [ADR 0004](adr/0004-case-study-narrative-restructure.md) for why
+  Problem/Solution sit together near the top while Results sits near the
+  bottom. Contrast with **Showcase**, the simpler `type: "showcase"`
+  project which only renders a description and gallery images.
+
+- **The Problem** — the case study's `challenge` field, labeled "The
+  Problem" in the UI (renamed from "The Challenge"). Styled adaptively: 30
+  words or fewer renders large/bold/centered, longer text renders
+  left-aligned at a more moderate size. See
+  [ADR 0004](adr/0004-case-study-narrative-restructure.md).
+
+- **Meta card** — the compact card in the Hero section holding
+  Year/Duration/Role/Client/Tools and the live-site/Behance links. Replaced
+  the earlier sticky sidebar layout. See
+  [ADR 0004](adr/0004-case-study-narrative-restructure.md).
+
+- **Insight card** — one card in the Research section's grid, built from
+  either a `researchMethods` entry or a `painPoints` entry (both treated as
+  equally-weighted "things learned during research"). See
+  [ADR 0004](adr/0004-case-study-narrative-restructure.md).
 
 - **Process step** — one entry in a case study's `process` array
   (`{ title, description }`, `src/sanity/schema/project.js:144-160`). Always
@@ -46,4 +65,16 @@ aren't self-evident from the code alone.
   `researchFindings`, `painPoints`, `quote`, `persona`, `howMightWe`,
   `ideation`, `wireframes`, `solutionHighlights`, `keyFunctions`) — each
   renders only when filled in, and is omitted entirely (not shown as an
-  empty state) otherwise.
+  empty state) otherwise. As of
+  [ADR 0004](adr/0004-case-study-narrative-restructure.md), `ideation` and
+  `wireframes` are never rendered regardless of content (schema kept, page
+  no longer reads them), and `researchObjectives`/`researchMethods`/
+  `researchFindings`/`painPoints` are consolidated into the single Research
+  section rather than four separate ones.
+
+- **Legacy, unused field** — a schema field intentionally kept (and still
+  fetched in `queries.js`) even though `CaseStudyPage.jsx` no longer renders
+  it, so that any project with existing content in it doesn't silently lose
+  that data. Currently `keyFunctions` (folded into `solutionHighlights`'
+  per-card `image`), `ideation`, and `wireframes`. See
+  [ADR 0004](adr/0004-case-study-narrative-restructure.md).

@@ -34,13 +34,12 @@ export function ProjectCard({ project, index = 0 }) {
           </div>
 
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center bg-bg-primary/80">
-            <motion.div
-              className="flex items-center gap-2 px-6 py-3 rounded-full font-medium bg-accent text-on-accent"
-              whileHover={{ scale: 1.05 }}
-            >
+            {/* CSS hover instead of whileHover — this renders once per card in
+                a grid, so per-instance JS pointer listeners add up. */}
+            <div className="flex items-center gap-2 px-6 py-3 rounded-full font-medium bg-accent text-on-accent transition-transform duration-200 hover:scale-105 motion-reduce:transform-none">
               {project.type === "case-study" ? "View Case Study" : "View Project"}
               <ArrowUpRight size={18} />
-            </motion.div>
+            </div>
           </div>
         </div>
 

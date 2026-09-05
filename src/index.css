@@ -1,18 +1,9 @@
-/* Font imports */
-@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Krona+One&display=swap");
+/* Fonts are loaded via <link> in index.html, not @import. An @import here
+   serializes the network: HTML -> app CSS -> Google's font CSS -> woff2, with
+   every hop render-blocking. The <link> tags start fetching while the HTML is
+   still parsing. Do not move them back into this file. */
 
 @import "tailwindcss";
-
-/* Krona One from Google Fonts */
-@font-face {
-  font-family: "Krona One";
-  src: url("https://fonts.gstatic.com/s/kronaone/v14/jAnEgHdjHcjgfIb1ZcUCMY-h.woff2")
-    format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
 
 /* color pallette */
 .dark {
@@ -35,6 +26,10 @@
 
   --color-border: rgba(201, 169, 110, 0.15);
   --color-border-hover: rgba(201, 169, 110, 0.3);
+
+  /* Star fill. Lives in CSS so <Star> doesn't have to subscribe to
+     ThemeContext just to pick a hex value — see Stars.jsx. */
+  --color-star: #c9a96e;
 }
 
 @theme {
@@ -59,6 +54,8 @@
 
   --color-moon: #d4c4a8;
   --color-moon-shadow: #a89878;
+
+  --color-star: #0a1628;
 
   --color-border: rgba(201, 169, 110, 0.15);
   --color-border-hover: rgba(201, 169, 110, 0.3);
@@ -325,6 +322,76 @@ img {
   animation: twinkle 3s ease-in-out infinite;
 }
 
+/* Ambient loops for the hero decorations.
+   These run forever, so they are CSS rather than framer-motion: a JS-driven
+   infinite animation wakes the main thread every frame even when the element
+   is offscreen, which is exactly what makes early scrolling feel sticky.
+   Both animate only transform/opacity so they stay on the compositor. */
+@keyframes moon-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -24px, 0);
+  }
+}
+
+.animate-moon-drift {
+  animation: moon-drift 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes star-twinkle {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale3d(0.95, 0.95, 1);
+  }
+}
+
+.animate-star-twinkle {
+  animation: star-twinkle 3s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes scroll-hint {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, 8px, 0);
+  }
+}
+
+.animate-scroll-hint {
+  animation: scroll-hint 1.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Respect the OS "reduce motion" setting: drop every looping decoration and
+   collapse transitions. Also covers framer-motion, which reads the same
+   media query at runtime. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 .animate-fade-in-up {
   animation: fadeInUp 0.6s ease-out forwards;
 }
@@ -342,11 +409,18 @@ img {
   transform: translateY(-4px);
 }
 
-/* Glass Effect */
+/* Glass Effect
+   backdrop-filter re-samples everything painted behind the element, so on a
+   fixed header it repaints on every scroll frame. Two things keep it cheap:
+   `isolation` + a compositor hint give it its own layer, and the blur radius
+   is small and identical across both properties (they used to disagree at
+   6px/12px, which made Safari do more work than Chrome for no visual reason). */
 .glass {
   background: rgba(17, 29, 46, 0.8);
   backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(6px);
+  isolation: isolate;
+  transform: translateZ(0);
 }
 
 html.light .glass {

@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { cn } from '../../utils/cn';
 
 export function Button({
@@ -9,7 +8,21 @@ export function Button({
   href,
   ...props
 }) {
-  const baseStyles = 'inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 rounded-full';
+  // Hover/press feedback is CSS. This component renders many times per page,
+  // and framer-motion's whileHover/whileTap would mount an animation
+  // controller and pointer listeners for each instance; the hover:/active:
+  // variants below do the same job on the compositor for free.
+  // Uses Tailwind's plain `transition` (not `transition-all`, not a
+  // hand-written `transition-[...]` list): a single class means a single
+  // `transition-property` rule, so it can't lose a cascade fight the way
+  // stacking transition-colors + transition-transform did (same CSS
+  // property set twice on one element — only the later rule wins, silently
+  // dropping the other). `transition` still excludes layout-affecting
+  // properties like width/padding that true transition-all would include.
+  const baseStyles =
+    'inline-flex items-center justify-center gap-2 font-medium rounded-full ' +
+    'transition duration-200 ' +
+    'hover:scale-[1.02] active:scale-[0.98] motion-reduce:transform-none';
 
   const variants = {
     primary: 'bg-accent text-on-accent hover:bg-accent-hover',
@@ -23,14 +36,12 @@ export function Button({
     large: 'px-8 py-4 text-lg',
   };
 
-  const Component = href ? motion.a : motion.button;
+  const Component = href ? 'a' : 'button';
 
   return (
     <Component
       href={href}
       className={cn(baseStyles, variants[variant], sizes[size], className)}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
       {...props}
     >
       {children}

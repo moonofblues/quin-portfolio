@@ -7,16 +7,17 @@ export function Layout({ children }) {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    // Scroll to top on route change, unless there's a hash
     if (!hash) {
-      window.scrollTo(0, 0);
-    } else {
-      // Scroll to hash element
-      setTimeout(() => {
-        const element = document.querySelector(hash);
-        element?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      return;
     }
+
+    // Wait one frame so the incoming route has committed and the target
+    // element exists, rather than guessing with a fixed timeout.
+    const frame = requestAnimationFrame(() => {
+      document.querySelector(hash)?.scrollIntoView({ behavior: "smooth" });
+    });
+    return () => cancelAnimationFrame(frame);
   }, [pathname, hash]);
 
   return (

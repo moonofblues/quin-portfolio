@@ -17,6 +17,15 @@ const skills = [
   "Graphic Designing",
 ];
 
+// Entrance timings.
+//
+// These used to run out to a 1.2s delay, which meant the hero screenshot — the
+// largest element on the page, i.e. the LCP candidate — sat at opacity 0 for
+// over a second no matter how fast it downloaded. The stagger is kept, but
+// compressed so the whole sequence resolves in well under half a second, and
+// the centre screenshot now leads the collage instead of trailing it.
+const EASE_OUT = [0.22, 1, 0.36, 1];
+
 export function Hero() {
   return (
     <section
@@ -51,7 +60,7 @@ export function Hero() {
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs md:text-sm bg-bg-tertiary text-text-secondary mb-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.4, delay: 0.05, ease: EASE_OUT }}
         >
           <span className="relative flex h-2 w-2" aria-hidden="true">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
@@ -60,21 +69,17 @@ export function Hero() {
           Portfolio in progress — more of my works are still being added
         </motion.div>
 
+        {/* The tags animate as one group. Previously each of the six was its
+            own motion element with its own controller and its own delay,
+            stretching the stagger to 0.8s for a purely decorative reveal. */}
         <motion.div
           className="flex flex-wrap justify-center max-w-2xl gap-2 mb-8"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.4, delay: 0.1, ease: EASE_OUT }}
         >
-          {skills.map((skill, index) => (
-            <motion.div
-              key={skill}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}
-            >
-              <Tag>{skill}</Tag>
-            </motion.div>
+          {skills.map((skill) => (
+            <Tag key={skill}>{skill}</Tag>
           ))}
         </motion.div>
 
@@ -82,7 +87,7 @@ export function Hero() {
           className="font-display text-3xl md:text-5xl lg:text-6xl xl:text-6xl leading-tight mb-6 text-text-primary"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          transition={{ duration: 0.45, delay: 0.15, ease: EASE_OUT }}
         >
           Designing Systems and Visuals That
           <br />
@@ -93,7 +98,7 @@ export function Hero() {
           className="text-md md:text-xl max-w-2xl mx-auto mb-10 text-text-secondary"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          transition={{ duration: 0.45, delay: 0.22, ease: EASE_OUT }}
         >
           From pixel to production — I bridge design and development to create
           interfaces that are as functional as they are beautiful.
@@ -103,7 +108,7 @@ export function Hero() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
+          transition={{ duration: 0.45, delay: 0.3, ease: EASE_OUT }}
         >
           <Button href="#work" variant="primary" size="large">
             View My Work
@@ -117,64 +122,73 @@ export function Hero() {
           className="absolute top-105 lg:top-120 left-1/2 -translate-x-1/2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.2 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
         >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          >
+          {/* Infinite bob is a CSS keyframe — a framer-motion repeat loop here
+              would drive the main thread for the entire session. */}
+          <div className="animate-scroll-hint">
             <ArrowDown size={24} className="text-text-secondary" />
-          </motion.div>
+          </div>
         </motion.div>
       </div>
 
       <div className="relative w-full h-44 md:h-72 mt-10 pointer-events-none overflow-hidden">
         <motion.div
           className="absolute bottom-[-10%] left-[5%] w-[280px] md:w-[500px] rounded-xl overflow-hidden shadow-2xl"
-          initial={{ opacity: 0, y: 100, rotate: -6 }}
+          initial={{ opacity: 0, y: 60, rotate: -6 }}
           animate={{ opacity: 0.9, y: 0, rotate: -6 }}
-          transition={{ duration: 0.8, delay: 1 }}
+          transition={{ duration: 0.55, delay: 0.2, ease: EASE_OUT }}
           style={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.4)" }}
         >
           <div className="aspect-video">
             <img
               src={adzuPortal}
               alt="AdZU Institutional Portal Screenshot"
+              width={1600}
+              height={891}
               fetchpriority="low"
               loading="lazy"
+              decoding="async"
             />
           </div>
         </motion.div>
 
+        {/* LCP candidate: shortest delay of the three, eager, high priority. */}
         <motion.div
           className="absolute bottom-[-5%] left-1/2 -translate-x-1/2 w-[300px] md:w-[520px] rounded-xl overflow-hidden shadow-2xl z-10"
-          initial={{ opacity: 0, y: 100, rotate: 0 }}
-          animate={{ opacity: 1, y: 0, rotate: 0 }}
-          transition={{ duration: 0.8, delay: 1.1 }}
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.1, ease: EASE_OUT }}
           style={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)" }}
         >
           <div className="aspect-video">
             <img
               src={zcmcWebsiteDark}
               alt="ZCMC Website Redesign Screenshot"
+              width={1600}
+              height={904}
               fetchpriority="high"
+              decoding="async"
             />
           </div>
         </motion.div>
 
         <motion.div
           className="absolute bottom-[-10%] right-[5%] w-[280px] md:w-[500px] rounded-xl overflow-hidden shadow-2xl"
-          initial={{ opacity: 0, y: 100, rotate: 6 }}
+          initial={{ opacity: 0, y: 60, rotate: 6 }}
           animate={{ opacity: 0.9, y: 0, rotate: 6 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
+          transition={{ duration: 0.55, delay: 0.25, ease: EASE_OUT }}
           style={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.4)" }}
         >
           <div className="aspect-video">
             <img
               src={erpDashboard}
               alt="Hospital ERP Dashboard Screenshot"
+              width={1600}
+              height={833}
               fetchpriority="low"
               loading="lazy"
+              decoding="async"
             />
           </div>
         </motion.div>

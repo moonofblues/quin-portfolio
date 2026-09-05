@@ -32,31 +32,29 @@ export function Contact() {
             and development, I'd love to hear from you.
           </p>
 
-          <motion.a
+          {/* CSS hover — see Button.jsx for why these aren't whileHover. */}
+          <a
             href="mailto:quinledesma@gmail.com"
-            className="inline-flex items-center gap-3 text-2xl md:text-3xl font-display mb-10 text-text-primary hover:text-accent transition-colors duration-200"
-            whileHover={{ scale: 1.02 }}
+            className="inline-flex items-center gap-3 text-2xl md:text-3xl font-display mb-10 text-text-primary hover:text-accent transition duration-200 hover:scale-[1.02] motion-reduce:transform-none"
           >
             <Mail size={28} className="text-accent" />
             quinledesma@gmail.com
-          </motion.a>
+          </a>
 
           <div className="flex items-center justify-center gap-4">
             {socialLinks.map((link) => {
               const Icon = link.icon;
               return (
-                <motion.a
+                <a
                   key={link.label}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-full flex items-center justify-center bg-bg-tertiary text-text-secondary hover:bg-accent hover:text-on-accent transition-all duration-200"
-                  whileHover={{ scale: 1.1, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
+                  className="w-12 h-12 rounded-full flex items-center justify-center bg-bg-tertiary text-text-secondary hover:bg-accent hover:text-on-accent transition duration-200 hover:-translate-y-0.5 hover:scale-110 active:scale-95 motion-reduce:transform-none"
                   aria-label={link.label}
                 >
                   <Icon size={20} />
-                </motion.a>
+                </a>
               );
             })}
           </div>
