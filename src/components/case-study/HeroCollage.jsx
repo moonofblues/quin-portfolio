@@ -1,11 +1,9 @@
 import { cn } from "../../utils/cn";
 
-const OFFSETS = [
-  "md:translate-y-6 md:-rotate-1 z-[3]",
-  "md:-translate-y-4 md:rotate-1 z-[2]",
-  "md:translate-y-10 md:-rotate-2 z-[1]",
-  "md:-translate-y-2 md:rotate-2 z-[4]",
-];
+// Subtle per-frame tilt only. The collage now sits in a single row, so the
+// old vertical-translate offsets (tuned for a 2x2 grid) would just leave the
+// row's top and bottom edges ragged.
+const TILTS = ["md:-rotate-1", "md:rotate-1", "md:-rotate-2", "md:rotate-1"];
 
 function BrowserFrame({ src, alt, className }) {
   return (
@@ -20,10 +18,12 @@ function BrowserFrame({ src, alt, className }) {
         <span className="w-2.5 h-2.5 rounded-full bg-text-muted/40" />
         <span className="w-2.5 h-2.5 rounded-full bg-text-muted/40" />
       </div>
+      {/* Fixed aspect so every frame in the row is the same height regardless
+          of the screenshot's native dimensions. */}
       <img
         src={src}
         alt={alt}
-        className="w-full h-auto object-cover"
+        className="w-full aspect-[16/10] object-cover"
         loading="lazy"
         decoding="async"
       />
@@ -48,7 +48,9 @@ export function HeroCollage({ images, title }) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <span className="font-display text-4xl text-text-muted">{title}</span>
+            <span className="font-display text-4xl text-text-muted">
+              {title}
+            </span>
           </div>
         )}
       </div>
@@ -56,14 +58,21 @@ export function HeroCollage({ images, title }) {
   }
 
   return (
-    <div className="rounded-2xl p-6 md:p-12 bg-accent-subtle">
-      <div className="grid grid-cols-2 gap-4 md:gap-6">
+    <div className="rounded-2xl p-6 md:p-12 ">
+      {/* One row from md up; stacked on mobile so 3-4 browser frames don't
+          shrink to an unreadable width. */}
+      <div
+        className={cn(
+          "grid grid-cols-1 gap-4 md:gap-6",
+          frames.length === 3 ? "md:grid-cols-3" : "md:grid-cols-4",
+        )}
+      >
         {frames.map((src, i) => (
           <BrowserFrame
             key={i}
             src={src}
             alt={`${title} — screen ${i + 1}`}
-            className={cn("transition-transform", OFFSETS[i % OFFSETS.length])}
+            className={TILTS[i % TILTS.length]}
           />
         ))}
       </div>

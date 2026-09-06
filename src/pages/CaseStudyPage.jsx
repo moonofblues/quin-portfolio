@@ -159,7 +159,7 @@ export function CaseStudyPage() {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10 lg:gap-16 items-start">
-                <div className="max-w-3xl">
+                <div className="max-w">
                   <div className="flex items-start gap-4 mb-4">
                     <Star size={32} className="mt-2 shrink-0" />
                     <div>
@@ -182,7 +182,6 @@ export function CaseStudyPage() {
                     </p>
                   )}
                 </div>
-
                 <div className="w-full lg:w-72 shrink-0 rounded-2xl shadow-card bg-bg-elevated p-6 md:p-8 space-y-5">
                   {project.year && (
                     <MetaRow label="Year">{project.year}</MetaRow>
@@ -241,7 +240,10 @@ export function CaseStudyPage() {
             </motion.div>
           </section>
 
-          <section className="w-full max-w-7xl mx-auto px-6 mb-16">
+          {/* Full-bleed (only a small gutter) rather than the max-w-7xl the
+              other sections use — 3-4 screenshots in one row need the width
+              to stay legible. */}
+          <section className="w-full px-4 sm:px-6 mb-16">
             <motion.div {...fadeUp}>
               <HeroCollage images={heroImages} title={project.title} />
             </motion.div>
@@ -272,7 +274,7 @@ export function CaseStudyPage() {
                   className={cn(
                     "font-display text-text-primary",
                     isProblemStatementShort
-                      ? "text-2xl md:text-4xl leading-snug"
+                      ? "text-2xl md:text-3xl leading-snug"
                       : "text-left text-xl md:text-2xl leading-relaxed",
                   )}
                 >
@@ -490,9 +492,32 @@ export function CaseStudyPage() {
           {showcaseImages.length > 0 && (
             <section className="w-full max-w-7xl mx-auto px-6 mb-16">
               <motion.div {...fadeUp}>
-                <h2 className="font-display text-2xl mb-6 text-text-primary">
-                  Design Showcase
-                </h2>
+                {/* Persistent affordance in the heading row — the section
+                    scrolls in heading-first, so the "expandable" cue has to
+                    live up here, not only in the badge at the bottom of a
+                    tall preview image the user hasn't scrolled to yet. */}
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-2">
+                  <h2 className="font-display text-2xl text-text-primary">
+                    Design Showcase
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setLightboxOpen(true)}
+                    className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-full bg-accent-subtle text-accent font-display text-sm transition-[background-color,transform] duration-200 hover:scale-105 motion-reduce:hover:transform-none"
+                  >
+                    <Expand size={16} />
+                    <span>
+                      View Full Showcase
+                      {showcaseImages.length > 1 &&
+                        ` · ${showcaseImages.length} frames`}
+                    </span>
+                  </button>
+                </div>
+                <p className="text-sm text-text-secondary mb-6">
+                  {showcaseImages.length > 1
+                    ? "Click any frame to view every screen full size."
+                    : "Click to view full size."}
+                </p>
                 <div
                   className="relative cursor-pointer group rounded-2xl overflow-hidden"
                   onClick={() => setLightboxOpen(true)}
@@ -504,6 +529,18 @@ export function CaseStudyPage() {
                     loading="lazy"
                     decoding="async"
                   />
+                  {/* Always-visible bottom fade + badge, not just on hover —
+                      without it, a cropped preview image just reads as cut
+                      off rather than "there's more, click to see it." */}
+                  <div className="absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-black/70 to-transparent pointer-events-none" />
+                  <div className="absolute bottom-4 right-4 flex items-center gap-2 px-4 py-2 rounded-full bg-black/70 backdrop-blur-sm text-white shadow-lg transition-[scale,opacity] duration-200 group-hover:scale-105 group-hover:opacity-0">
+                    <Expand size={16} />
+                    <span className="font-display text-sm">
+                      View Full Showcase
+                      {showcaseImages.length > 1 &&
+                        ` · ${showcaseImages.length} frames`}
+                    </span>
+                  </div>
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-3">
                     <Expand size={32} className="text-white" />
                     <span className="font-display text-white text-lg">
