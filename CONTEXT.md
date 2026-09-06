@@ -91,3 +91,53 @@ features; Design Showcase is the full visual output end-to-end.
 The single authenticated owner (Quin) who manages Projects through the
 protected `/admin` route. There is exactly one Admin; there are no other user
 roles.
+
+---
+
+# Visual Language
+
+Terms introduced by the 2026-09 dark redesign. See `docs/redesign-plan.md` for
+the plan these belong to, and ADRs 0005-0007 for the decisions behind them.
+
+## Ambient Layer
+The non-interactive decorative field sitting behind page content: Moon, Stars
+and Fireflies. Purely atmospheric — it never conveys information, never
+receives pointer events, and must always stay quiet enough to sit behind text.
+
+## Moon
+A single large disc anchoring a section's composition. Placed deliberately, at
+most one per section. Part of the Ambient Layer.
+
+## Star
+A small, hand-placed, individually positioned twinkling glyph. There are only
+ever a few and every position is chosen by hand. Part of the Ambient Layer.
+
+Distinct from a **Firefly**: a Star is deliberate and few, a Firefly is
+procedural and many.
+
+## Title Ornament
+The Star glyph used inline as a mark beside a heading. Despite sharing a
+component with the Star, this is *typographic*, not part of the Ambient
+Layer — it sits in the text flow and scrolls with it.
+
+## Firefly
+One of many tiny, soft, slowly drifting motes in the Ambient Layer.
+Procedurally generated, never hand-placed. Fireflies carry no meaning and are
+deliberately subtle. The opposite of a Star in both count and intent.
+
+## Custom Cursor
+The pointer treatment replacing the native cursor on precise-pointer devices:
+a dot tracking the true pointer position, plus a lagging ring. Absent on touch
+devices and whenever reduced motion is requested — in those cases the native
+cursor is left completely alone.
+
+## Cursor Affordance
+The label or shape the Custom Cursor takes over a particular element ("View
+Project" over a project card, an arrow over an outbound link). A property of
+the element being hovered, not of the cursor itself.
+
+## Testimonial
+An attributed quote from a real person who has worked with Quin: quote, name,
+role, organisation, and optionally a photo and profile link. **Attribution is
+mandatory** — an unattributed quote is not a Testimonial and is not published,
+because anonymous praise reads as invented and costs more trust than it earns.
