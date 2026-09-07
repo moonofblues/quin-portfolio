@@ -152,12 +152,20 @@ body {
   background-clip: text;
 }
 
-/* Background Gradient */
+/* Background Gradient (hero ground)
+   Translucent rather than opaque: the Firefly layer is a fixed -z-10 sheet
+   behind page content, so an opaque wash here would erase the entire field
+   across the hero's viewport — the one screen where the Ambient Layer matters
+   most. Lower --hero-wash-alpha to bring the fireflies forward, raise it for
+   more hero contrast. At 85% the field was barely readable through the wash;
+   50% is what actually shows it — and since both stops are near-black over a
+   near-black body, halving the alpha costs very little ground contrast. */
 .bg-gradient-radial {
+  --hero-wash-alpha: 50%;
   background: radial-gradient(
     ellipse at top,
-    var(--color-bg-secondary) 0%,
-    var(--color-bg-primary) 70%
+    color-mix(in srgb, var(--color-bg-secondary) var(--hero-wash-alpha), transparent) 0%,
+    color-mix(in srgb, var(--color-bg-primary) var(--hero-wash-alpha), transparent) 70%
   );
 }
 
@@ -398,4 +406,189 @@ img {
   opacity: 0.03;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* ── Fireflies (ADR 0006) ──
+   The procedural half of the Ambient Layer. Two loops per mote, drift and
+   glow, on independent durations so the field never pulses in lockstep.
+   Both animate transform/opacity only, so the compositor owns them and the
+   main thread stays free for React and for the Lenis rAF loop that already
+   lives there — the second permanent main-thread loop ADR 0006 rejected. */
+.firefly {
+  position: absolute;
+  width: var(--ff-size);
+  height: var(--ff-size);
+  border-radius: var(--radius-full);
+  background: var(--ff-color);
+  /* Painted once on a box that only ever translates and fades, so this blur
+     is rasterized a single time rather than per frame. */
+  box-shadow: 0 0 6px 1px var(--ff-color);
+  opacity: var(--ff-min);
+  will-change: transform, opacity;
+  animation:
+    firefly-drift var(--ff-drift-duration) ease-in-out infinite var(--ff-drift-delay),
+    firefly-glow var(--ff-glow-duration) ease-in-out infinite var(--ff-glow-delay);
+}
+
+@keyframes firefly-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(var(--ff-dx), var(--ff-dy), 0);
+  }
+}
+
+@keyframes firefly-glow {
+  0%,
+  100% {
+    opacity: var(--ff-min);
+  }
+  50% {
+    opacity: var(--ff-max);
+  }
+}
+
+/* ~35 desktop / ~15 mobile (ADR 0006). `display: none` rather than a JS media
+   query: a hidden element gets no compositor layer at all, and this needs no
+   resize listener on the main thread. */
+@media (max-width: 767px) {
+  .firefly:nth-child(n + 16) {
+    display: none;
+  }
+}
+
+/* The global reduced-motion block below collapses animation duration, which
+   would leave the field frozen but still visible. Fireflies are pure
+   decoration, so they go entirely. */
+@media (prefers-reduced-motion: reduce) {
+  .fireflies {
+    display: none;
+  }
+}
+
+/* ── Custom Cursor (ADR 0007) ──
+   Rule 2 (precise pointers only) and rule 3 (never under reduced motion) are
+   both baked into this media query rather than layered on as overrides, so
+   neither can be lost to a later edit that only reads one of them. The class
+   is added by Cursor.jsx on mount: if the lazy chunk never loads, the native
+   cursor is simply left alone. */
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.has-custom-cursor,
+  html.has-custom-cursor * {
+    cursor: none;
+  }
+}
+
+.cursor-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.cursor-layer.is-visible {
+  opacity: 1;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: var(--radius-full);
+  will-change: transform;
+}
+
+/* Rule 1: this is the element at the true pointer position. It has no
+   transition — easing it would put the visible pointer behind the real one. */
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--color-accent);
+}
+
+.cursor-ring {
+  display: grid;
+  place-items: center;
+  min-width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-accent);
+  /* Only the ring's shape transitions. `transform` is deliberately absent:
+     position is driven per frame from JS, and a transition on it would fight
+     the easing and double the lag. */
+  transition: min-width 200ms ease, height 200ms ease,
+    background-color 200ms ease, border-color 200ms ease;
+}
+
+/* Cursor Affordance — the ring becomes a filled pill carrying the label the
+   hovered element declared via `data-cursor`. */
+.cursor-ring[data-labelled] {
+  min-width: 84px;
+  height: 30px;
+  padding: 0 12px;
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.cursor-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--color-on-accent);
+}
+
+/* ── Marquee (Phase 3 primitive) ──
+   Infinite, so CSS rather than framer-motion: a JS `repeat: Infinity` wakes
+   the main thread every frame for the whole session, offscreen included.
+   Transform-only, so the compositor owns it.
+
+   The track is rendered twice and the pair translated by exactly -50%. At the
+   end of the cycle the second copy sits precisely where the first started, so
+   the reset is invisible — this is why the -50% is not a tunable number. */
+.marquee {
+  overflow: hidden;
+  /* The row is real content (the tools list), so it must stay reachable when
+     the animation is off — under reduced motion it becomes a scrollable row
+     rather than a truncated one. */
+  -webkit-overflow-scrolling: touch;
+}
+
+.marquee-inner {
+  animation: marquee-scroll var(--marquee-duration, 40s) linear infinite;
+  will-change: transform;
+}
+
+/* Pausing costs nothing — the compositor simply stops advancing the
+   animation. The content is information, so a reader has to be able to stop
+   it long enough to read it. */
+.marquee:hover .marquee-inner,
+.marquee:focus-within .marquee-inner {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* The global reduced-motion block only collapses duration, which would leave
+   the marquee frozen mid-scroll with the first items clipped out of view.
+   Stop it at the start instead and let the reader scroll the row by hand. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    overflow-x: auto;
+  }
+
+  .marquee-inner {
+    animation: none !important;
+  }
 }

@@ -21,14 +21,19 @@ export function Moon({ className, size = 120 }) {
     >
       {/* Moon body — the 60px glow is painted on this static child rather than
           the moving wrapper, so the blur is rasterized once instead of being
-          re-rendered on every frame of the drift. */}
+          re-rendered on every frame of the drift.
+
+          Colour comes from --color-moon / --color-moon-shadow. Both were
+          hardcoded to the retired gold (#d4c4a8 family), so the moon survived
+          the Phase 1 re-skin untouched — a warm tan disc on the near-black
+          lavender ground, while both tokens sat defined and unused. */}
       <div
         className="absolute inset-0 rounded-full"
         style={{
           background:
-            "linear-gradient(135deg, #d4c4a8 0%, #c4b498 50%, #a89878 100%)",
+            "linear-gradient(135deg, var(--color-moon) 0%, color-mix(in srgb, var(--color-moon) 65%, var(--color-moon-shadow)) 50%, var(--color-moon-shadow) 100%)",
           boxShadow:
-            "0 0 60px rgba(212, 196, 168, 0.4), inset -10px -10px 30px rgba(0, 0, 0, 0.15)",
+            "0 0 60px color-mix(in srgb, var(--color-moon) 40%, transparent), inset -10px -10px 30px rgba(0, 0, 0, 0.25)",
         }}
       />
       {/* Moon glow */}

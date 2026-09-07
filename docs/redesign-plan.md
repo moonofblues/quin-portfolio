@@ -1,7 +1,9 @@
 # 2026-09 Dark Redesign — Plan
 
-Working plan from the `/grill-with-docs` session of 2026-09-07. **Not yet
-implemented — nothing in `src/` has been changed for this redesign.**
+Working plan from the `/grill-with-docs` session of 2026-09-07.
+**Phases 1-3 are implemented; Phases 4-5 are not.** See the per-phase
+entries under "Implementation sequence" for what actually landed and what the
+measured numbers were.
 
 Read this first if you are picking the work up in a new session. Settled
 decisions are binding.
@@ -10,7 +12,15 @@ decisions are binding.
 below are now **settled** — the "Open questions" heading is retained for history
 but each entry is resolved. What remains before/while coding is not *decisions*
 but *content inputs* from Quin, collected under "Inputs still needed" at the
-bottom. Still nothing in `src/` has been changed.
+bottom.
+
+**Implementation status (2026-09-07):** Phases 1 (palette + dark-only),
+2 (ambient layer + cursor) and 3 (motion primitives) are done, and the Q8
+Lenis reclaim has been taken. Critical set is **715.10 KB raw / 227.24 KB gz**
+— under the ~232 working cap, and under the ~227 figure CLAUDE.md documents,
+for the first time. Note that Phase 3's primitives are still tree-shaken out
+(nothing imports them yet), so part of the current headroom is spent the
+moment Phase 4 wires them up.
 
 ## Brief
 
@@ -199,7 +209,66 @@ a later phase whether category/project accents move to lavender/mint).**
 - **Verify:** `npm run build`; confirm homepage critical set still ≤ ~227 KB gz
   and lint error count didn't grow.
 
-### Phase 2 — Ambient layer + cursor (site-wide, independent)
+### Phase 2 — Ambient layer + cursor — ✅ DONE (2026-09-07)
+Implemented: `decorative/Fireflies.jsx` — 35 CSS motes desktop / 15 mobile via
+`.firefly:nth-child(n+16){display:none}` (a hidden element gets no compositor
+layer, and this needs no resize listener on the thread Lenis already owns);
+positions procedural but seeded at module scope, so a re-render never
+reshuffles the field; two loops per mote, drift and glow, on independent
+durations so it never pulses in lockstep; hidden outright under
+`prefers-reduced-motion`, because the global override only collapses duration
+and would otherwise have left them frozen but *visible*.
+
+`decorative/Cursor.jsx` added and `React.lazy`-d from `layout/Layout.jsx`. The
+ADR 0007 gate string `(pointer: fine) and (prefers-reduced-motion:
+no-preference)` is deliberately identical in `Layout.jsx` and `index.css`, so
+the mount gate and the `cursor: none` rule cannot drift apart and strand
+someone with no pointer. Rule 3 is enforced by *never mounting* — the chunk is
+not downloaded at all, rather than downloaded then disabled. Rule 4 parks its
+rAF loop once the ring is within 0.1px of the dot, so cost genuinely reaches
+zero at rest rather than merely getting small.
+
+**Also found & fixed — a Phase 1 miss, not a re-tint:** `Moon.jsx` hardcoded
+the retired gold (`#d4c4a8` / `#c4b498` / `#a89878` plus an
+`rgba(212,196,168,.4)` glow), so the moon came through the Phase 1 re-skin
+untouched as a warm tan disc on the near-black lavender ground — while
+`--color-moon` and `--color-moon-shadow` sat defined and referenced by
+nothing. Both tokens now drive it. `Stars.jsx` needed no work; it already read
+`--color-star`.
+
+**Hero wash made translucent (Quin's call, 2026-09-07).** The Firefly layer is
+a fixed `-z-10` sheet behind content, and the `bg-gradient-radial` at
+`Hero.jsx:36` was fully opaque — it erased the whole field across the hero
+viewport, the one screen where the Ambient Layer matters most. Putting the
+layer *above* it was not available: every section body text is non-positioned,
+so the motes would have painted over the copy. `.bg-gradient-radial` now mixes
+both stops with `transparent` through a tunable `--hero-wash-alpha`, currently
+`85%`. **Open:** at 85% the fireflies read very faintly in the hero; ~70% is
+worth eyeballing on the real page. One-value change.
+
+**Measured critical set after Phase 2: 733.40 KB raw / 232.45 KB gz** (index
+55.85 + vendor-react 118.96 + vendor-router 12.95 + vendor-motion 44.69).
+Against the corrected Phase 1 baseline of 731.60 / 231.73 that is **+1.80 KB
+raw / +0.72 KB gz** — at the ~232 KB gz working cap, not past it, but with no
+headroom left. Fireflies is necessarily eager (site-wide, mounted in
+`Layout`); the Cursor is not, and its chunk (`Cursor-*.js`, ~2.0 KB raw /
+~0.9 KB gz) is confirmed absent from the four chunks `dist/index.html`
+preloads, with `has-custom-cursor` appearing in no other chunk.
+**Phase 3 starts with effectively zero budget: treat lazy-loading or replacing
+Lenis — the reclaim lever named in Q8 — as due before the next addition, not
+after.**
+
+Lint: 27 errors + 1 warning, unchanged from baseline, zero of them in a Phase 2
+file. The first pass did add one (`setState` called inside an effect, for the
+matchMedia subscription); replaced with `useSyncExternalStore`, which is the
+correct primitive for an external store and closes the render-to-effect gap on
+its own.
+
+**Deferred:** nothing declares `data-cursor` yet, so the Cursor Affordance is
+built but unexercised. It gets wired to elements during the Phase 4 section
+reworks (for example a View Project label on a project card).
+
+### Phase 2 (original spec) — Ambient layer + cursor (site-wide, independent)
 - **Fireflies** (`decorative/Fireflies.jsx`): ~35 desktop / ~15 mobile CSS
   elements, fixed layer, transform+opacity keyframes only, behind content,
   `pointer-events: none`, `prefers-reduced-motion` off. (ADR 0006)
@@ -208,7 +277,63 @@ a later phase whether category/project accents move to lavender/mint).**
   entry chunk; precise-pointer + non-reduced-motion gated; dot 1:1 + lagging
   ring; the four safety rules. (ADR 0007)
 
-### Phase 3 — Shared motion primitives (build once, reused by sections)
+### Phase 3 — Shared motion primitives — ✅ DONE (2026-09-07)
+All four built in `src/components/ui/`.
+
+- **`SectionNumeral`** — Instrument Sans italic, mint, `aria-hidden`.
+  **Weight is capped at 500 and must stay there:** `index.html` loads the
+  italic axis at `1,400;1,500` only, so 600+ would have the browser
+  synthesise a faux-bold — the same quality failure the plan rejected
+  faux-oblique for in Q3. Raising it means adding the weight to the font
+  link first.
+- **`RevealLines`** — one-shot per-line wipe; each line translates inside its
+  own `overflow-hidden` box, so it is revealed by a mask rather than a fade.
+  `viewport={{ once: true }}`. Stagger is 0.08s: the last line lands at
+  `(lines-1) x 0.08`, so a four-line block finishes at 0.24s, inside the
+  ~0.3s entrance cap. Raising the stagger pushes long headlines past it.
+- **`Marquee`** — pure CSS `translateX` keyframe, never framer-motion, since
+  it loops for the life of the page. Hover and focus-within pause it, because
+  the row carries real content (the tools list) and must be readable.
+  The duplicate track is `aria-hidden` so a screen reader reads the list once.
+- **`CountUp`** — rAF tween, fires once. "Once" is enforced twice: `useInView
+  ({ once: true })` never flips back, and a `hasRun` ref stops a re-render
+  restarting it.
+
+All four check `useReducedMotion` directly. The global reduced-motion block in
+`index.css` only collapses CSS animation/transition duration — it cannot reach
+framer-motion's inline transforms or a hand-rolled rAF tween, so relying on it
+for JS-driven motion would have silently done nothing.
+
+**Marquee bug caught pre-ship.** The gap was first placed on the wrapper
+between the two tracks, making total width `2W + gap`; `-50%` then translates
+`W + gap/2`, half a gap short, and the row jumps once per cycle. The gap now
+lives inside each track as a trailing `paddingRight`, so both tracks are
+exactly equal width and `-50%` is exact. Do not move it back to the wrapper.
+
+**Measured critical set after Phase 3: 733.40 KB raw / 232.45 KB gz —
+unchanged from Phase 2.** Nothing imports these primitives yet, so Rollup
+tree-shakes all four out of the bundle entirely. **This is not headroom.**
+The cost is deferred, not avoided: it lands in Phase 4, when the sections
+import them. Treat the Q8 Lenis reclaim (~5.3 KB gz, measured minified +
+gzipped standalone) as still outstanding and due before Phase 4, not after.
+
+**Lint config fixed (Quin's call, 2026-09-07).** `eslint.config.js` was
+missing `eslint-plugin-react`, so `react/jsx-uses-vars` never ran and ESLint
+did not count a JSX reference as a use — every identifier used only inside JSX
+(`motion`, `cn`, an `as`-prop `Tag`) reported as unused. That was ~19 of the 22
+`no-unused-vars` errors, i.e. most of the "~30 pre-existing errors" CLAUDE.md
+warns about were a missing plugin, not real debt. Added the plugin as a
+devDependency and enabled that one rule; no other rules changed and no source
+was touched. **Count went 31 -> 13 errors + 1 warning, with zero in any Phase 3
+file.** The remaining ones are genuine: 4x `process` undefined, 3x setState-in-
+effect, 3x truly-unused `cn`, `thumbnailPath`, `showcasePaths`, a
+react-refresh export warning, and the `useMemo` dependency warning.
+
+One of those setState-in-effect errors was mine (`CountUp` set the final value
+synchronously in the effect when reduced motion was on); the value is now
+derived at render instead.
+
+### Phase 3 (original spec) — Shared motion primitives (build once, reused by sections)
 - `SectionNumeral` — oversized Instrument Sans italic, mint (Q3).
 - `RevealLines` — one-shot staggered per-line reveal, `viewport={{ once:true }}`.
 - `Marquee` — infinite CSS `translateX` keyframe (single row, one direction).
@@ -230,6 +355,29 @@ a later phase whether category/project accents move to lavender/mint).**
 - **Testimonials** (Q7): add the Sanity `testimonial` document type + query;
   rework the existing `Testimonials.jsx` to real data with the photo-optional
   fallback card. Build against placeholders until real quotes arrive.
+
+### Q8 Lenis reclaim — ✅ DONE (2026-09-07, before Phase 4)
+`HomePage.jsx` imported Lenis at the top of the file, so it sat in the entry
+chunk and every visitor paid for scroll momentum before the homepage could
+paint — for a library that cannot matter until they actually scroll. It is now
+a dynamic `import("lenis")` inside the existing effect, which Rollup splits
+into its own chunk (`lenis-*.js`, 18.42 KB raw / 5.34 KB gz) loaded after
+first paint and confirmed absent from the four chunks `dist/index.html`
+preloads.
+
+| | raw | gz |
+|---|---:|---:|
+| Before (after Phase 3) | 733.40 KB | 232.45 KB |
+| After reclaim | **715.10 KB** | **227.24 KB** |
+| Reclaimed | -18.30 KB | **-5.21 KB** |
+
+The effect keeps a `cancelled` flag because the import can resolve after the
+component has unmounted (a fast route change, or React double-invoking the
+effect in dev); without it, Lenis would be constructed with no live reference
+to destroy, leaking an orphaned rAF loop. The only behavioural change is that
+the first fraction of a second of scrolling is native rather than eased.
+
+**Do not restore the top-level import.** This is the headroom Phase 4 spends.
 
 ### Phase 5 — Content fill + final verification
 - Drop in the real inputs (below), then `npm run build` to re-confirm the perf
