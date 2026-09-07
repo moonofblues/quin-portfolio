@@ -9,8 +9,8 @@ import { cn } from "../../utils/cn";
  * negative animation-delay so the stars start out of phase without any of
  * them being invisible for the first second.
  *
- * Fill comes from the `--color-star` CSS variable rather than useTheme(), so
- * a theme toggle repaints instead of re-rendering every star.
+ * Fill comes from the `--color-star` CSS variable, so the glyph never has to
+ * subscribe to React state just to pick its colour.
  */
 export function Star({ className, style, size = 24, delay = 0 }) {
   return (

@@ -1,6 +1,5 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "./context/ThemeContext";
 import { ProjectsProvider } from "./context/ProjectsContext";
 import { Layout } from "./components/layout/Layout";
 import { HomePage } from "./pages/HomePage";
@@ -29,8 +28,7 @@ function RouteFallback() {
 function App() {
   return (
     <BrowserRouter>
-      <ThemeProvider>
-        <Routes>
+      <Routes>
           {/* Studio lives outside the portfolio layout — Sanity handles its own auth */}
           <Route
             path="/studio/*"
@@ -60,8 +58,7 @@ function App() {
               </ProjectsProvider>
             }
           />
-        </Routes>
-      </ThemeProvider>
+      </Routes>
     </BrowserRouter>
   );
 }

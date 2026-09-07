@@ -5,72 +5,36 @@
 
 @import "tailwindcss";
 
-/* color pallette */
-.dark {
-  --color-bg-what: #ffe600;
-  --color-bg-primary: #0a1628;
-  --color-bg-secondary: #111d2e;
-  --color-bg-tertiary: #1a2a3f;
-  --color-bg-elevated: #0f1f33;
-  --color-bg-card: #111d2e;
-  --color-bg-hover: #243347;
-
-  --color-text-primary: #f5f0e8;
-  --color-text-secondary: #a8a39c;
-  --color-text-muted: #6b7280;
-
-  --color-accent: #c9a96e;
-  --color-accent-hover: #dfc07a;
-  --color-accent-muted: #9a7d4a;
-  --color-accent-subtle: rgba(201, 169, 110, 0.15);
-
-  --color-border: rgba(201, 169, 110, 0.15);
-  --color-border-hover: rgba(201, 169, 110, 0.3);
-
-  /* Star fill. Lives in CSS so <Star> doesn't have to subscribe to
-     ThemeContext just to pick a hex value — see Stars.jsx. */
-  --color-star: #c9a96e;
-}
-
+/* Dark-only palette — 2026-09 redesign (ADR 0005). Lavender primary + mint
+   secondary on a near-black ground. There is no light mode and no `.dark`
+   class: these values live directly in `@theme`, applied unconditionally. */
 @theme {
-  --color-bg-what: #be1818;
-  --color-bg-primary: #faf8f5;
-  --color-bg-secondary: #f0ece4;
-  --color-bg-tertiary: #e5e0d8;
-  --color-bg-elevated: #ffffff;
+  --color-bg-primary: #07090d;   /* ground */
+  --color-bg-secondary: #0e1219; /* surface */
+  --color-bg-tertiary: #161b24;  /* pills, tags — one step up from surface */
+  --color-bg-elevated: #0e1219;
+  --color-bg-card: #0e1219;
+  --color-bg-hover: #1e242e;
 
-  --color-text-primary: #0a1628;
-  --color-text-secondary: #4a5568;
-  --color-text-muted: #718096;
+  --color-text-primary: #f2f1ee;
+  --color-text-secondary: #8a8f9a;
+  --color-text-muted: #5f646e;
 
-  --color-bg-card: #ffffff;
-  --color-bg-hover: #d5d0c8;
-  --color-on-accent: #0a1628;
+  --color-on-accent: #07090d;
 
-  --color-accent: #b8954f;
-  --color-accent-hover: #a07f3a;
-  --color-accent-muted: #8b7355;
-  --color-accent-subtle: rgba(201, 169, 110, 0.15);
+  --color-accent: #a99ce4;           /* lavender — PRIMARY accent */
+  --color-accent-hover: #bbb0ec;
+  --color-accent-muted: #7e73b0;
+  --color-accent-subtle: rgba(169, 156, 228, 0.15);
+  --color-accent-secondary: #a8d5cd; /* mint — SECONDARY accent */
 
-  --color-moon: #d4c4a8;
-  --color-moon-shadow: #a89878;
+  --color-moon: #c9c4e0;
+  --color-moon-shadow: #6e6890;
 
-  --color-star: #0a1628;
+  --color-star: #a99ce4;
 
-  --color-border: rgba(201, 169, 110, 0.15);
-  --color-border-hover: rgba(201, 169, 110, 0.3);
-
-  /* --color-light-bg-primary: #faf8f5;
-  --color-light-bg-secondary: #f0ece4;
-  --color-light-bg-tertiary: #e5e0d8;
-  --color-light-bg-elevated: #ffffff;
-
-  --color-light-text-primary: #0a1628;
-  --color-light-text-secondary: #4a5568;
-  --color-light-text-muted: #718096;
-
-  --color-light-accent: #b8954f;
-  --color-light-accent-hover: #a07f3a; */
+  --color-border: rgba(169, 156, 228, 0.15);
+  --color-border-hover: rgba(169, 156, 228, 0.3);
 
   --font-display: "Krona One", sans-serif;
   --font-body: "Instrument Sans", sans-serif;
@@ -94,7 +58,7 @@
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  --shadow-glow: 0 0 40px rgba(201, 169, 110, 0.15);
+  --shadow-glow: 0 0 40px rgba(169, 156, 228, 0.15);
 
   --transition-fast: 150ms ease;
   --transition-base: 200ms ease;
@@ -138,11 +102,6 @@ body {
   /* color: var(--color-text-primary); */
 }
 
-/* Light Mode */
-html.light {
-  background-color: var(--color-light-bg-primary);
-  /* color: var(--color-light-text-primary); */
-}
 /* @layer base {
   a {
     color: inherit;
@@ -172,10 +131,6 @@ html.light {
   background: var(--color-accent);
 }
 
-html.light::-webkit-scrollbar-track {
-  background: var(--color-light-bg-secondary);
-}
-
 /* Typography Utilities */
 .font-display {
   font-family: var(--font-display);
@@ -203,14 +158,6 @@ html.light::-webkit-scrollbar-track {
     ellipse at top,
     var(--color-bg-secondary) 0%,
     var(--color-bg-primary) 70%
-  );
-}
-
-html.light .bg-gradient-radial {
-  background: radial-gradient(
-    ellipse at top,
-    var(--color-light-bg-secondary) 0%,
-    var(--color-light-bg-primary) 70%
   );
 }
 
@@ -307,10 +254,10 @@ img {
 @keyframes pulse-glow {
   0%,
   100% {
-    box-shadow: 0 0 20px rgba(201, 169, 110, 0.3);
+    box-shadow: 0 0 20px rgba(169, 156, 228, 0.3);
   }
   50% {
-    box-shadow: 0 0 40px rgba(201, 169, 110, 0.5);
+    box-shadow: 0 0 40px rgba(169, 156, 228, 0.5);
   }
 }
 
@@ -416,23 +363,18 @@ img {
    is small and identical across both properties (they used to disagree at
    6px/12px, which made Safari do more work than Chrome for no visual reason). */
 .glass {
-  background: rgba(17, 29, 46, 0.8);
+  /* surface (#0e1219) at 80% — the frosted header on the dark ground */
+  background: rgba(14, 18, 25, 0.8);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   isolation: isolate;
   transform: translateZ(0);
 }
 
-html.light .glass {
-  background: rgba(255, 255, 255, 0.8);
-}
-
-/* Card Shadow (theme-aware) */
+/* Card shadow — dark-only, so the deeper shadow is the base (there is no
+   longer a `.dark` scope to switch it on). A 0.06 alpha is invisible on a
+   near-black ground. */
 .shadow-card {
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-}
-
-.dark .shadow-card {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 

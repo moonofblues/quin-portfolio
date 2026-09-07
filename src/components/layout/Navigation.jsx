@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Moon, Sun, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { cn } from "../../utils/cn";
-import { useTheme } from "../../context/ThemeContext";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -13,7 +12,6 @@ const navLinks = [
 ];
 
 export function Navigation() {
-  const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -97,14 +95,6 @@ export function Navigation() {
                 routes every pointerenter through React state and a JS
                 animation loop; hover:/active: variants are handled entirely by
                 the compositor and cost nothing on the main thread. */}
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-full text-text-secondary hover:bg-bg-tertiary transition duration-200 hover:scale-110 active:scale-90 motion-reduce:transform-none"
-              aria-label="Toggle theme"
-            >
-              {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
-            </button>
-
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 rounded-full text-text-secondary hover:bg-bg-tertiary transition duration-200 hover:scale-110 active:scale-90 motion-reduce:transform-none"

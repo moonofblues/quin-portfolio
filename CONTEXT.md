@@ -141,3 +141,24 @@ An attributed quote from a real person who has worked with Quin: quote, name,
 role, organisation, and optionally a photo and profile link. **Attribution is
 mandatory** — an unattributed quote is not a Testimonial and is not published,
 because anonymous praise reads as invented and costs more trust than it earns.
+Attribution means name **and** role (both required); organisation and photo are
+optional — a photo is not attribution, so requiring one would wrongly exclude
+real, fully-credited quotes.
+
+## Section Numeral
+The oversized figure (`01`, `02`, `03`) marking a reworked homepage section.
+Rendered in **Instrument Sans italic**, mint — deliberately the *body* font, not
+the display font, because Krona One (the display face) has no italic axis and
+faux-obliquing it would fail the quality bar. A decorative marker, not an index
+the reader must track: never placed where existing content already carries an
+ordering (e.g. the About timeline's date periods), which would create two
+competing numbering systems. Distinct from the case-study **Timeline node**
+badge, which is a functional step number, not decoration.
+
+## Now
+A homepage section stating what Quin is doing *right now* — a short,
+present-tense list of current activities (building / teaching / learning) with a
+manually-set "as of" date. Deliberately pitched at **activity** level, not
+**role** level: the About timeline already lists current job titles, so "Now"
+describes work in progress ("Building X at ZCMC") and never restates a title.
+A "Now" that has gone stale is worse than none — keep it current or remove it.
