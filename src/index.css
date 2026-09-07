@@ -421,8 +421,9 @@ img {
   border-radius: var(--radius-full);
   background: var(--ff-color);
   /* Painted once on a box that only ever translates and fades, so this blur
-     is rasterized a single time rather than per frame. */
-  box-shadow: 0 0 6px 1px var(--ff-color);
+     is rasterized a single time rather than per frame. Radius scales with
+     --ff-size so the glow stays proportional to the dot as size varies. */
+  box-shadow: 0 0 calc(var(--ff-size) * 1.6) calc(var(--ff-size) * 0.25) var(--ff-color);
   opacity: var(--ff-min);
   will-change: transform, opacity;
   animation:

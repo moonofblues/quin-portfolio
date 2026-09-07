@@ -1,7 +1,7 @@
 # 2026-09 Dark Redesign — Plan
 
 Working plan from the `/grill-with-docs` session of 2026-09-07.
-**Phases 1-3 are implemented; Phases 4-5 are not.** See the per-phase
+**Phases 1-4 are implemented; Phase 5 (real content) is not.** See the per-phase
 entries under "Implementation sequence" for what actually landed and what the
 measured numbers were.
 
@@ -14,13 +14,13 @@ but each entry is resolved. What remains before/while coding is not *decisions*
 but *content inputs* from Quin, collected under "Inputs still needed" at the
 bottom.
 
-**Implementation status (2026-09-07):** Phases 1 (palette + dark-only),
-2 (ambient layer + cursor) and 3 (motion primitives) are done, and the Q8
-Lenis reclaim has been taken. Critical set is **715.10 KB raw / 227.24 KB gz**
-— under the ~232 working cap, and under the ~227 figure CLAUDE.md documents,
-for the first time. Note that Phase 3's primitives are still tree-shaken out
-(nothing imports them yet), so part of the current headroom is spent the
-moment Phase 4 wires them up.
+**Implementation status (2026-09-07):** Phases 1-4 are done — palette,
+ambient layer + cursor, motion primitives, and all five section reworks —
+and the Q8 Lenis reclaim has been taken. Critical set is
+**718.03 KB raw / 227.92 KB gz**, ~4 KB gz under the ~232 working cap. Four
+sections (Services tools, About photo, Now, Testimonials) are built against
+placeholders and render their placeholder or nothing until Quin supplies the
+real content listed under "Inputs still needed" — that's Phase 5.
 
 ## Brief
 
@@ -339,7 +339,89 @@ derived at render instead.
 - `Marquee` — infinite CSS `translateX` keyframe (single row, one direction).
 - `CountUp` — fires once on scroll-in.
 
-### Phase 4 — Section reworks (each inherits the palette automatically)
+### Phase 4 — Section reworks — ✅ DONE (2026-09-07)
+All five sections built against placeholder content, per the plan — none of
+the four content inputs (tools, photo, Now activities, testimonials) have
+arrived from Quin yet, and nothing here waits on them arriving.
+
+- **Hero (Q4):** `RevealLines` on the headline, two lines. Structural change
+  is genuinely none — collage and the eager ZCMC LCP image are untouched.
+  RevealLines drives itself off `whileInView`, which fires immediately since
+  the hero is on screen at mount; `delay={0.15}` keeps it landing at the same
+  point in the fixed entrance sequence the plain h1 used to occupy.
+- **Services (Q5):** positioning statement, a `Marquee` of tools, and the six
+  capabilities as a compact pill row (icon + title only — the per-card
+  descriptions are dropped; the positioning statement now carries that
+  weight). Removed the hardcoded gold `boxShadow`
+  (`rgba(201,169,110,0.3)`) and the `transition-all` the plan flagged.
+  **Tools list is a placeholder**, restricted to the one sublist actually
+  verifiable from this repo's `package.json` (React, Vite, Tailwind CSS,
+  Sanity, Framer Motion) rather than guessed — design tools like Figma
+  aren't included because they can't be confirmed. Replace the array
+  wholesale once Quin supplies the real list; the code comment says the same.
+- **About (Q6):** a scroll-drawn vertical connector through the timeline's
+  icon column, reusing `ProcessTimeline`'s `useScroll`/`useTransform`
+  pattern, plus one `SectionNumeral`. The connector runs the icon column's
+  full height rather than being inset to the first/last icon's exact
+  center — row height varies with each entry's text, so a precise inset
+  would drift; `ProcessTimeline`'s own mobile connector uses the same
+  full-height-behind-the-nodes approach. Swapping `space-y-4` for
+  `flex flex-col gap-4` on the timeline list was necessary, not cosmetic:
+  `gap` ignores out-of-flow children, so the two absolutely-positioned
+  connector lines don't shift `space-y`'s `> * + *` selector's idea of which
+  row is first and throw off its margins. No per-entry numerals, matching
+  Q6. Monogram placeholder stays — no photo yet.
+- **"Now" (Q1) — new section:** Sanity singleton `now` schema (`asOf` +
+  `activities[]` of `{verb, text}`) registered in `sanity.config.js`,
+  `SectionNumeral` fixed at `03` per Q1, `RevealLines` on the activity
+  lines. Fetched at runtime in the component's own effect — see the ADR 0001
+  correction below. Placed between About and Testimonials; the plan fixes
+  Now's numeral but not its position, so this was a judgment call: activity-
+  level content reads naturally right after About's role-level timeline.
+  Renders nothing until Quin publishes the singleton in Studio (no document
+  exists yet), consistent with ADR 0002.
+- **Testimonials (Q7):** new Sanity `testimonial` document type per the Q7
+  field spec, `fetchTestimonials()` querying `status == "published"`, photo-
+  optional fallback (initials avatar when no photo). **The three hardcoded
+  quotes this file used to carry are removed, not replaced with placeholders
+  — they were unattributed by the glossary's own definition** ("Professional
+  Colleague", "Client": a generic role standing in for a real name), which
+  fails the mandatory-attribution rule this very redesign is meant to
+  enforce. Renders nothing until Quin publishes real ones (ADR 0002); this is
+  a compliance fix riding along with the redesign, not new redesign scope.
+
+**ADR 0001 correction, found while implementing "Now".** This plan's Q1 entry
+says Now "updates at build time, not runtime — per ADR 0001" and that a
+"runtime-fetch exception was rejected as not worth violating ADR 0001". That
+has the ADR backwards: ADR 0001's actual decision is *"no build-time snapshot
+needed"* — build-time was the alternative it rejected, not the rule it set.
+No build-time pipeline exists anywhere in this repo either — `npm run build`
+is a plain `vite build`, and every other Sanity-backed query
+(`fetchAllProjects`) already fetches at runtime through `ProjectsContext`.
+Implementing Now as build-time would have meant inventing new infrastructure
+this plan never actually asked for, and it would have undone the one thing
+ADR 0001 explicitly bought by choosing Sanity: publishing in Studio takes
+effect immediately, no rebuild required. `fetchNow()` and `fetchTestimonials()`
+in `queries.js` both follow the existing runtime-fetch pattern; the comment
+there carries this same correction so it isn't relitigated on a future read.
+
+**Measured critical set after Phase 4: 718.03 KB raw / 227.92 KB gz** — this
+is the first build where every Phase 3 primitive is actually imported and
+live (Hero uses `RevealLines`, Services uses `Marquee`, About and Now use
+`SectionNumeral`, Now uses `RevealLines` again), plus four new sections'
+worth of JSX and two new Sanity queries. Against the post-reclaim baseline of
+715.10 / 227.24 that is **+2.93 KB raw / +0.68 KB gz** — under the ~232 KB gz
+cap, with about 4 KB gz of headroom left rather than none. `Cursor-*.js` and
+`lenis-*.js` are both confirmed absent from the four chunks `dist/index.html`
+preloads.
+
+Lint: 13 errors + 1 warning, unchanged from the Phase 3 count. `About.jsx`
+carries one of the pre-existing genuine errors (`cn` imported but unused) —
+this predates Phase 4's edit to that file and is already accounted for in
+the "3x truly-unused `cn`" baseline recorded after the Phase 3 lint fix; it
+was not introduced here.
+
+### Phase 4 (original spec) — Section reworks (each inherits the palette automatically)
 - **Hero** (Q4): apply `RevealLines` to the headline; leave the collage and the
   eager ZCMC LCP image timing untouched. Structural change = none.
 - **Services** (Q5): positioning statement + `Marquee` of tools + capability

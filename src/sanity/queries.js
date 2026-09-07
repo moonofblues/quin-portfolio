@@ -62,3 +62,30 @@ export async function fetchAllProjects() {
     `*[_type == "project" && status == "published"] | order(sortOrder asc, _createdAt desc) { ${PROJECT_FIELDS} }`
   );
 }
+
+// Runtime fetch, matching every other query in this file — not a build-time
+// snapshot. The redesign plan's Q1 entry cites ADR 0001 as requiring a
+// build-time pipeline, but that has the ADR backwards: ADR 0001's actual
+// decision is "no build-time snapshot needed" (that's the alternative it
+// rejected), and no such pipeline exists anywhere in this repo — `npm run
+// build` is a plain `vite build`. Runtime fetch is also what keeps Studio
+// publishing instant, which is the whole reason ADR 0001 picked Sanity.
+export async function fetchNow() {
+  return client.fetch(
+    `*[_type == "now"][0] { asOf, activities[] { verb, text } }`
+  );
+}
+
+export async function fetchTestimonials() {
+  return client.fetch(
+    `*[_type == "testimonial" && status == "published"] | order(sortOrder asc, _createdAt desc) {
+      "id": _id,
+      quote,
+      name,
+      role,
+      organisation,
+      "photo": photo.asset->url,
+      profileUrl
+    }`
+  );
+}

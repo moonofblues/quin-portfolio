@@ -4,6 +4,7 @@ import { Button } from "./ui/Button";
 import { Tag } from "./ui/Tag";
 import { Moon } from "./decorative/Moon";
 import { Star } from "./decorative/Stars";
+import { RevealLines } from "./ui/RevealLines";
 import zcmcWebsiteDark from "../assets/zcmc-website-hero-dark.webp";
 import adzuPortal from "../assets/adzu-portal-home.webp";
 import erpDashboard from "../assets/erp-dashboard.webp";
@@ -83,16 +84,29 @@ export function Hero() {
           ))}
         </motion.div>
 
-        <motion.h1
+        {/* Q4 (Hero): re-skin + motion, no restructure — the collage and LCP
+            timing below are untouched. This is the hero's slice of the Q2
+            animation vocabulary: RevealLines wipes each line up from behind
+            its own mask instead of the plain fade+translateY every other
+            hero element still uses. `eager`, not the default `whileInView`:
+            the hero is visible at the very first paint, and whileInView's
+            IntersectionObserver callback is not guaranteed to fire inside
+            that same instant — it was found to leave the headline stuck
+            invisible in its pre-reveal state. `eager` uses `animate`
+            instead, matching how every other element in this sequence
+            (badge/tags/paragraph/buttons) already plays unconditionally on
+            mount. `delay={0.15}` keeps it landing at the same point in that
+            sequence where the plain h1 used to sit. */}
+        <RevealLines
+          as="h1"
           className="font-display text-3xl md:text-5xl lg:text-6xl xl:text-6xl leading-tight mb-6 text-text-primary"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.15, ease: EASE_OUT }}
-        >
-          Designing Systems and Visuals That
-          <br />
-          <span className="text-gradient">Actually Work</span>
-        </motion.h1>
+          delay={0.15}
+          eager
+          lines={[
+            "Designing Systems and Visuals That",
+            <span className="text-gradient">Actually Work</span>,
+          ]}
+        />
 
         <motion.p
           className="text-md md:text-xl max-w-2xl mx-auto mb-10 text-text-secondary"

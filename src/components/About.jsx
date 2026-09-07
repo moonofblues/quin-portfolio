@@ -1,6 +1,8 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { MapPin, Briefcase, GraduationCap } from "lucide-react";
 import { SectionTitle } from "./ui/SectionTitle";
+import { SectionNumeral } from "./ui/SectionNumeral";
 import { cn } from "../utils/cn";
 
 const timeline = [
@@ -38,10 +40,30 @@ const timeline = [
 ];
 
 export function About() {
+  // Q6 (Settled → Option A): a scroll-drawn connector linking the timeline
+  // entries through their icon nodes, tracked against this ref rather than
+  // the window — the same useScroll/useTransform pattern ProcessTimeline
+  // uses for its own draw-in line.
+  const timelineRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start 0.85", "end 0.6"],
+  });
+  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
   return (
     <section id="about" className="section relative">
       <div className="container">
-        <SectionTitle>About Me</SectionTitle>
+        {/* Q3: one SectionNumeral for About, no per-entry numerals — the
+            entries already carry date periods, so a second index per row
+            would compete with them. Numbered 02: only About and "Now" (03)
+            carry a numeral in this redesign, so 02 is About's position in
+            that pair, in page order — not a claim that a "01" exists
+            elsewhere on the page. */}
+        <div className="flex items-start justify-between gap-4 mb-12">
+          <SectionTitle className="mb-0">About Me</SectionTitle>
+          <SectionNumeral value="02" />
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
           <motion.div
@@ -98,21 +120,41 @@ export function About() {
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div>
               <h4 className="font-display text-sm uppercase tracking-wider mb-4 text-text-muted">
                 Experience
               </h4>
 
-              {timeline.map((item, index) => (
+              {/* `flex flex-col gap-4` rather than `space-y-4`: gap ignores
+                  out-of-flow children, so the two absolute connector lines
+                  below don't shift the space-y `> * + *` selector's idea of
+                  which row is "first" and throw off its margins. The
+                  connector runs the icon column's full height rather than
+                  being inset to the first/last icon's exact center — row
+                  height varies with each entry's text, so a precise inset
+                  would drift; ProcessTimeline's own mobile connector uses the
+                  same full-height-behind-the-nodes approach. */}
+              <div ref={timelineRef} className="relative flex flex-col gap-4">
+                <div
+                  className="absolute left-9 top-0 bottom-0 w-0.5 bg-bg-tertiary"
+                  aria-hidden="true"
+                />
+                <motion.div
+                  className="absolute left-9 top-0 w-0.5 bg-accent"
+                  style={{ height: lineHeight }}
+                  aria-hidden="true"
+                />
+
+                {timeline.map((item, index) => (
                 <motion.div
                   key={index}
-                  className="flex gap-4 p-4 rounded-xl bg-bg-secondary"
+                  className="relative flex gap-4 p-4 rounded-xl bg-bg-secondary"
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-accent/10">
+                  <div className="relative z-10 w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-accent/10">
                     {item.type === "education" ? (
                       <GraduationCap size={18} className="text-accent" />
                     ) : (
@@ -130,7 +172,8 @@ export function About() {
                     </p>
                   </div>
                 </motion.div>
-              ))}
+                ))}
+              </div>
             </div>
           </motion.div>
         </div>

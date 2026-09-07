@@ -39,7 +39,7 @@ const FIREFLIES = (() => {
   return Array.from({ length: DESKTOP_COUNT }, () => ({
     left: `${pick(0, 100).toFixed(2)}%`,
     top: `${pick(0, 100).toFixed(2)}%`,
-    size: `${pick(2, 4.5).toFixed(2)}px`,
+    size: `${pick(4, 8).toFixed(2)}px`,
     // Drift stays small and mostly upward — a mote adrift, not an insect
     // crossing the room. Large travel reads as movement and pulls the eye,
     // which the Ambient Layer must never do.

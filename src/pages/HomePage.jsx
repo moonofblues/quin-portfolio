@@ -5,6 +5,7 @@ import { FeaturedWork } from "../components/FeaturedWork";
 import { OtherWork } from "../components/OtherWork";
 import { Services } from "../components/Services";
 import { About } from "../components/About";
+import { Now } from "../components/Now";
 import { Testimonials } from "../components/Testimonials";
 import { Contact } from "../components/Contact";
 
@@ -59,6 +60,11 @@ export function HomePage() {
         <OtherWork />
         <Services />
         <About />
+        {/* Placed here, not per any explicit ordering in the plan (Q1 only
+            fixes its numeral at "03", not its position): activity-level
+            "right now" content reads naturally right after About's
+            role-level timeline, before Testimonials closes the narrative. */}
+        <Now />
         <Testimonials />
         <Contact />
       </main>
