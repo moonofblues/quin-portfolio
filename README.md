@@ -65,7 +65,7 @@ To run the project locally:
 
 4. **(Optional) Run the Sanity Studio**
 
-   The Studio is embedded via `sanity.config.js` and served through the same Vite dev server — visit `/studio` once `npm run dev` is running. It also needs the same `.env.local` values to connect to your dataset.
+   The Studio is embedded via `sanity.config.js` and served through the same Vite dev server — visit `/studio` once `npm run dev` is running. It also needs the same `.env.local` values to connect to the dataset.
 
 ### Troubleshooting
 
