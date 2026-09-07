@@ -165,7 +165,21 @@ removed** an inline anti-FOUC theme script in `index.html` (set
 55.13 + vendor-react 118.96 + vendor-router 12.95 + vendor-motion 44.69 gz).
 This is ~5 KB gz above the plan's cited ~227 — pre-existing drift (Phase 1 only
 removed code), likely Lenis in the entry chunk. **Baseline for the Q8 cap
-corrected to this measured figure pending Quin's call (see Q8).**
+corrected to this measured figure pending Quin's call (see Q8).
+
+**Post-review fixes (code-review subagent, 2026-09-07):** the token *definitions*
+were rewritten but dead light/dark *rules* lower in `index.css` were missed on
+the first pass. Fixed: removed `html.light` background, scrollbar-track and
+`.bg-gradient-radial` overrides (referenced deleted `--color-light-*` tokens);
+removed dead `html.light .glass`; recolored `.glass` from the retired navy
+`rgba(17,29,46,.8)` to the new surface `rgba(14,18,25,.8)`; **collapsed
+`.dark .shadow-card` into `.shadow-card`** so the intended `0.2`-alpha shadow is
+the base (the `.dark` scope no longer exists, so cards were silently falling
+back to an invisible `0.06` shadow on the near-black ground — a real visual bug);
+recolored the unused `pulse-glow` keyframe off gold. **Still latent (deferred):**
+hardcoded gold `#c9a96e` in `src/data/projects.js:614` and
+`src/data/categories.js:3` (data, not tokens — won't auto-recolor; decide during
+a later phase whether category/project accents move to lavender/mint).**
 
 ### Phase 1 (original spec) — Foundation: palette + dark-only (unblocks everything)
 - **Rewrite `index.css` tokens.** Map the new palette onto the **existing token
