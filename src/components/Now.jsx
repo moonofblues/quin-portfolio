@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { SectionTitle } from "./ui/SectionTitle";
-import { SectionNumeral } from "./ui/SectionNumeral";
 import { RevealLines } from "./ui/RevealLines";
 import { fetchNow } from "../sanity/queries";
 
@@ -46,12 +45,7 @@ export function Now() {
   return (
     <section id="now" className="section relative">
       <div className="container">
-        {/* Same header pattern as About: SectionTitle + SectionNumeral,
-            fixed at "03" per Q1 — not derived from position in the DOM. */}
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <SectionTitle className="mb-0">Right Now</SectionTitle>
-          <SectionNumeral value="03" />
-        </div>
+        <SectionTitle className="mb-4">Right Now</SectionTitle>
 
         {formattedAsOf && (
           <motion.p
@@ -65,8 +59,16 @@ export function Now() {
           </motion.p>
         )}
 
+        {/* eager: play via `animate`, not `whileInView`. The activity lines
+            start translated out of their overflow-hidden clip box, so if the
+            IntersectionObserver reveal fails to fire they stay permanently
+            invisible (RevealLines documents this flaky case; Hero uses eager
+            for the same reason). Now is the only other RevealLines consumer
+            and it hit exactly that — the reveal never fired and the lines sat
+            hidden. eager needs no observer and always plays. */}
         <RevealLines
           as="div"
+          eager
           className="max-w-4xl space-y-4"
           lineClassName="text-xl md:text-2xl leading-snug text-text-primary"
           lines={data.activities.map((activity, i) => (

@@ -465,6 +465,103 @@ the first fraction of a second of scrolling is native rather than eased.
 - Drop in the real inputs (below), then `npm run build` to re-confirm the perf
   cap and a clean-ish lint delta; visual pass on desktop + mobile widths.
 
+## Phase 6 — Focus chooser + focused homepage (planned, 2026-09-08)
+
+Working plan from the `/grill-with-docs` session of 2026-09-08. **Not yet
+implemented — this section is the settled design, ready to build.** Decision
+record: [ADR 0008](adr/0008-focus-chooser-and-service-taxonomy.md). Vocabulary
+(*Focus*, *Focus chooser*, *Focused view*, *Default view*, *Service*): see
+`docs/glossary.md`.
+
+### Brief
+
+On load, greet the visitor (typically a hiring manager) with a choice of
+which discipline to view the site through — UI/UX, video, graphic design, etc.
+Picking one tailors the homepage to it. This promotes taxonomy that already
+exists deeper in the site (the work-page category filter) up to the front
+door; it is not a new information architecture.
+
+### Settled
+
+Every row below is a settled decision from the grilling session. They are
+binding, same as the Q1–Q8 table above.
+
+| # | Decision | Outcome |
+|---|---|---|
+| 1 | Entry pattern | **Dismissible pop-up** (the *Focus chooser*) on first visit, with a prominent **Skip**. "Seen" remembered in `localStorage`. Not a blocking gate. Chosen over a hard gate and over a non-blocking on-page section — see ADR 0008. |
+| 2 | What a choice does | Keeps the **same homepage**; swaps only the **hero** (headline, description, tags) and **Featured Work**. What I Do, About, Contact are untouched. |
+| 3 | Taxonomy | Unify the two drifted lists into one canonical **Service** taxonomy (6 values). The separate `categories.js` list is retired. |
+| 4 | Cardinality | A project references **one or more** Services (multi-valued array), not a single category. Filter becomes `project.services.includes(focus)`. |
+| 5 | Where the choice lives | In the **URL** as `?focus=<id>` (shareable; refresh- and back-button-safe). A URL naming a Focus **skips the chooser**. The `localStorage` "seen" flag is a separate concern. |
+| 6 | Hero swap scope | **Headline + description + tags** change per Focus. The **collage screenshots do not** — they carry the LCP image (perf rule "never delay the LCP element"). |
+| 7 | Where per-Focus copy lives | **One code file** — the single source of truth for the Service list *and* each Focus's hero copy, tags, and icon. Drives the chooser, the Focused hero, the work filter, and What I Do. |
+| 8 | Featured Work per Focus | **Featured-in-Focus first**, then top up with the most recent projects in that same Focus, up to 6. Keeps curation, avoids a sparse grid. |
+| 9 | Empty Focus | Show **all six** in the chooser; a Focus with no projects yet shows a "work coming soon" note and falls back to the full set. (Front-End / Low-Code start empty until re-tagged.) |
+| 10 | Switching Focus | **Both:** clickable service pills in What I Do **and** a persistent **"Viewing: <Focus>"** switcher in the nav, plus a "View all" reset. Both read/write the same `?focus=` param. |
+| 11 | Loading | The chooser is **bundled** (in the entry chunk) so it paints on the first frame with no flash. Kept to text + buttons; re-measure the homepage critical set against the ~232 KB gz cap after it lands. |
+| — | Skip / Default | Skip, first paint before choosing, and any link without `?focus=` all show the **Default view**: the current generic hero + unfiltered featured set, clean URL, and the chooser is not shown again. |
+| 13 | Data migration | **Additive & reversible:** add the `services` array alongside `category`, copy values over, verify, then retire `category`. Nothing deleted until the new field is proven. |
+
+Accessibility (non-negotiable, built in regardless): the chooser traps
+keyboard focus while open, **Esc = Skip**, background scroll is locked, it is
+screen-reader labelled (`role="dialog"`, `aria-modal`), and it respects
+`prefers-reduced-motion` (no large entrance animation).
+
+### Prerequisite — Service taxonomy refactor
+
+The chooser depends on the taxonomy being unified first. This is a
+live-content refactor (Sanity schema + several files), so it is sequenced
+ahead of any UI:
+
+1. Add a multi-valued `services` field to the project schema
+   (`src/sanity/schema/project.js`) with the six values, alongside the
+   existing `category`.
+2. Copy each existing project's `category` into `services` (one-element
+   array), verify in Studio, then remove the `category` field and its schema
+   `list`.
+3. Replace `src/data/categories.js` with a single Service source file (see
+   Q7) — id, label, description, hero copy, tags, icon per Service.
+4. Update the filter path: `ProjectsContext.getProjectsByCategory` →
+   a Service-aware selector using `services.includes(...)`; update
+   `WorkPage.jsx`, `OtherWork.jsx`, `CaseStudyPage.jsx`, and
+   `queries.js` references (8 files touch `category` today).
+
+### Implementation sequence
+
+Ordered by dependency:
+
+1. **Taxonomy refactor** (prerequisite above) — no UI change yet; the site
+   keeps working on the new field.
+2. **Single Service source file** — the one code file from Q7, consumed by
+   the existing What I Do section first (proves the source before anything
+   new depends on it).
+3. **Focused hero + Featured Work** — make the hero read per-Focus copy
+   (Q6) and Featured Work apply the Q8 rule, both driven by the `?focus=`
+   param (Q5). Default view is the no-param path.
+4. **Switchers** — clickable What I Do pills + the nav "Viewing:" control +
+   "View all" reset (Q10).
+5. **Focus chooser** — the pop-up itself, last, once the underlying Focused
+   view it navigates into already works (Q1, Q11 + accessibility).
+
+### Performance notes
+
+- The chooser ships in the entry chunk (Q11) — keep it text/buttons only, no
+  new heavy dependency, and **re-measure** `dist/index.html`'s critical set
+  after it lands (cap ~232 KB gz, per Q8 of the main plan).
+- The hero collage / LCP image is untouched by design (Q6).
+- The nav "Viewing:" switcher lives on the fixed header — obey the existing
+  header rules (no `transition-all`, no per-frame `backdrop-filter` churn).
+
+### Inputs still needed from Quin (Phase 6)
+
+- **Per-Focus hero copy** — headline + description + tag set for each of the
+  six Services (including Front-End Dev and Low-Code, which are always
+  selectable).
+- **Focus chooser copy** — the pop-up's heading, one-line subtext, and button
+  labels (Claude can draft a first version).
+- **Re-tagging** — which existing projects should also be tagged Front-End Dev
+  and Low-Code, so those Focuses aren't empty on day one.
+
 ## Inputs still needed from Quin
 
 Decisions are done; these are content items to gather (none block starting the

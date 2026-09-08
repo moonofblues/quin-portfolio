@@ -2,6 +2,18 @@
 
 Personal portfolio site — React + Vite + Tailwind v4, content in Sanity.
 
+## Communication
+
+**Explain for a non-expert.** Quin is still learning to code. Avoid
+unexplained jargon; define any technical term the first time it appears, and
+prefer plain-language analogies over insider shorthand. After a change, give a
+short "what I did" note in plain English; in bug fixes, lead with the
+diagnosis before the fix.
+
+Step 5 — commit (the docs are unrelated to your portrait/section WIP, so a separate commit keeps history clean, but that's your call):
+git add docs/ CLAUDE.md .gitignore
+git commit -m "docs: plan Focus chooser + Service taxonomy (Phase 6, ADR 0008)"
+
 ## Design principles
 
 ### Minimize UI friction
@@ -32,12 +44,12 @@ Widths had drifted across the case-study page (3xl through 7xl with no
 rule), which both wasted margin space and cramped grid content. Stick to
 this scale — don't invent intermediate widths:
 
-| Width | Use for |
-|---|---|
-| full-bleed | Color-blocked bands (Background/Challenge split, pull quote) |
+| Width       | Use for                                                                                                                                                                                 |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| full-bleed  | Color-blocked bands (Background/Challenge split, pull quote)                                                                                                                            |
 | `max-w-7xl` | Media and multi-column grids: hero, process stepper, pain points, how-might-we, solution highlights, key functions, wireframes, ideation diagrams, showcase galleries, related projects |
-| `max-w-6xl` | Sidebar layouts and smaller grids: project brief, research methods, results |
-| `max-w-4xl` | **Prose only** — applied to the paragraph itself, not the section |
+| `max-w-6xl` | Sidebar layouts and smaller grids: project brief, research methods, results                                                                                                             |
+| `max-w-4xl` | **Prose only** — applied to the paragraph itself, not the section                                                                                                                       |
 
 The key pattern for mixed sections (prose + grid/media): put the **section**
 at `max-w-7xl` and constrain the **paragraph** with its own `max-w-4xl`.
@@ -46,6 +58,15 @@ measure. Don't narrow the whole section just because it contains a
 paragraph.
 
 ## Working process
+
+**Always inquire first, with detailed info, before any implementation or
+coding.** This is the default for every task, not just bugs. Before writing
+or changing any code, present a detailed plan — what you intend to do, which
+files, the approach, any trade-offs and alternatives — and stop and wait for
+explicit approval. Do not start implementing on your own judgment, even when
+the task seems clear or a single approach seems obviously best. The only
+exception is a trivial, unambiguous, single-step change (e.g. a typo fix)
+that carries no decision worth a person's input. When in doubt, ask.
 
 **Diagnose before acting, in detail.** Before changing code — especially for
 bugs, regressions, or "it feels slow/broken" reports — investigate first and
@@ -58,7 +79,7 @@ report findings before touching files:
 - Before proposing a fix, lay out the options in detail: what each option
   does, its trade-offs, and whether it's reversible.
 - Don't silently pick a side of a UX trade-off (e.g. animated vs. instant
-  scroll) without flagging that it *is* a trade-off.
+  scroll) without flagging that it _is_ a trade-off.
 - **Ask which option to take before implementing anything.** After laying
   out the diagnosis and the options, stop and ask the user which approach
   to proceed with — do not go ahead on your own judgment, even if one
@@ -145,4 +166,4 @@ chunk Rollup derives from `App.jsx`.
 
 - `npm run lint` has ~30 pre-existing errors (unused `motion` imports,
   react-hooks warnings) unrelated to any given change — check that your
-  change doesn't *add* to the count rather than expecting a clean run.
+  change doesn't _add_ to the count rather than expecting a clean run.

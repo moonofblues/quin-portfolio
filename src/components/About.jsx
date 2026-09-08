@@ -2,8 +2,8 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { MapPin, Briefcase, GraduationCap } from "lucide-react";
 import { SectionTitle } from "./ui/SectionTitle";
-import { SectionNumeral } from "./ui/SectionNumeral";
 import { cn } from "../utils/cn";
+import quinPortrait from "../assets/quin-portrait.webp";
 
 const timeline = [
   {
@@ -54,16 +54,7 @@ export function About() {
   return (
     <section id="about" className="section relative">
       <div className="container">
-        {/* Q3: one SectionNumeral for About, no per-entry numerals — the
-            entries already carry date periods, so a second index per row
-            would compete with them. Numbered 02: only About and "Now" (03)
-            carry a numeral in this redesign, so 02 is About's position in
-            that pair, in page order — not a claim that a "01" exists
-            elsewhere on the page. */}
-        <div className="flex items-start justify-between gap-4 mb-12">
-          <SectionTitle className="mb-0">About Me</SectionTitle>
-          <SectionNumeral value="02" />
-        </div>
+        <SectionTitle className="mb-12">About Me</SectionTitle>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
           <motion.div
@@ -77,9 +68,16 @@ export function About() {
               <div className="absolute inset-[-40px] rounded-full opacity-10 border border-accent" />
 
               <div className="aspect-square rounded-2xl overflow-hidden bg-bg-tertiary">
-                <div className="w-full h-full flex items-center justify-center">
-                  <span className="font-display text-4xl text-accent">QL</span>
-                </div>
+                <img
+                  src={quinPortrait}
+                  alt="Quin Ledesma"
+                  width={3025}
+                  height={3025}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  fetchpriority="low"
+                  decoding="async"
+                />
               </div>
             </div>
 

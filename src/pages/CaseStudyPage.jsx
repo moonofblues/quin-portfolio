@@ -350,14 +350,14 @@ export function CaseStudyPage() {
                   <h2 className="font-display text-sm uppercase tracking-wider mb-6 text-text-muted">
                     Background
                   </h2>
-                  <p className="text-lg leading-relaxed text-text-primary">
-                    {project.background}
-                  </p>
                   {project.quote && (
-                    <blockquote className="mt-10 pl-6 border-l-4 border-accent font-display text-xl md:text-2xl leading-snug text-text-primary">
+                    <blockquote className="mt-10 pl-6 border-l-4 border-accent font-display text-xl md:text-2xl leading-snug text-text-primary mb-6">
                       &ldquo;{project.quote}&rdquo;
                     </blockquote>
                   )}
+                  <p className="text-lg leading-relaxed text-text-primary">
+                    {project.background}
+                  </p>
                 </motion.div>
               </div>
             </section>

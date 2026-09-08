@@ -3,6 +3,47 @@
 Domain terms used across this codebase's docs (ADRs, code comments) that
 aren't self-evident from the code alone.
 
+## Focus (homepage entry experience)
+
+Introduced in Phase 6 of the redesign; see
+[ADR 0008](adr/0008-focus-chooser-and-service-taxonomy.md) and the "Phase 6"
+section of `docs/redesign-plan.md`.
+
+- **Focus** — one discipline a visitor can choose to view the homepage
+  through: UI/UX, Front-End Dev, Web Dev, Low-Code/No-Code, Graphic Design,
+  or Video. A Focus is exactly a **Service** (see below) — the two words name
+  the same thing from two sides: *Service* is what Quin offers, *Focus* is the
+  visitor's chosen slice of it. The active Focus lives in the URL as
+  `?focus=<id>` (e.g. `?focus=video`), which makes it shareable and lets a
+  link skip the Focus chooser.
+
+- **Focus chooser** — the dismissible pop-up (a modal dialog) shown once to a
+  first-time visitor, offering all six Focuses plus a prominent **Skip**. Seen
+  state is remembered in `localStorage`; a URL that already names a Focus
+  skips it. Not a blocking gate — Skip (or Esc) dismisses it to the Default
+  view. See ADR 0008 for why a dismissible pop-up was chosen over both a hard
+  gate and a non-blocking on-page section.
+
+- **Focused view** — the homepage while a Focus is active. Only the **hero**
+  (headline, description, tags) and **Featured Work** change; What I Do,
+  About, and Contact are unaffected. Featured Work shows that Focus's featured
+  projects first, topped up with its most recent projects to fill the grid.
+
+- **Default view** — the homepage with no Focus active (a first paint before
+  choosing, after Skip, or any link without a `?focus=` param): the original
+  generic hero and the unfiltered featured set.
+
+- **Service** — the canonical taxonomy of what Quin does (six values). A
+  project references **one or more** Services (multi-valued), replacing the
+  earlier single-valued **Category**. The Service list is defined once in code
+  and is the single source of truth for the Focus chooser, the Focused hero,
+  the work filter, and the "What I Do" section. See ADR 0008.
+
+- **Category** *(retired)* — the earlier single-valued `category` field on a
+  project (four values: `ui-ux`, `web-dev`, `graphic-design`, `video`).
+  Superseded by the multi-valued **Service**. Retained here only so older docs
+  and comments referring to "category" remain intelligible.
+
 ## Case study page
 
 - **Case study** — a `project` document with `type: "case-study"`, rendered
