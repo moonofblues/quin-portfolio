@@ -7,13 +7,13 @@ import { cn } from "../utils/cn";
 export function ProjectCard({ project, index = 0 }) {
   return (
     <motion.article
-      className="group relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-card"
+      className="group relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-card h-full"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
-      <Link to={`/work/${project.slug}`}>
+      <Link to={`/work/${project.slug}`} className="flex flex-col h-full">
         <div className="relative aspect-[16/9] overflow-hidden">
           <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-105">
             {project.thumbnail ? (
@@ -43,7 +43,7 @@ export function ProjectCard({ project, index = 0 }) {
           </div>
         </div>
 
-        <div className="p-6 bg-bg-secondary">
+        <div className="flex flex-col flex-1 p-6 bg-bg-secondary">
           <div className="flex flex-wrap gap-2 mb-4">
             {project.tags?.slice(0, 3).map((tag) => (
               <Tag key={tag}>{tag}</Tag>
@@ -59,7 +59,7 @@ export function ProjectCard({ project, index = 0 }) {
           </p>
 
           {project.impact && (
-            <div className="mt-4 pt-4 border-t border-bg-tertiary">
+            <div className="mt-auto pt-4 border-t border-bg-tertiary">
               <span className="text-sm text-text-muted">Impact: </span>
               <span className="text-accent">{project.impact}</span>
             </div>

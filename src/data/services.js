@@ -78,9 +78,9 @@ export const SERVICES = [
     label: "Graphic Design",
     description: "Branding, print, and visual design",
     icon: Layers,
-    heroHeadline: "Visuals That Communicate, Not Just Decorate",
+    heroHeadline: "Visuals That *Communicate*, Not Just Decorate",
     heroDescription:
-      "10+ years of design experience — from brand identities to marketing collateral. I create visuals that align with your brand strategy and actually move the needle on engagement.",
+      "10+ years of design experience — from brand identities to marketing collateral. I create visuals that align with brand strategy and actually move the needle on engagement.",
     heroTags: [
       "Brand Identity",
       "Print Design",
