@@ -47,10 +47,6 @@ function App() {
                     <Routes>
                       <Route path="/" element={<HomePage />} />
                       <Route path="/work" element={<WorkPage />} />
-                      <Route
-                        path="/work/category/:category"
-                        element={<WorkPage />}
-                      />
                       <Route path="/work/:slug" element={<CaseStudyPage />} />
                     </Routes>
                   </Suspense>

@@ -530,49 +530,44 @@ ahead of any UI.
 
 #### Taxonomy (amended) — Category document type, Focus derived (ADR 0009)
 
-Done so far (steps 1–2 of the earlier session, 2026-09-09):
-`src/data/services.js` exists as the single code source of the six Focuses;
-`Services.jsx`, `WorkPage.jsx`, `OtherWork.jsx`, `CaseStudyPage.jsx`, and
-`ProjectsContext` were pointed at it; a `services` array and an interim
-free-text `subcategory` field were added to the project schema. **ADR 0009
-changes direction from here** — the remaining refactor is:
+**✅ FULLY DONE (2026-09-09).** All five steps below are complete.
 
-1. **New `category` document type** (`src/sanity/schema/category.js`):
-   `title`, `slug`, `focus` (string dropdown of the six focus ids, exactly one),
-   `sortOrder`. Register it in `sanity.config.js`.
-2. **Add a `categories` reference array** to the project schema
-   (`of: [{ type: "reference", to: [{ type: "category" }] }]`), **optional at
-   first**. Fetch it in `queries.js` (dereference to `title`, `slug`, `focus`).
-3. **Add a `fetchCategories()` query** and expose the category list +
-   category-aware selectors from `ProjectsContext`:
-   - focus of a project = the set of its categories' `focus` values (derived);
-   - `getProjectsByFocus(focusId)` = projects with any category in that focus;
-   - `getCategoriesByFocus(focusId)` = category docs for that focus (for the
-     Work-page sub-filter, ordered by `sortOrder`).
-4. **Migration (additive, reversible):** Quin creates Category documents and
-   tags every project's `categories`. Only then: flip `categories` to required
-   and **remove** the now-superseded `services`, `subcategory`, and legacy
-   `category` fields from the schema, `queries.js`, and the selectors.
-5. **Work page** gains the two-level filter (Focus tabs → Category sub-row),
-   URL `/work?focus=<id>&category=<slug>` (query params, per ADR 0008).
-   `OtherWork.jsx` and `CaseStudyPage.jsx` read the derived focus label.
+1. ✅ **`category` document type** (`src/sanity/schema/category.js`): `title`,
+   `slug`, `focus` (radio of the six ids), `sortOrder`. Registered in
+   `sanity.config.js`.
+2. ✅ **`categories` reference array on project** — required (≥ 1), dereferenced
+   in `queries.js` to `{ id, title, slug, focus }`. `fetchCategories()` query
+   added for the Work page.
+3. ✅ **`getProjectsByFocus` + `getProjectFocuses`** in `ProjectsContext` — focus
+   derived from `p.categories[].focus`; no fallback needed.
+4. ✅ **Migration complete** — `services`, `subcategory`, and legacy `category`
+   fields removed from schema, `queries.js`, and all selectors.
+5. ✅ **Work page two-level filter** — Focus tabs → Category sub-row,
+   URL `/work?focus=<id>&category=<slug>`. `OtherWork.jsx` and `CaseStudyPage.jsx`
+   derive their focus label from `project.categories[0].focus`.
+
+Also done: `src/data/services.js` (single code source for the 6 Focuses),
+`Services.jsx`, `WorkPage.jsx`, `OtherWork.jsx`, `CaseStudyPage.jsx` all
+consume it. `SERVICE_BY_ID` map available for focus label lookups.
 
 ### Implementation sequence
 
 Ordered by dependency:
 
-1. **Taxonomy refactor** (prerequisite above) — no UI change yet; the site
-   keeps working on the new field.
-2. **Single Service source file** — the one code file from Q7, consumed by
-   the existing What I Do section first (proves the source before anything
-   new depends on it).
+1. ✅ **Taxonomy refactor** — complete (see above).
+2. ✅ **Single Service source file** — `src/data/services.js` done; consumed by
+   Services.jsx, WorkPage, OtherWork, CaseStudyPage.
 3. **Focused hero + Featured Work** — make the hero read per-Focus copy
    (Q6) and Featured Work apply the Q8 rule, both driven by the `?focus=`
    param (Q5). Default view is the no-param path.
+   **Blocked on:** per-Focus hero copy from Quin (headline + description + tags
+   for each of the 6 Focuses — see "Inputs still needed" below).
 4. **Switchers** — clickable What I Do pills + the nav "Viewing:" control +
-   "View all" reset (Q10).
+   "View all" reset (Q10). No content input needed — can build now.
 5. **Focus chooser** — the pop-up itself, last, once the underlying Focused
    view it navigates into already works (Q1, Q11 + accessibility).
+   **Note:** chooser copy can be drafted by Claude; per-Focus hero copy (step 3)
+   is the only true blocker.
 
 ### Performance notes
 

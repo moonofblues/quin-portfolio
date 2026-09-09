@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "../../utils/cn";
+import { SERVICE_BY_ID } from "../../data/services";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -15,6 +16,9 @@ export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const focusId = searchParams.get("focus");
+  const activeService = focusId ? SERVICE_BY_ID[focusId] : null;
 
   useEffect(() => {
     // Scroll fires far more often than once per frame. Coalescing into a
@@ -88,6 +92,19 @@ export function Navigation() {
                 {link.label}
               </Link>
             ))}
+            {activeService && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-accent/10 border border-accent/20 text-accent">
+                Viewing: {activeService.label}
+                <button
+                  type="button"
+                  onClick={() => setSearchParams({})}
+                  aria-label="Clear focus filter"
+                  className="hover:text-text-primary transition-colors duration-200 leading-none"
+                >
+                  <X size={11} />
+                </button>
+              </span>
+            )}
           </div>
 
           <div className="flex items-center gap-4">
@@ -132,6 +149,25 @@ export function Navigation() {
                   </Link>
                 </motion.div>
               ))}
+              {activeService && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: navLinks.length * 0.1 }}
+                >
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium bg-accent/10 border border-accent/20 text-accent">
+                    Viewing: {activeService.label}
+                    <button
+                      type="button"
+                      onClick={() => setSearchParams({})}
+                      aria-label="Clear focus filter"
+                      className="hover:text-text-primary transition-colors duration-200 leading-none"
+                    >
+                      <X size={13} />
+                    </button>
+                  </span>
+                </motion.div>
+              )}
             </div>
           </motion.div>
         )}

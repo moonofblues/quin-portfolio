@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useSearchParams } from "react-router-dom";
 import { SectionTitle } from "./ui/SectionTitle";
 import { Marquee } from "./ui/Marquee";
 import { Tag } from "./ui/Tag";
@@ -15,6 +16,14 @@ import { SERVICES } from "../data/services";
 const tools = ["React", "Vite", "Tailwind CSS", "Sanity", "Framer Motion"];
 
 export function Services() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const focusId = searchParams.get("focus");
+
+  // Toggle: clicking the active pill deselects it; clicking a new one selects it.
+  const handlePillClick = (id) => {
+    setSearchParams(focusId === id ? {} : { focus: id });
+  };
+
   return (
     <section id="services" className="section relative">
       <div className="container">
@@ -54,18 +63,30 @@ export function Services() {
         <div className="flex flex-wrap gap-4 items-center justify-center">
           {SERVICES.map((capability, index) => {
             const Icon = capability.icon;
+            const isActive = focusId === capability.id;
             return (
               <motion.div
                 key={capability.id}
+                role="button"
+                tabIndex={0}
+                onClick={() => handlePillClick(capability.id)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handlePillClick(capability.id);
+                  }
+                }}
                 className={cn(
-                  "inline-flex items-center gap-3 pl-4 pr-6 py-4 rounded-full",
-                  "bg-bg-secondary border border-bg-tertiary",
-                  // Named properties, not `transition-all` (CLAUDE.md
-                  // performance rule) — this row is six instances, and
-                  // transition-all would animate layout-affecting properties
-                  // none of these actually change on hover.
-                  "transition-[background-color,border-color]",
-                  "hover:bg-bg-hover hover:border-accent-secondary/40",
+                  "inline-flex items-center gap-3 pl-4 pr-6 py-4 rounded-full cursor-pointer",
+                  "bg-bg-secondary border",
+                  // Named properties only — transition-all animates layout-
+                  // affecting properties and triggers backdrop-filter on every
+                  // frame, which is expensive on the fixed header. Not an issue
+                  // here, but the rule applies site-wide.
+                  "transition-[background-color,border-color,box-shadow]",
+                  isActive
+                    ? "border-accent-secondary/60 bg-bg-hover ring-1 ring-accent-secondary/25"
+                    : "border-bg-tertiary hover:bg-bg-hover hover:border-accent-secondary/40",
                 )}
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}

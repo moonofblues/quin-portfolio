@@ -158,7 +158,7 @@ export function CaseStudyPage() {
                     <Star size={32} className="mt-2 shrink-0" />
                     <div>
                       <h3 className="font-display text-xs uppercase tracking-wider mb-2 text-accent">
-                        {SERVICE_BY_ID[project.services?.[0]]?.label ?? SERVICE_BY_ID[project.category]?.label ?? project.category}
+                        {SERVICE_BY_ID[project.categories?.[0]?.focus]?.label ?? ""}
                       </h3>
                       <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-text-primary">
                         {project.title}

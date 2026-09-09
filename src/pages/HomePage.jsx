@@ -8,6 +8,7 @@ import { About } from "../components/About";
 import { Now } from "../components/Now";
 import { Testimonials } from "../components/Testimonials";
 import { Contact } from "../components/Contact";
+import { FocusChooser } from "../components/FocusChooser";
 
 export function HomePage() {
   // Lenis is loaded dynamically rather than imported at the top of the file.
@@ -53,6 +54,7 @@ export function HomePage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden noise-overlay">
+      <FocusChooser />
       <main>
         <Hero />
         <Introduction />

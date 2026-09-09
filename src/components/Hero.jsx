@@ -1,15 +1,23 @@
 import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "./ui/Button";
 import { Tag } from "./ui/Tag";
 import { Moon } from "./decorative/Moon";
 import { Star } from "./decorative/Stars";
 import { RevealLines } from "./ui/RevealLines";
+import { SERVICE_BY_ID, parseHeadline } from "../data/services";
 import zcmcWebsiteDark from "../assets/zcmc-website-hero-dark.webp";
 import adzuPortal from "../assets/adzu-portal-home.webp";
 import erpDashboard from "../assets/erp-dashboard.webp";
 
-const skills = [
+const DEFAULT_HEADLINE = [
+  "Designing Systems and Visuals That",
+  <span className="text-gradient">Actually Work</span>,
+];
+const DEFAULT_DESCRIPTION =
+  "From pixel to production — I bridge design and development to create interfaces that are as functional as they are beautiful.";
+const DEFAULT_TAGS = [
   "UI/UX Design",
   "Front-End Dev",
   "Web Development",
@@ -28,6 +36,32 @@ const skills = [
 const EASE_OUT = [0.22, 1, 0.36, 1];
 
 export function Hero() {
+  const [searchParams] = useSearchParams();
+  const focusId = searchParams.get("focus");
+  const service = focusId ? SERVICE_BY_ID[focusId] : null;
+
+  // When a focus is active, build a single headline line with gradient spans
+  // parsed from the *marked* segments in the copy. When no focus, use the
+  // two-line default with the hardcoded gradient second line.
+  const headlineLines = service
+    ? [
+        <>
+          {parseHeadline(service.heroHeadline).map((p, i) =>
+            p.gradient ? (
+              <span key={i} className="text-gradient">
+                {p.text}
+              </span>
+            ) : (
+              p.text
+            )
+          )}
+        </>,
+      ]
+    : DEFAULT_HEADLINE;
+
+  const description = service ? service.heroDescription : DEFAULT_DESCRIPTION;
+  const tags = service ? service.heroTags : DEFAULT_TAGS;
+
   return (
     <section
       id="home"
@@ -70,42 +104,29 @@ export function Hero() {
           Portfolio in progress — more of my works are still being added
         </motion.div>
 
-        {/* The tags animate as one group. Previously each of the six was its
-            own motion element with its own controller and its own delay,
-            stretching the stagger to 0.8s for a purely decorative reveal. */}
         <motion.div
           className="flex flex-wrap justify-center max-w-2xl gap-2 mb-8"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1, ease: EASE_OUT }}
         >
-          {skills.map((skill) => (
-            <Tag key={skill}>{skill}</Tag>
+          {tags.map((tag) => (
+            <Tag key={tag}>{tag}</Tag>
           ))}
         </motion.div>
 
         {/* Q4 (Hero): re-skin + motion, no restructure — the collage and LCP
-            timing below are untouched. This is the hero's slice of the Q2
-            animation vocabulary: RevealLines wipes each line up from behind
-            its own mask instead of the plain fade+translateY every other
-            hero element still uses. `eager`, not the default `whileInView`:
-            the hero is visible at the very first paint, and whileInView's
-            IntersectionObserver callback is not guaranteed to fire inside
-            that same instant — it was found to leave the headline stuck
-            invisible in its pre-reveal state. `eager` uses `animate`
-            instead, matching how every other element in this sequence
-            (badge/tags/paragraph/buttons) already plays unconditionally on
-            mount. `delay={0.15}` keeps it landing at the same point in that
-            sequence where the plain h1 used to sit. */}
+            timing below are untouched. RevealLines wipes each line up from
+            behind its own mask. `eager` uses `animate` instead of
+            `whileInView` so the headline is never stuck invisible on first
+            paint. Content swaps in place when focus changes — no key remount,
+            which avoids old and new instances painting simultaneously. */}
         <RevealLines
           as="h1"
           className="font-display text-3xl md:text-5xl lg:text-6xl xl:text-6xl leading-tight mb-6 text-text-primary"
           delay={0.15}
           eager
-          lines={[
-            "Designing Systems and Visuals That",
-            <span className="text-gradient">Actually Work</span>,
-          ]}
+          lines={headlineLines}
         />
 
         <motion.p
@@ -114,8 +135,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.22, ease: EASE_OUT }}
         >
-          From pixel to production — I bridge design and development to create
-          interfaces that are as functional as they are beautiful.
+          {description}
         </motion.p>
 
         <motion.div

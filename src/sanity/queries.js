@@ -6,9 +6,6 @@ const PROJECT_FIELDS = `
   subtitle,
   "slug": slug.current,
   type,
-  category,
-  services,
-  subcategory,
   categories[]-> {
     "id": _id,
     title,

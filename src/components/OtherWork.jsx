@@ -7,38 +7,46 @@ import { SERVICES, SERVICE_BY_ID } from "../data/services";
 
 const ALL_TAB = { id: "all", label: "All" };
 
+// A project's focuses are derived from its categories (ADR 0009).
+function focusesOf(p) {
+  return (p.categories ?? []).map((c) => c.focus).filter(Boolean);
+}
+
 export function OtherWork() {
-  const { getOtherWorkProjects, getProjectsByService, loading } = useProjects();
+  const { getOtherWorkProjects, loading } = useProjects();
   const [activeFilter, setActiveFilter] = useState("all");
 
   if (loading) return null;
 
   const otherWorkProjects = getOtherWorkProjects();
-  // Only show tabs that have at least one showcase project in that service.
+
+  // Only show focus tabs that have at least one showcase project.
   const visibleTabs = [
     ALL_TAB,
     ...SERVICES.filter((s) =>
-      otherWorkProjects.some((p) =>
-        p.services?.length ? p.services.includes(s.id) : p.category === s.id
-      )
+      otherWorkProjects.some((p) => focusesOf(p).includes(s.id)),
     ).map((s) => ({ id: s.id, label: s.label })),
   ];
 
   const filteredProjects =
     activeFilter === "all"
       ? otherWorkProjects
-      : otherWorkProjects.filter((p) =>
-          p.services?.length
-            ? p.services.includes(activeFilter)
-            : p.category === activeFilter
-        );
+      : otherWorkProjects.filter((p) => focusesOf(p).includes(activeFilter));
+
+  // Display label for a project's primary focus — used in the hover overlay.
+  const focusLabelOf = (p) => {
+    const focuses = focusesOf(p);
+    return focuses.length > 0
+      ? SERVICE_BY_ID[focuses[0]]?.label ?? focuses[0]
+      : null;
+  };
 
   return (
     <section className="section relative">
       <div className="container">
         <SectionTitle>Other Works</SectionTitle>
 
-        {/* Filter tabs */}
+        {/* Focus filter tabs */}
         <motion.div
           className="flex flex-wrap gap-2 mb-10"
           initial={{ opacity: 0, y: 20 }}
@@ -46,18 +54,18 @@ export function OtherWork() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          {visibleTabs.map((category) => (
+          {visibleTabs.map((tab) => (
             <button
-              key={category.id}
-              onClick={() => setActiveFilter(category.id)}
+              key={tab.id}
+              onClick={() => setActiveFilter(tab.id)}
               className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 hover:bg-accent-hover ",
-                activeFilter === category.id
+                "px-4 py-2 rounded-full text-sm font-medium transition-[background-color,color] duration-200 hover:bg-accent-hover",
+                activeFilter === tab.id
                   ? "bg-accent text-text-primary text-lg"
-                  : "bg-bg-tertiary text-text-secondary ",
+                  : "bg-bg-tertiary text-text-secondary",
               )}
             >
-              {category.label}
+              {tab.label}
             </button>
           ))}
         </motion.div>
@@ -92,13 +100,13 @@ export function OtherWork() {
                   </div>
                 )}
 
-                {/* Overlay when hovered */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center bg-text-primary ">
-                  <span className="font-display text-sm text-accent  mb-2">
+                {/* Hover overlay */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center bg-text-primary">
+                  <span className="font-display text-sm text-accent mb-2">
                     {project.title}
                   </span>
                   <span className="text-xs text-text-secondary">
-                    {SERVICE_BY_ID[project.services?.[0]]?.label ?? SERVICE_BY_ID[project.category]?.label ?? project.category}
+                    {focusLabelOf(project)}
                   </span>
                 </div>
               </motion.div>
