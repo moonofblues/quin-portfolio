@@ -35,18 +35,36 @@ export const projectSchema = {
       validation: (R) => R.required(),
     },
     {
-      name: "category",
-      title: "Category",
-      type: "string",
+      name: "services",
+      title: "Services",
+      type: "array",
+      of: [{ type: "string" }],
       options: {
         list: [
           { title: "UI/UX Design", value: "ui-ux" },
+          { title: "Front-End Development", value: "front-end" },
           { title: "Web Development", value: "web-dev" },
+          { title: "Low-Code / No-Code", value: "low-code" },
           { title: "Graphic Design", value: "graphic-design" },
-          { title: "Video", value: "video" },
+          { title: "Video Editing", value: "video" },
         ],
+        layout: "tags",
       },
-      validation: (R) => R.required(),
+      description: "Select one or more services this project falls under. Replaces Category — set this first, then Category can be retired.",
+    },
+    {
+      name: "subcategory",
+      title: "Category (legacy — use Categories below)",
+      type: "string",
+      description: "Superseded by the Categories reference field. Kept until migration completes; do not fill in for new projects.",
+    },
+    {
+      name: "categories",
+      title: "Categories",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "category" }] }],
+      description:
+        "The categories this project belongs to. The project's Focus/Service is derived from these — see ADR 0009. (Will become required once every project is tagged.)",
     },
     {
       name: "status",

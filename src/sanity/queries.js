@@ -7,6 +7,14 @@ const PROJECT_FIELDS = `
   "slug": slug.current,
   type,
   category,
+  services,
+  subcategory,
+  categories[]-> {
+    "id": _id,
+    title,
+    "slug": slug.current,
+    focus
+  },
   featured,
   status,
   sortOrder,
@@ -73,6 +81,21 @@ export async function fetchAllProjects() {
 export async function fetchNow() {
   return client.fetch(
     `*[_type == "now"][0] { asOf, activities[] { verb, text } }`
+  );
+}
+
+// The full list of Category documents, ordered for the Work-page sub-filter.
+// Fetched by the Work page only (not site-wide), so the homepage bundle and
+// network are untouched — see ADR 0009 and the Phase 6 plan.
+export async function fetchCategories() {
+  return client.fetch(
+    `*[_type == "category"] | order(sortOrder asc, title asc) {
+      "id": _id,
+      title,
+      "slug": slug.current,
+      focus,
+      sortOrder
+    }`
   );
 }
 

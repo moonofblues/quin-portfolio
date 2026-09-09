@@ -1,23 +1,9 @@
 import { motion } from "framer-motion";
-import { Palette, Code, Smartphone, Layers, Video, Wand2 } from "lucide-react";
 import { SectionTitle } from "./ui/SectionTitle";
 import { Marquee } from "./ui/Marquee";
 import { Tag } from "./ui/Tag";
 import { cn } from "../utils/cn";
-
-// Q5 (Settled → Hybrid Option B): not a full replace. Three parts —
-// (a) a positioning statement as the section anchor, (b) a tools marquee,
-// (c) the six capabilities as a compact horizontal band rather than six
-// chunky cards. The old per-card descriptions are dropped; the positioning
-// statement now carries the narrative weight they used to.
-const capabilities = [
-  { id: 1, title: "UI/UX Design", icon: Palette },
-  { id: 2, title: "Front-End Development", icon: Code },
-  { id: 3, title: "Web Development", icon: Smartphone },
-  { id: 4, title: "Low-Code / No-Code", icon: Wand2 },
-  { id: 5, title: "Graphic Design", icon: Layers },
-  { id: 6, title: "Video Editing", icon: Video },
-];
+import { SERVICES } from "../data/services";
 
 // PLACEHOLDER — Quin's real tool list is an open input (redesign plan,
 // "Inputs still needed"): "accurate to actual stack, no invented tools",
@@ -66,7 +52,7 @@ export function Services() {
         </motion.div>
 
         <div className="flex flex-wrap gap-4 items-center justify-center">
-          {capabilities.map((capability, index) => {
+          {SERVICES.map((capability, index) => {
             const Icon = capability.icon;
             return (
               <motion.div
@@ -90,7 +76,7 @@ export function Services() {
                   <Icon size={22} className="text-accent-secondary" />
                 </span>
                 <span className="text-base md:text-lg font-medium text-text-primary">
-                  {capability.title}
+                  {capability.label}
                 </span>
               </motion.div>
             );

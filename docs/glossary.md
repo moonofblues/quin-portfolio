@@ -33,16 +33,29 @@ section of `docs/redesign-plan.md`.
   choosing, after Skip, or any link without a `?focus=` param): the original
   generic hero and the unfiltered featured set.
 
-- **Service** — the canonical taxonomy of what Quin does (six values). A
-  project references **one or more** Services (multi-valued), replacing the
-  earlier single-valued **Category**. The Service list is defined once in code
-  and is the single source of truth for the Focus chooser, the Focused hero,
-  the work filter, and the "What I Do" section. See ADR 0008.
+- **Service** — the canonical top-level taxonomy of what Quin does (six
+  values). Same thing as **Focus**, named from Quin's side. Defined once in
+  code (`src/data/services.js`) and the single source of truth for the Focus
+  chooser, the Focused hero, and the "What I Do" section. A project does **not**
+  store its Services directly — they are **derived** from the project's
+  Categories (see below). See ADR 0008 and [ADR 0009](adr/0009-category-document-type-focus-derived.md).
 
-- **Category** *(retired)* — the earlier single-valued `category` field on a
-  project (four values: `ui-ux`, `web-dev`, `graphic-design`, `video`).
-  Superseded by the multi-valued **Service**. Retained here only so older docs
-  and comments referring to "category" remain intelligible.
+- **Category** — a finer bucket *within* one Focus — e.g. "Travel Montage"
+  under Video Editing, "Branding" under Graphic Design. As of
+  [ADR 0009](adr/0009-category-document-type-focus-derived.md) it is a **Sanity
+  document type** (`title`, `slug`, `focus`, `sortOrder`), each Category
+  assigned to **exactly one** Focus via its `focus` field. A project references
+  **one or more** Categories (required, ≥ 1); this is the *only* taxonomy field
+  a project carries, and a project's Focuses fall out of its categories'
+  `focus` values. Categories surface on the **Work page only**, as the
+  second-level filter under a chosen Focus. (Supersedes both the earlier
+  retired single-valued `category` string and the interim free-text
+  `subcategory` field.)
+
+  *Historical note:* ADR 0008 briefly stored a multi-valued `services` array on
+  the project and retired `category`. ADR 0009 reverses that split — Category
+  returns as a managed document type and Service becomes derived — to avoid two
+  taxonomy fields drifting apart.
 
 ## Case study page
 

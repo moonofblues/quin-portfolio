@@ -11,13 +11,7 @@ import { StatRing } from "../components/case-study/StatRing";
 import { ProcessTimeline } from "../components/case-study/ProcessTimeline";
 import { useProjects } from "../context/ProjectsContext";
 import { cn } from "../utils/cn";
-
-const CATEGORY_LABELS = {
-  "ui-ux": "UI/UX Design",
-  "web-dev": "Web Development",
-  "graphic-design": "Graphic Design",
-  video: "Video",
-};
+import { SERVICE_BY_ID } from "../data/services";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -164,7 +158,7 @@ export function CaseStudyPage() {
                     <Star size={32} className="mt-2 shrink-0" />
                     <div>
                       <h3 className="font-display text-xs uppercase tracking-wider mb-2 text-accent">
-                        {CATEGORY_LABELS[project.category] || project.category}
+                        {SERVICE_BY_ID[project.services?.[0]]?.label ?? SERVICE_BY_ID[project.category]?.label ?? project.category}
                       </h3>
                       <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-text-primary">
                         {project.title}

@@ -3,30 +3,35 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SectionTitle } from "./ui/SectionTitle";
 import { cn } from "../utils/cn";
 import { useProjects } from "../context/ProjectsContext";
+import { SERVICES, SERVICE_BY_ID } from "../data/services";
 
-const FILTER_TABS = [
-  { id: "all", label: "All" },
-  { id: "graphic-design", label: "Graphic Design" },
-  { id: "video", label: "Video" },
-  { id: "web-dev", label: "Web Dev" },
-  { id: "ui-ux", label: "UI/UX" },
-];
+const ALL_TAB = { id: "all", label: "All" };
 
 export function OtherWork() {
-  const { getOtherWorkProjects, loading } = useProjects();
+  const { getOtherWorkProjects, getProjectsByService, loading } = useProjects();
   const [activeFilter, setActiveFilter] = useState("all");
 
   if (loading) return null;
 
   const otherWorkProjects = getOtherWorkProjects();
-  const categories = FILTER_TABS.filter(
-    (c) => c.id === "all" || otherWorkProjects.some((p) => p.category === c.id),
-  );
+  // Only show tabs that have at least one showcase project in that service.
+  const visibleTabs = [
+    ALL_TAB,
+    ...SERVICES.filter((s) =>
+      otherWorkProjects.some((p) =>
+        p.services?.length ? p.services.includes(s.id) : p.category === s.id
+      )
+    ).map((s) => ({ id: s.id, label: s.label })),
+  ];
 
   const filteredProjects =
     activeFilter === "all"
       ? otherWorkProjects
-      : otherWorkProjects.filter((p) => p.category === activeFilter);
+      : otherWorkProjects.filter((p) =>
+          p.services?.length
+            ? p.services.includes(activeFilter)
+            : p.category === activeFilter
+        );
 
   return (
     <section className="section relative">
@@ -41,7 +46,7 @@ export function OtherWork() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          {categories.map((category) => (
+          {visibleTabs.map((category) => (
             <button
               key={category.id}
               onClick={() => setActiveFilter(category.id)}
@@ -93,7 +98,7 @@ export function OtherWork() {
                     {project.title}
                   </span>
                   <span className="text-xs text-text-secondary">
-                    {project.category}
+                    {SERVICE_BY_ID[project.services?.[0]]?.label ?? SERVICE_BY_ID[project.category]?.label ?? project.category}
                   </span>
                 </div>
               </motion.div>

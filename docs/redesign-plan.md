@@ -469,9 +469,19 @@ the first fraction of a second of scrolling is native rather than eased.
 
 Working plan from the `/grill-with-docs` session of 2026-09-08. **Not yet
 implemented — this section is the settled design, ready to build.** Decision
-record: [ADR 0008](adr/0008-focus-chooser-and-service-taxonomy.md). Vocabulary
-(*Focus*, *Focus chooser*, *Focused view*, *Default view*, *Service*): see
-`docs/glossary.md`.
+records: [ADR 0008](adr/0008-focus-chooser-and-service-taxonomy.md) and
+[ADR 0009](adr/0009-category-document-type-focus-derived.md). Vocabulary
+(*Focus*, *Focus chooser*, *Focused view*, *Default view*, *Service*,
+*Category*): see `docs/glossary.md`.
+
+> **Taxonomy amended 2026-09-09 (ADR 0009).** The Q3/Q4/Q13 rows below and the
+> "Prerequisite" section describe ADR 0008's original shape, where the project
+> stored a multi-valued `services` array and Category was retired. That has
+> been superseded: **Category is now a Sanity document type**, each assigned to
+> one Focus; a project references **Categories only** (≥ 1, required) and its
+> **Focuses are derived** from them. See ADR 0009 and the "Taxonomy (amended)"
+> subsection below for the binding version. The Focus chooser, Focused hero,
+> and Work-page filter behaviour are otherwise as described.
 
 ### Brief
 
@@ -511,20 +521,41 @@ screen-reader labelled (`role="dialog"`, `aria-modal`), and it respects
 
 The chooser depends on the taxonomy being unified first. This is a
 live-content refactor (Sanity schema + several files), so it is sequenced
-ahead of any UI:
+ahead of any UI.
 
-1. Add a multi-valued `services` field to the project schema
-   (`src/sanity/schema/project.js`) with the six values, alongside the
-   existing `category`.
-2. Copy each existing project's `category` into `services` (one-element
-   array), verify in Studio, then remove the `category` field and its schema
-   `list`.
-3. Replace `src/data/categories.js` with a single Service source file (see
-   Q7) — id, label, description, hero copy, tags, icon per Service.
-4. Update the filter path: `ProjectsContext.getProjectsByCategory` →
-   a Service-aware selector using `services.includes(...)`; update
-   `WorkPage.jsx`, `OtherWork.jsx`, `CaseStudyPage.jsx`, and
-   `queries.js` references (8 files touch `category` today).
+> **Superseded by ADR 0009 — see "Taxonomy (amended)" below.** The four steps
+> that were here described storing a `services` array on the project. Under
+> ADR 0009 the project stores **Category references** instead and Service is
+> derived. The amended subsection is the binding version.
+
+#### Taxonomy (amended) — Category document type, Focus derived (ADR 0009)
+
+Done so far (steps 1–2 of the earlier session, 2026-09-09):
+`src/data/services.js` exists as the single code source of the six Focuses;
+`Services.jsx`, `WorkPage.jsx`, `OtherWork.jsx`, `CaseStudyPage.jsx`, and
+`ProjectsContext` were pointed at it; a `services` array and an interim
+free-text `subcategory` field were added to the project schema. **ADR 0009
+changes direction from here** — the remaining refactor is:
+
+1. **New `category` document type** (`src/sanity/schema/category.js`):
+   `title`, `slug`, `focus` (string dropdown of the six focus ids, exactly one),
+   `sortOrder`. Register it in `sanity.config.js`.
+2. **Add a `categories` reference array** to the project schema
+   (`of: [{ type: "reference", to: [{ type: "category" }] }]`), **optional at
+   first**. Fetch it in `queries.js` (dereference to `title`, `slug`, `focus`).
+3. **Add a `fetchCategories()` query** and expose the category list +
+   category-aware selectors from `ProjectsContext`:
+   - focus of a project = the set of its categories' `focus` values (derived);
+   - `getProjectsByFocus(focusId)` = projects with any category in that focus;
+   - `getCategoriesByFocus(focusId)` = category docs for that focus (for the
+     Work-page sub-filter, ordered by `sortOrder`).
+4. **Migration (additive, reversible):** Quin creates Category documents and
+   tags every project's `categories`. Only then: flip `categories` to required
+   and **remove** the now-superseded `services`, `subcategory`, and legacy
+   `category` fields from the schema, `queries.js`, and the selectors.
+5. **Work page** gains the two-level filter (Focus tabs → Category sub-row),
+   URL `/work?focus=<id>&category=<slug>` (query params, per ADR 0008).
+   `OtherWork.jsx` and `CaseStudyPage.jsx` read the derived focus label.
 
 ### Implementation sequence
 

@@ -42,6 +42,17 @@ export function ProjectsProvider({ children }) {
 
     const getCaseStudies = () => projects.filter((p) => p.type === "case-study");
 
+    // A project's Focuses are derived from its Categories (ADR 0009). During
+    // the additive migration, projects not yet tagged with categories fall
+    // back to the older `services` array, then the legacy `category` string,
+    // so filtering keeps working before every project is re-tagged.
+    const focusesOf = (p) => {
+      if (p.categories?.length)
+        return [...new Set(p.categories.map((c) => c.focus).filter(Boolean))];
+      if (p.services?.length) return p.services;
+      return p.category ? [p.category] : [];
+    };
+
     return {
       projects,
       loading,
@@ -49,14 +60,53 @@ export function ProjectsProvider({ children }) {
       getFeaturedProjects: () => projects.filter((p) => p.featured),
       getOtherWorkProjects: () =>
         projects.filter((p) => p.type === "showcase"),
+      // --- Interim selectors, still consumed by WorkPage/OtherWork until the
+      // Chunk 2 two-level filter replaces them. Kept intact so nothing breaks
+      // mid-migration; removed once the Work page reads categories directly. ---
       getProjectsByCategory: (cat) =>
         cat === "all" ? projects : projects.filter((p) => p.category === cat),
+      getProjectsByService: (serviceId) =>
+        serviceId === "all"
+          ? projects
+          : projects.filter((p) =>
+              p.services?.length
+                ? p.services.includes(serviceId)
+                : p.category === serviceId
+            ),
+      getSubcategoriesByService: (serviceId) => {
+        const pool =
+          serviceId === "all"
+            ? projects
+            : projects.filter((p) =>
+                p.services?.length
+                  ? p.services.includes(serviceId)
+                  : p.category === serviceId
+              );
+        return [
+          ...new Set(pool.map((p) => p.subcategory).filter(Boolean)),
+        ].sort();
+      },
+      // --- Category-aware selectors (ADR 0009), the target model. ---
+      // Exposed so callers can render a project's discipline label(s) from the
+      // derived focus rather than reading a stored field.
+      getProjectFocuses: focusesOf,
+      // Category-aware selector (ADR 0009). "all" returns everything; otherwise
+      // a project matches when its derived Focuses include the given focus id.
+      getProjectsByFocus: (focusId) =>
+        focusId === "all"
+          ? projects
+          : projects.filter((p) => focusesOf(p).includes(focusId)),
       getProjectBySlug,
       getRelatedProjects: (slug, limit = 3) => {
         const current = getProjectBySlug(slug);
         if (!current) return [];
+        const currentFocuses = focusesOf(current);
         return projects
-          .filter((p) => p.slug !== slug && p.category === current.category)
+          .filter(
+            (p) =>
+              p.slug !== slug &&
+              focusesOf(p).some((f) => currentFocuses.includes(f)),
+          )
           .slice(0, limit);
       },
       getNextPrevProjects: (slug) => {

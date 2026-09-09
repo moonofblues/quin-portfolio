@@ -5,22 +5,24 @@ import { ArrowLeft } from "lucide-react";
 import { ProjectCard } from "../components/ProjectCard";
 import { Star } from "../components/decorative/Stars";
 import { Button } from "../components/ui/Button";
-import { categories } from "../data/categories";
+import { SERVICES } from "../data/services";
 import { useProjects } from "../context/ProjectsContext";
 import { cn } from "../utils/cn";
 
 export function WorkPage() {
   const { category } = useParams();
   const navigate = useNavigate();
-  const { projects, getProjectsByCategory, loading } = useProjects();
+  const { projects, getProjectsByService, loading } = useProjects();
 
   const activeCategory = category || "all";
+  const allFilter = { id: "all", label: "All Work", description: "Browse all projects across disciplines" };
+  const filters = [allFilter, ...SERVICES];
 
   const filteredProjects = useMemo(() => {
-    return getProjectsByCategory(activeCategory);
+    return getProjectsByService(activeCategory);
   }, [activeCategory, projects]);
 
-  const currentCategory = categories.find((c) => c.id === activeCategory);
+  const currentCategory = filters.find((c) => c.id === activeCategory);
 
   if (loading) {
     return (
@@ -65,7 +67,7 @@ export function WorkPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          {categories.map((cat) => (
+          {filters.map((cat) => (
             <button
               key={cat.id}
               onClick={() =>
@@ -83,7 +85,7 @@ export function WorkPage() {
                 (
                 {cat.id === "all"
                   ? projects.length
-                  : getProjectsByCategory(cat.id).length}
+                  : getProjectsByService(cat.id).length}
                 )
               </span>
             </button>
