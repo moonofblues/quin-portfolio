@@ -601,6 +601,137 @@ re-skin/palette work — they block the specific sections noted):
 - **Testimonials:** the real, attributable quotes Quin is already collecting
   (name + role mandatory). Blocks the Testimonials section.
 
+## Phase 7 — Concept visibility + default-hero copy (planned, 2026-09-10)
+
+From a `/design-review` of the live homepage (2026-09-10), answering two
+questions Quin posed: **does the landing page feel unique, and would it attract
+recruiters / HR / clients right away?** The review's verdict: the craft is
+there, but the page currently reads as a *polished generic dark portfolio*, and
+its strongest material is hidden. Two root causes, both fixable without
+re-architecture. This ties to [ADR 0010](adr/0010-differentiate-through-concept-not-more-motion.md)
+(differentiate through a committed concept, not more motion). **Not yet
+implemented — this is the settled direction plus draft copy, ready to build.**
+
+Decision confirmed with Quin alongside this review: **stick to the night-sky
+concept** (do not swap it for a different metaphor), and **keep the Focus
+chooser** (its purpose is valid — see below).
+
+### 7A — Make the night sky actually visible (commit to the concept)
+
+**Problem.** The night sky is the intended differentiator, but it is
+imperceptible. In a fully-composited capture of the hero, the background read
+as near-flat near-black: the Moon (top-left), the three Stars, and the 35
+Fireflies are all present in the DOM but do not register visually. A near-flat
+dark background under a centered hero is the single most common portfolio look —
+so the concept that should make the site unique currently isn't showing up. Per
+ADR 0010, the concept must **organize**, not just sit behind the content as
+dots too faint to see.
+
+**Direction (all CSS / static SVG — no entry-chunk weight, no new library,
+stays within the ~232 KB gz cap and consistent with ADRs 0006/0007):**
+
+- **A real sky gradient behind the hero**, not near-flat black — e.g. a deep
+  indigo/violet-to-near-black vertical wash, so the eye reads "night sky" on the
+  first frame rather than "dark theme."
+- **Reduce `--hero-wash-alpha`.** Phase 2 already flagged this: at `85%` the
+  fireflies "read very faintly in the hero; ~70% is worth eyeballing." That one
+  value dims the Moon, Stars, and Fireflies all at once. Lower it (try ~65–70%)
+  so the ambient layer actually shows. One-line change in `.bg-gradient-radial`.
+- **Make the Moon a present focal element** rather than a faint disc — larger
+  and/or brighter (`--color-moon` is `#c9c4e0`), with a soft glow that survives
+  the wash.
+- **Denser / brighter Stars clustered near the headline**, and optionally faint
+  **constellation connector lines** (static SVG, `aria-hidden`) — this reuses the
+  reference's "drawn connector" motif already in the plan (Q3) but points it at
+  the concept instead of a section index.
+- **Optional structural commitment** (ADR 0010's "organize, not decorate"):
+  let section transitions read as horizon/gradient shifts so scrolling feels
+  like moving through the night. Lower priority than the hero fixes above.
+
+**Success test (from the review):** show the first screen for ~6 seconds, take
+it away, ask what the person remembers. "A night sky / distinct point of view"
+= working; "another dark site" = not yet.
+
+### 7B — Strengthen the *default* hero copy (the Skip / no-focus path)
+
+**Problem.** The Focus chooser's Skip and first-paint both land on the
+**Default view** (Phase 6, "Skip / Default" row), whose copy is generic:
+
+- Headline (`Hero.jsx:14–17` `DEFAULT_HEADLINE`): "Designing Systems and Visuals
+  That / **Actually Work**"
+- Description (`Hero.jsx:18–19` `DEFAULT_DESCRIPTION`): "From pixel to production
+  — I bridge design and development to create interfaces that are as functional
+  as they are beautiful."
+
+This is interchangeable with what most designer-developers write. Meanwhile the
+genuinely strong, specific, outcome-driven copy — "hospital systems used by 500+
+healthcare workers daily… 60% faster task completion" — lives only in the
+**per-Focus** copy (`services.js`, UI/UX focus) and is therefore **gated behind
+picking a discipline.** Since most visitors skip, the site leads with its
+weakest foot and hides its best one.
+
+**Direction.** Promote specificity and proof into the *default* hero, so a
+visitor who never chooses a Focus still sees outcomes and numbers. The default
+must stay discipline-spanning (the visitor hasn't picked one), but "spanning"
+does not require "generic." Draft options for Quin to pick / edit:
+
+- **Option A — proof-led.**
+  - Headline: "Design and Code That **Hold Up in Production**"
+  - Description: "I design and build the systems real people rely on — like
+    hospital software used daily by 500+ healthcare workers. Research-driven,
+    production-ready, and tested with a critical eye."
+- **Option B — identity + proof.**
+  - Headline: "I Design Systems People **Actually Rely On**"
+  - Description: "UI/UX, front-end, and QA in one person — currently shaping
+    hospital information systems used by 500+ staff daily at Zamboanga City
+    Medical Center, and teaching the next generation of developers at Ateneo de
+    Zamboanga University."
+
+(Gradient/emphasis span shown in **bold** — keep the existing `text-gradient`
+treatment on that segment.)
+
+> **⚠ Verify before shipping:** the "500+ healthcare workers" and "60% faster
+> task completion" figures are carried over from the existing per-Focus copy.
+> Confirm they are accurate and defensible — a hiring manager may ask. Do not
+> ship a metric Quin can't stand behind. Same "real and attributable" rule the
+> testimonials and tools list already follow.
+
+### 7C — Focus chooser: keep the purpose, reduce first-paint friction
+
+**Purpose (confirmed valid, keep it).** The chooser exists so a recruiter or HR
+screener can see **only the work relevant to the role they're hiring for** —
+promoting the taxonomy up to the front door (Phase 6 brief). That goal is worth
+keeping; the review does **not** recommend removing it.
+
+**Friction to fix.** Phase 6 Q1 intended a *dismissible, non-blocking* pop-up
+with a prominent Skip. Two gaps between that intent and the current build:
+
+- **It covers the hero on first paint.** The current `FocusChooser.jsx` renders
+  a full `bg-black/75` overlay and locks body scroll, so the very first thing a
+  6-second skimmer sees is a *task* ("Pick a discipline") before any name,
+  value, or work — friction ahead of value, against CLAUDE.md "minimize UI
+  friction." Consider whether the hero should be **legible behind/around** the
+  chooser (so value lands even before a choice), or whether the chooser should
+  appear as a **non-blocking on-page control** rather than a covering overlay.
+- **Implementation diverges from the plan.** Phase 6 Q1 specifies "seen"
+  remembered in **`localStorage`**; the build uses a **module-level `_seen`
+  flag that resets every reload** (deliberate — comment in `FocusChooser.jsx`
+  says it's so every hiring manager gets it). Reconcile: decide whether
+  re-showing every visit is intended, and align the plan and code either way.
+
+**Dependency.** 7C interacts with 7B: whichever path is chosen, the **default /
+skip experience must carry the strong copy from 7B**, since that is what most
+visitors land on.
+
+### Inputs still needed from Quin (Phase 7)
+
+- **Default hero copy** — pick Option A or B above (or a variant), and
+  **confirm the metrics are accurate** (7B).
+- **Night-sky art direction call** — how far to push visibility (hero-only vs.
+  the optional structural/section-transition commitment) (7A).
+- **Focus-chooser behaviour call** — hero-legible-behind vs. non-blocking
+  on-page control, and re-show-every-visit vs. `localStorage` once (7C).
+
 ## Known cleanup, unrelated to the redesign but in the same files
 
 - `src/components/FeaturedWork.jsx` — roughly 90 lines of commented-out dead

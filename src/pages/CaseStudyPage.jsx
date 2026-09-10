@@ -158,7 +158,8 @@ export function CaseStudyPage() {
                     <Star size={32} className="mt-2 shrink-0" />
                     <div>
                       <h3 className="font-display text-xs uppercase tracking-wider mb-2 text-accent">
-                        {SERVICE_BY_ID[project.categories?.[0]?.focus]?.label ?? ""}
+                        {SERVICE_BY_ID[project.categories?.[0]?.focus]?.label ??
+                          ""}
                       </h3>
                       <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-text-primary">
                         {project.title}
@@ -322,18 +323,6 @@ export function CaseStudyPage() {
             )
           )}
 
-          {/* Process */}
-          {project.process && project.process.length > 0 && (
-            <section className="w-full max-w-7xl mx-auto px-6 mb-16">
-              <motion.div {...fadeUp}>
-                <h2 className="font-display text-2xl mb-8 md:mb-12 text-text-primary">
-                  The Process
-                </h2>
-                <ProcessTimeline steps={project.process} />
-              </motion.div>
-            </section>
-          )}
-
           {/* Background — standalone context, no longer force-split with
               Challenge (which is now "The Problem" above). The pull quote
               renders here instead of as its own full-bleed banner. */}
@@ -354,6 +343,18 @@ export function CaseStudyPage() {
                   </p>
                 </motion.div>
               </div>
+            </section>
+          )}
+
+          {/* Process */}
+          {project.process && project.process.length > 0 && (
+            <section className="w-full max-w-7xl mx-auto px-6 mb-16">
+              <motion.div {...fadeUp}>
+                <h2 className="font-display text-2xl mb-8 md:mb-12 text-text-primary">
+                  The Process
+                </h2>
+                <ProcessTimeline steps={project.process} />
+              </motion.div>
             </section>
           )}
 
