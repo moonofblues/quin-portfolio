@@ -184,6 +184,42 @@ export const projectSchema = {
       of: [{ type: "image", options: { hotspot: true } }],
       description: "Full Behance-style frames shown in the lightbox",
     },
+    {
+      name: "embeds",
+      title: "Embeds (optional)",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "embed",
+          fields: [
+            {
+              name: "title",
+              title: "Label (optional)",
+              type: "string",
+              description: 'e.g. "View on Behance" — shown above the embed',
+            },
+            {
+              name: "embedCode",
+              title: "Embed Code",
+              type: "text",
+              rows: 4,
+              description:
+                "Paste the <iframe> embed snippet from Behance/YouTube/Figma's own Share → Embed button.",
+              validation: (R) => R.required(),
+            },
+          ],
+          preview: {
+            select: { title: "title" },
+            prepare({ title }) {
+              return { title: title || "Embed" };
+            },
+          },
+        },
+      ],
+      description:
+        "One or more embedded frames — use instead of uploading images when the work already lives on another site.",
+    },
     // Optional research/UX sections — all unrequired. Each renders on the
     // case study page only when filled in; otherwise the section is omitted
     // entirely. See docs/adr/0002-optional-research-sections-for-case-studies.md

@@ -30,6 +30,7 @@ const PROJECT_FIELDS = `
   solution,
   results[] { metric, label },
   "images": showcaseImages[].asset->url,
+  embeds[] { title, embedCode },
   background,
   researchObjectives,
   researchMethods[] { title, description },

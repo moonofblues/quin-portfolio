@@ -7,6 +7,7 @@ import { Button } from "../components/ui/Button";
 import { Star } from "../components/decorative/Stars";
 import { ProjectCard } from "../components/ProjectCard";
 import { HeroCollage } from "../components/case-study/HeroCollage";
+import { ProjectEmbeds } from "../components/case-study/ProjectEmbeds";
 import { StatRing } from "../components/case-study/StatRing";
 import { ProcessTimeline } from "../components/case-study/ProcessTimeline";
 import { useProjects } from "../context/ProjectsContext";
@@ -243,6 +244,14 @@ export function CaseStudyPage() {
               <HeroCollage images={heroImages} title={project.title} />
             </motion.div>
           </section>
+
+          {project.embeds?.length > 0 && (
+            <section className="w-full max-w-7xl mx-auto px-6 mb-16">
+              <motion.div {...fadeUp}>
+                <ProjectEmbeds embeds={project.embeds} />
+              </motion.div>
+            </section>
+          )}
 
           {/* The Problem, immediately followed by The Solution: a reader who
               only wants the pitch gets both without scrolling past the
@@ -654,6 +663,12 @@ export function CaseStudyPage() {
                 />
               ))}
             </div>
+          )}
+
+          {project.embeds?.length > 0 && (
+            <motion.div className="mt-10" {...fadeUp}>
+              <ProjectEmbeds embeds={project.embeds} />
+            </motion.div>
           )}
 
           {project.fbPostUrl && (
