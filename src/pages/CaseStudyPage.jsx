@@ -93,6 +93,9 @@ export function CaseStudyPage() {
     .filter((image) => image && image !== project.thumbnail);
   const heroImages = [project.thumbnail, ...showcaseImages].filter(Boolean);
   const hasSolutionHighlights = project.solutionHighlights?.length > 0;
+  const behanceEmbedUrl = project.embeds?.find(
+    (embed) => embed.platform === "behance" && embed.url,
+  )?.url;
   // The Problem's big/centered treatment only reads well on a short, punchy
   // line. Existing case studies were written as multi-sentence prose (ZCMC
   // ERP's `challenge` is ~130 words), which would otherwise render as an
@@ -203,7 +206,7 @@ export function CaseStudyPage() {
                       </div>
                     </div>
                   )}
-                  {(project.liveUrl || project.behanceUrl) && (
+                  {(project.liveUrl || behanceEmbedUrl) && (
                     <div className="flex flex-col gap-3 pt-1">
                       {project.liveUrl && (
                         <Button
@@ -217,9 +220,9 @@ export function CaseStudyPage() {
                           <ExternalLink size={16} />
                         </Button>
                       )}
-                      {project.behanceUrl && (
+                      {behanceEmbedUrl && (
                         <Button
-                          href={project.behanceUrl}
+                          href={behanceEmbedUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           variant="secondary"
@@ -244,14 +247,6 @@ export function CaseStudyPage() {
               <HeroCollage images={heroImages} title={project.title} />
             </motion.div>
           </section>
-
-          {project.embeds?.length > 0 && (
-            <section className="w-full max-w-7xl mx-auto px-6 mb-16">
-              <motion.div {...fadeUp}>
-                <ProjectEmbeds embeds={project.embeds} />
-              </motion.div>
-            </section>
-          )}
 
           {/* The Problem, immediately followed by The Solution: a reader who
               only wants the pitch gets both without scrolling past the
@@ -492,6 +487,14 @@ export function CaseStudyPage() {
             </section>
           )}
 
+          {project.embeds?.length > 0 && (
+            <section className="w-full max-w-7xl mx-auto px-6 mb-16">
+              <motion.div {...fadeUp}>
+                <ProjectEmbeds embeds={project.embeds} />
+              </motion.div>
+            </section>
+          )}
+
           {/* Design Showcase */}
           {showcaseImages.length > 0 && (
             <section className="w-full max-w-7xl mx-auto px-6 mb-16">
@@ -668,28 +671,6 @@ export function CaseStudyPage() {
           {project.embeds?.length > 0 && (
             <motion.div className="mt-10" {...fadeUp}>
               <ProjectEmbeds embeds={project.embeds} />
-            </motion.div>
-          )}
-
-          {project.fbPostUrl && (
-            <motion.div className="mt-16" {...fadeUp}>
-              <h2 className="font-display text-2xl mb-6 text-text-primary">
-                See the Post Live
-              </h2>
-              <div className="flex justify-center rounded-2xl p-4 md:p-8 bg-bg-secondary">
-                <iframe
-                  src={`https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(
-                    project.fbPostUrl,
-                  )}&show_text=true&width=500`}
-                  width="500"
-                  height="720"
-                  className="max-w-full border-0 overflow-hidden rounded-xl bg-white"
-                  scrolling="no"
-                  allowFullScreen
-                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                  title={`Facebook post — ${project.title}`}
-                />
-              </div>
             </motion.div>
           )}
         </section>

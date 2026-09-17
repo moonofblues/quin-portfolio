@@ -30,7 +30,7 @@ const PROJECT_FIELDS = `
   solution,
   results[] { metric, label },
   "images": showcaseImages[].asset->url,
-  embeds[] { title, embedCode },
+  embeds[] { platform, url, embedCode, title },
   background,
   researchObjectives,
   researchMethods[] { title, description },
@@ -58,9 +58,7 @@ const PROJECT_FIELDS = `
     "image": image.asset->url,
     caption
   },
-  liveUrl,
-  behanceUrl,
-  fbPostUrl
+  liveUrl
 `;
 
 export async function fetchAllProjects() {

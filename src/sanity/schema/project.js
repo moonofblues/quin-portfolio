@@ -194,10 +194,32 @@ export const projectSchema = {
           name: "embed",
           fields: [
             {
-              name: "title",
-              title: "Label (optional)",
+              name: "platform",
+              title: "Platform",
               type: "string",
-              description: 'e.g. "View on Behance" — shown above the embed',
+              options: {
+                list: [
+                  { title: "Behance", value: "behance" },
+                  { title: "Facebook", value: "facebook" },
+                  { title: "Custom (paste embed code)", value: "custom" },
+                ],
+                layout: "radio",
+              },
+              initialValue: "behance",
+              validation: (R) => R.required(),
+            },
+            {
+              name: "url",
+              title: "URL",
+              type: "url",
+              description: "The Behance project URL or Facebook post URL to embed.",
+              hidden: ({ parent }) => parent?.platform === "custom",
+              validation: (R) =>
+                R.custom((value, context) =>
+                  context.parent?.platform !== "custom" && !value
+                    ? "URL is required for this platform"
+                    : true,
+                ),
             },
             {
               name: "embedCode",
@@ -205,20 +227,32 @@ export const projectSchema = {
               type: "text",
               rows: 4,
               description:
-                "Paste the <iframe> embed snippet from Behance/YouTube/Figma's own Share → Embed button.",
-              validation: (R) => R.required(),
+                "Paste the <iframe> embed snippet from the platform's own Share → Embed button.",
+              hidden: ({ parent }) => parent?.platform !== "custom",
+              validation: (R) =>
+                R.custom((value, context) =>
+                  context.parent?.platform === "custom" && !value
+                    ? "Embed code is required for a custom embed"
+                    : true,
+                ),
+            },
+            {
+              name: "title",
+              title: "Label (optional)",
+              type: "string",
+              description: 'e.g. "Full case study on Behance" — shown above the embed',
             },
           ],
           preview: {
-            select: { title: "title" },
-            prepare({ title }) {
-              return { title: title || "Embed" };
+            select: { title: "title", platform: "platform", url: "url" },
+            prepare({ title, platform, url }) {
+              return { title: title || url || "Embed", subtitle: platform };
             },
           },
         },
       ],
       description:
-        "One or more embedded frames — use instead of uploading images when the work already lives on another site.",
+        "One or more embedded frames. Behance and Facebook render inline (Behance can expand to full width); use Custom to paste an <iframe> snippet for anything else. See docs/adr/0010.",
     },
     // Optional research/UX sections — all unrequired. Each renders on the
     // case study page only when filled in; otherwise the section is omitted
@@ -393,13 +427,17 @@ export const projectSchema = {
     },
     {
       name: "behanceUrl",
-      title: "Behance URL",
+      title: "Behance URL (legacy, unused)",
       type: "url",
+      description:
+        "Deprecated — being migrated into Embeds above (platform: Behance). The hero's 'View on Behance' button now derives its link from Embeds instead of this field. Kept temporarily as a reference while re-entering existing values by hand; delete once migration is complete. See docs/adr/0010.",
     },
     {
       name: "fbPostUrl",
-      title: "Facebook Post URL",
+      title: "Facebook Post URL (legacy, unused)",
       type: "url",
+      description:
+        "Deprecated — being migrated into Embeds above (platform: Facebook). No longer rendered anywhere. Kept temporarily as a reference while re-entering existing values by hand; delete once migration is complete. See docs/adr/0010.",
     },
   ],
   preview: {
