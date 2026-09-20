@@ -91,6 +91,12 @@ html {
 body {
   font-family: var(--font-body);
   line-height: 1.6;
+  /* Full-bleed sections (see FullBleed in ProjectEmbeds.jsx) are 100vw wide,
+     and 100vw counts the scrollbar — ~15px more than the visible page, which
+     would otherwise add a sideways scrollbar. `clip` trims the overhang
+     without making body a scroll container, so sticky positioning and Lenis
+     smooth scroll keep working; `hidden` would break both. */
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.3s ease, color 0.3s ease;

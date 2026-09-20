@@ -9,9 +9,31 @@ function behanceProjectId(url) {
   return match ? match[1] : null;
 }
 
-// Always renders full viewport width — breaks out of the page's max-w-7xl
-// section by measuring from the viewport rather than the parent container.
-// See ADR 0010.
+// Breaks out of the page's max-w-7xl section to full viewport width by
+// measuring from the viewport (100vw) rather than the parent container, then
+// pulling itself back so it stays centred. See ADR 0010.
+//
+// 100vw counts the scrollbar's width, so this is ~15px wider than the visible
+// page on desktop; `overflow-x: clip` on `body` (index.css) absorbs the
+// difference. `clip` rather than `hidden` on purpose — `hidden` would turn the
+// body into a scroll container and break sticky positioning and Lenis.
+//
+// No rounded corners: at full bleed they'd sit at the viewport edge where
+// they can't be seen. The iframe inside keeps its own rounding.
+function FullBleed({ children }) {
+  return (
+    <div className="relative left-1/2 w-screen max-w-none -translate-x-1/2 bg-bg-secondary p-4 md:p-8">
+      {children}
+    </div>
+  );
+}
+
+// Height note: `h-[min(80vh,900px)]` — tall enough to fill most of a laptop
+// screen, capped so it doesn't become an absurd wall of iframe on a large
+// monitor. It is spelled out literally at both call sites below rather than
+// shared through a constant: Tailwind generates CSS by scanning the source for
+// whole class names, so a name assembled at runtime produces no styles at all.
+
 function BehanceEmbed({ url, title }) {
   const projectId = behanceProjectId(url);
 
@@ -30,21 +52,17 @@ function BehanceEmbed({ url, title }) {
   }
 
   return (
-    <div className="relative left-1/2 w-screen max-w-none -translate-x-1/2 rounded-2xl bg-bg-secondary p-4 md:p-8">
-      <div className="flex justify-center">
-        <iframe
-          src={`https://www.behance.net/embed/project/${projectId}?ilo0=1`}
-          height={720}
-          width="100%"
-          className="max-w-full rounded-xl border-0"
-          allowFullScreen
-          loading="lazy"
-          allow="clipboard-write"
-          referrerPolicy="strict-origin-when-cross-origin"
-          title={title || "Behance project"}
-        />
-      </div>
-    </div>
+    <FullBleed>
+      <iframe
+        src={`https://www.behance.net/embed/project/${projectId}?ilo0=1`}
+        className="block w-full h-[min(80vh,900px)] rounded-xl border-0"
+        allowFullScreen
+        loading="lazy"
+        allow="clipboard-write"
+        referrerPolicy="strict-origin-when-cross-origin"
+        title={title || "Behance project"}
+      />
+    </FullBleed>
   );
 }
 
@@ -70,12 +88,22 @@ function FacebookEmbed({ url, title }) {
 
 // embedCode is only ever entered by the site owner in Sanity Studio, so
 // dangerouslySetInnerHTML here isn't a public-input risk.
+//
+// Platforms ship their snippets at a hardcoded thumbnail size — Behance's is
+// `width="404" height="316"` — which left the frame as a small box adrift in a
+// wide card. The `[&_iframe]:*` rules restyle whatever iframe the snippet
+// contains so it fills the full-bleed card instead. CSS beats the width/height
+// HTML attributes, so the pasted numbers are ignored without editing the
+// snippet. Deliberate trade-off: a custom embed that *wants* to be small (a
+// narrow social widget, say) gets stretched too — see ADR 0010.
 function CustomEmbed({ embedCode }) {
   return (
-    <div
-      className="flex justify-center overflow-x-auto rounded-2xl bg-bg-secondary p-4 md:p-8"
-      dangerouslySetInnerHTML={{ __html: embedCode }}
-    />
+    <FullBleed>
+      <div
+        className="[&_iframe]:block [&_iframe]:w-full [&_iframe]:max-w-full [&_iframe]:h-[min(80vh,900px)] [&_iframe]:rounded-xl [&_iframe]:border-0"
+        dangerouslySetInnerHTML={{ __html: embedCode }}
+      />
+    </FullBleed>
   );
 }
 
