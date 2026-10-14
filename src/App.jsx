@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useSearchParams } from "react-router-dom";
 import { ProjectsProvider } from "./context/ProjectsContext";
 import { Layout } from "./components/layout/Layout";
 import { HomePage } from "./pages/HomePage";
@@ -19,6 +19,18 @@ const WorkPage = lazy(() =>
 const CaseStudyPage = lazy(() =>
   import("./pages/CaseStudyPage").then((m) => ({ default: m.CaseStudyPage })),
 );
+
+// Case study v2 preview (ADR 0011, D14): /work/<slug>?v=2 renders the new
+// page while the current one stays the default. Remove this switch, and the
+// old page, once v2 is approved.
+const CaseStudyPageV2 = lazy(() =>
+  import("./pages/CaseStudyPageV2").then((m) => ({ default: m.CaseStudyPageV2 })),
+);
+
+function CaseStudyRoute() {
+  const [params] = useSearchParams();
+  return params.get("v") === "2" ? <CaseStudyPageV2 /> : <CaseStudyPage />;
+}
 
 /** Neutral placeholder while a route chunk streams in. */
 function RouteFallback() {
@@ -47,7 +59,7 @@ function App() {
                     <Routes>
                       <Route path="/" element={<HomePage />} />
                       <Route path="/work" element={<WorkPage />} />
-                      <Route path="/work/:slug" element={<CaseStudyPage />} />
+                      <Route path="/work/:slug" element={<CaseStudyRoute />} />
                     </Routes>
                   </Suspense>
                 </Layout>

@@ -11,6 +11,7 @@ import { ProjectEmbeds } from "../components/case-study/ProjectEmbeds";
 import { StatRing } from "../components/case-study/StatRing";
 import { ProcessTimeline } from "../components/case-study/ProcessTimeline";
 import { useProjects } from "../context/ProjectsContext";
+import { useProjectDetail } from "../context/useProjectDetail";
 import { cn } from "../utils/cn";
 import { SERVICE_BY_ID } from "../data/services";
 
@@ -36,8 +37,12 @@ function MetaRow({ label, children }) {
 export function CaseStudyPage() {
   const { slug } = useParams();
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const { getProjectBySlug, getNextPrevProjects, getRelatedProjects, loading } =
+  const { getNextPrevProjects, getRelatedProjects, loading: listLoading } =
     useProjects();
+  // Full content comes from the per-slug fetch since the site-wide list only
+  // carries card fields (ADR 0011).
+  const { project, loading: detailLoading } = useProjectDetail(slug);
+  const loading = listLoading || detailLoading;
 
   // All hooks must come before any early returns
   useEffect(() => {
@@ -56,7 +61,6 @@ export function CaseStudyPage() {
     };
   }, [lightboxOpen]);
 
-  const project = getProjectBySlug(slug);
   const { prev, next } = getNextPrevProjects(slug);
   const relatedProjects = getRelatedProjects(slug, 2);
   const showcaseImages = [project?.images].flat().filter(Boolean);

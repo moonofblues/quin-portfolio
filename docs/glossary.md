@@ -132,3 +132,37 @@ section of `docs/redesign-plan.md`.
   that data. Currently `keyFunctions` (folded into `solutionHighlights`'
   per-card `image`), `ideation`, and `wireframes`. See
   [ADR 0004](adr/0004-case-study-narrative-restructure.md).
+
+## Case study v2 (narrative model)
+
+Introduced by [ADR 0011](adr/0011-case-study-v2-spine-and-typed-sections.md);
+full design in `docs/case-study-v2-plan.md`.
+
+- **Spine** — the case-study content that always sits in a fixed position:
+  Hero (title, `headline`, overview, meta card), The Problem, Solution at a
+  Glance at the top; Design Showcase, Outcome & Status, Reflection, Next case
+  study at the bottom. Stored as dedicated `project` fields.
+
+- **Section** — one entry in a project's drag-to-reorder `sections[]` list,
+  the middle of the story between the top and bottom spine. Always one of four
+  **typed sections**: *Story* (`storySection`), *Statement*
+  (`statementSection`), *Process* (`processSection`), *Key Decisions*
+  (`decisionsSection`).
+
+- **Block** — a reusable piece of content inside a Story section (and, for
+  media, inside a Key Decision): rich text, media, card grid, or callout.
+  Defined once in `src/sanity/schema/caseStudyBlocks.js`.
+
+- **Chapter** — a group of consecutive sections shown as one entry in the
+  sticky chapter nav. A section with a `navLabel` starts a new chapter;
+  sections without one belong to the chapter above. The spine adds the fixed
+  "Overview" and "Outcome" chapters.
+
+- **Solution at a Glance** — the short cards under The Problem. Derived from
+  the Key Decisions section (each decision's `glanceTitle`/`glanceSummary`)
+  and linking to that decision; falls back to `solutionHighlights`, then
+  `solution`, on projects without Key Decisions.
+
+- **Adapter** — `toSections(project)`, temporary code that builds sections
+  from legacy fields for projects whose `sections` list is still empty.
+  Removed once every case study has been migrated by hand.

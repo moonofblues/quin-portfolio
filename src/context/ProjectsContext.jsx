@@ -5,8 +5,9 @@ import {
   useEffect,
   useCallback,
   useMemo,
+  useRef,
 } from "react";
-import { fetchAllProjects } from "../sanity/queries";
+import { fetchAllProjects, fetchProjectDetail } from "../sanity/queries";
 
 const ProjectsContext = createContext(null);
 
@@ -31,6 +32,34 @@ export function ProjectsProvider({ children }) {
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  // Full detail content, fetched per slug by the detail page and kept for the
+  // session so Next/Back between case studies doesn't refetch (ADR 0011).
+  // Holds the resolved value (`null` = no such project) or the in-flight
+  // promise, so two callers for the same slug share one request.
+  const detailCache = useRef(new Map());
+
+  const getCachedProjectDetail = useCallback((slug) => {
+    const entry = detailCache.current.get(slug);
+    return entry instanceof Promise ? undefined : entry;
+  }, []);
+
+  const loadProjectDetail = useCallback((slug) => {
+    const cache = detailCache.current;
+    if (cache.has(slug)) return Promise.resolve(cache.get(slug));
+    const request = fetchProjectDetail(slug).then(
+      (data) => {
+        cache.set(slug, data ?? null);
+        return data ?? null;
+      },
+      (err) => {
+        cache.delete(slug);
+        throw err;
+      },
+    );
+    cache.set(slug, request);
+    return request;
+  }, []);
 
   // The selectors and the context value are memoized on `projects`. Without
   // this, every provider render hands consumers a new value object holding new
@@ -62,6 +91,8 @@ export function ProjectsProvider({ children }) {
           ? projects
           : projects.filter((p) => focusesOf(p).includes(focusId)),
       getProjectBySlug,
+      getCachedProjectDetail,
+      loadProjectDetail,
       getRelatedProjects: (slug, limit = 3) => {
         const current = getProjectBySlug(slug);
         if (!current) return [];
@@ -83,7 +114,7 @@ export function ProjectsProvider({ children }) {
         };
       },
     };
-  }, [projects, loading, error]);
+  }, [projects, loading, error, getCachedProjectDetail, loadProjectDetail]);
 
   if (error) {
     return (

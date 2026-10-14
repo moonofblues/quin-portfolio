@@ -2,20 +2,31 @@ export const projectSchema = {
   name: "project",
   title: "Project",
   type: "document",
+  // Studio tabs (ADR 0011). "Legacy" holds pre-v2 fields that the page's
+  // adapter still reads until each case study is rewritten into `sections`.
+  groups: [
+    { name: "card", title: "Card & meta", default: true },
+    { name: "story", title: "Story" },
+    { name: "outcome", title: "Outcome" },
+    { name: "legacy", title: "Legacy" },
+  ],
   fields: [
     {
       name: "title",
+      group: "card",
       title: "Title",
       type: "string",
       validation: (R) => R.required(),
     },
     {
       name: "subtitle",
+      group: "card",
       title: "Subtitle",
       type: "string",
     },
     {
       name: "slug",
+      group: "card",
       title: "Slug",
       type: "slug",
       options: { source: "title", maxLength: 96 },
@@ -23,6 +34,7 @@ export const projectSchema = {
     },
     {
       name: "type",
+      group: "card",
       title: "Type",
       type: "string",
       options: {
@@ -36,6 +48,7 @@ export const projectSchema = {
     },
     {
       name: "categories",
+      group: "card",
       title: "Categories",
       type: "array",
       of: [{ type: "reference", to: [{ type: "category" }] }],
@@ -45,6 +58,7 @@ export const projectSchema = {
     },
     {
       name: "status",
+      group: "card",
       title: "Status",
       type: "string",
       options: {
@@ -59,24 +73,28 @@ export const projectSchema = {
     },
     {
       name: "featured",
+      group: "card",
       title: "Featured",
       type: "boolean",
       initialValue: false,
     },
     {
       name: "sortOrder",
+      group: "card",
       title: "Sort Order",
       type: "number",
       description: "Lower numbers appear first",
     },
     {
       name: "thumbnail",
+      group: "card",
       title: "Thumbnail",
       type: "image",
       options: { hotspot: true },
     },
     {
       name: "tags",
+      group: "card",
       title: "Tags",
       type: "array",
       of: [{ type: "string" }],
@@ -84,6 +102,7 @@ export const projectSchema = {
     },
     {
       name: "tools",
+      group: "card",
       title: "Tools Used",
       type: "array",
       of: [{ type: "string" }],
@@ -91,6 +110,7 @@ export const projectSchema = {
     },
     {
       name: "description",
+      group: "card",
       title: "Short Description",
       type: "text",
       rows: 3,
@@ -98,46 +118,111 @@ export const projectSchema = {
     },
     {
       name: "impact",
+      group: "card",
       title: "Impact (one-liner)",
       type: "string",
       description: "e.g. 60% reduction in task completion time",
     },
     {
       name: "year",
+      group: "card",
       title: "Year",
       type: "string",
     },
     {
       name: "role",
+      group: "card",
       title: "My Role",
       type: "string",
     },
     {
+      name: "team",
+      group: "card",
+      title: "Team (optional)",
+      type: "string",
+      description: 'e.g. "1 designer, 2 frontend and 1 backend developer"',
+    },
+    {
       name: "client",
+      group: "card",
       title: "Client",
       type: "string",
     },
     {
       name: "duration",
+      group: "card",
       title: "Duration",
       type: "string",
+      description: 'Free text; add a note if useful, e.g. "Nov – Dec 2025 · MVP in 5 weeks"',
     },
-    // Case Study fields
+    {
+      // Not named `status` — that field is the Draft/Published switch above.
+      name: "projectStatus",
+      group: "card",
+      title: "Project Status (optional)",
+      type: "string",
+      description: "Where the work stands today, shown in the case study meta card.",
+      options: {
+        list: [
+          { title: "Shipped", value: "Shipped" },
+          { title: "MVP built · not deployed", value: "MVP built · not deployed" },
+          { title: "In progress", value: "In progress" },
+          { title: "Concept", value: "Concept" },
+        ],
+      },
+    },
+    // Case Study fields — the fixed "spine" plus the reorderable story
+    // (ADR 0011).
+    {
+      name: "headline",
+      group: "story",
+      title: "Headline (optional)",
+      type: "string",
+      description:
+        'The narrative hook under the title, e.g. "Rebuilding a stalled hospital system around the plan itself"',
+    },
     {
       name: "overview",
+      group: "story",
       title: "Overview",
       type: "text",
       rows: 5,
     },
     {
       name: "challenge",
-      title: "The Challenge",
+      group: "story",
+      title: "The Problem",
       type: "text",
       rows: 5,
+      description:
+        "Shown as The Problem near the top. One punchy sentence (≤30 words) renders large and centred.",
+    },
+    {
+      name: "sections",
+      group: "story",
+      title: "Story sections",
+      type: "array",
+      description:
+        "The middle of the case study, in reading order — drag to reorder. Sits between Solution at a Glance and the Design Showcase. While this is empty, the page builds sections from the Legacy tab.",
+      of: [
+        { type: "storySection" },
+        { type: "statementSection" },
+        { type: "processSection" },
+        { type: "decisionsSection" },
+      ],
+      hidden: ({ document }) => document?.type !== "case-study",
+      validation: (R) =>
+        R.custom((sections) =>
+          (sections ?? []).filter((s) => s._type === "decisionsSection").length > 1
+            ? "Only one Key Decisions section per case study — Solution at a Glance is built from it"
+            : true,
+        ),
     },
     {
       name: "process",
+      group: "legacy",
       title: "Process Steps",
+      description: "Legacy (ADR 0011): only used while Story sections is empty.",
       type: "array",
       of: [
         {
@@ -155,12 +240,15 @@ export const projectSchema = {
     },
     {
       name: "solution",
+      group: "legacy",
       title: "The Solution",
+      description: "Legacy (ADR 0011): only used while Story sections is empty.",
       type: "text",
       rows: 5,
     },
     {
       name: "results",
+      group: "outcome",
       title: "Results",
       type: "array",
       of: [
@@ -178,14 +266,82 @@ export const projectSchema = {
       ],
     },
     {
+      name: "outcomeHeadline",
+      group: "outcome",
+      title: "Outcome Headline (optional)",
+      type: "string",
+      description: 'One line summing up where things stand, e.g. "Built, but not yet proven in use"',
+    },
+    {
+      name: "outcomeNotes",
+      group: "outcome",
+      title: "Outcome Notes (optional)",
+      type: "array",
+      description:
+        'Up to 3 labelled columns under the metrics. Suggested labels: "Delivered", "Not yet verified", "Measured impact".',
+      of: [
+        {
+          type: "object",
+          name: "outcomeNote",
+          fields: [
+            {
+              name: "label",
+              title: "Label",
+              type: "string",
+              options: {
+                list: ["Delivered", "Not yet verified", "Measured impact", "What's next"],
+              },
+              validation: (R) => R.required(),
+            },
+            { name: "body", title: "Text", type: "portableText", validation: (R) => R.required() },
+          ],
+          preview: { select: { title: "label" } },
+        },
+      ],
+      validation: (R) => R.max(3),
+    },
+    {
+      name: "reflection",
+      group: "outcome",
+      title: "Reflection (optional)",
+      type: "object",
+      fields: [
+        {
+          name: "headline",
+          title: "Headline",
+          type: "string",
+          description: 'e.g. "The fix was in the data flow, not the screens"',
+        },
+        { name: "body", title: "Text", type: "portableText" },
+      ],
+    },
+    {
       name: "showcaseImages",
+      group: "outcome",
       title: "Design Showcase Images",
       type: "array",
-      of: [{ type: "image", options: { hotspot: true } }],
+      of: [
+        {
+          type: "image",
+          options: { hotspot: true },
+          // Optional so existing uploads stay valid (ADR 0011).
+          fields: [
+            {
+              name: "title",
+              title: "Title (optional)",
+              type: "string",
+              description: 'Bold lead-in shown with the caption, e.g. "Approver review."',
+            },
+            { name: "caption", title: "Caption (optional)", type: "text", rows: 2 },
+            { name: "alt", title: "Alt text (optional)", type: "string" },
+          ],
+        },
+      ],
       description: "Full Behance-style frames shown in the lightbox",
     },
     {
       name: "embeds",
+      group: "outcome",
       title: "Embeds (optional)",
       type: "array",
       of: [
@@ -259,22 +415,26 @@ export const projectSchema = {
     // entirely. See docs/adr/0002-optional-research-sections-for-case-studies.md
     {
       name: "background",
+      group: "legacy",
       title: "Background (optional)",
       type: "text",
       rows: 5,
       description:
-        "Org/product framing shown side-by-side with The Challenge. Leave empty to render Challenge full-width as before.",
+        "Legacy (ADR 0011): only used while Story sections is empty. Org/product framing shown side-by-side with The Challenge. Leave empty to render Challenge full-width as before.",
     },
     {
       name: "researchObjectives",
+      group: "legacy",
       title: "Research Objectives (optional)",
       type: "array",
       of: [{ type: "string" }],
-      description: "Bullet list of what the research set out to learn",
+      description: "Legacy (ADR 0011): only used while Story sections is empty. Bullet list of what the research set out to learn",
     },
     {
       name: "researchMethods",
+      group: "legacy",
       title: "Research Methods (optional)",
+      description: "Legacy (ADR 0011): only used while Story sections is empty.",
       type: "array",
       of: [
         {
@@ -292,13 +452,17 @@ export const projectSchema = {
     },
     {
       name: "researchFindings",
+      group: "legacy",
       title: "Research Findings (optional)",
+      description: "Legacy (ADR 0011): only used while Story sections is empty.",
       type: "text",
       rows: 5,
     },
     {
       name: "painPoints",
+      group: "legacy",
       title: "Pain Points (optional)",
+      description: "Legacy (ADR 0011): only used while Story sections is empty.",
       type: "array",
       of: [
         {
@@ -316,13 +480,15 @@ export const projectSchema = {
     },
     {
       name: "quote",
+      group: "legacy",
       title: "Pull Quote (optional)",
       type: "text",
       rows: 2,
-      description: "A short participant quote shown as a full-width banner",
+      description: "Legacy (ADR 0011): only used while Story sections is empty. A short participant quote shown as a full-width banner",
     },
     {
       name: "persona",
+      group: "legacy",
       title: "Persona (optional)",
       type: "object",
       description: "A real research participant — leave empty if no participant research was conducted",
@@ -345,13 +511,15 @@ export const projectSchema = {
     },
     {
       name: "howMightWe",
+      group: "legacy",
       title: "How Might We (optional)",
       type: "array",
       of: [{ type: "string" }],
-      description: "Reframed design opportunities, shown as a card grid",
+      description: "Legacy (ADR 0011): only used while Story sections is empty. Reframed design opportunities, shown as a card grid",
     },
     {
       name: "ideation",
+      group: "legacy",
       title: "Ideation (optional)",
       type: "object",
       fields: [
@@ -361,6 +529,7 @@ export const projectSchema = {
     },
     {
       name: "wireframes",
+      group: "legacy",
       title: "Wireframes (optional)",
       type: "object",
       fields: [
@@ -375,6 +544,7 @@ export const projectSchema = {
     },
     {
       name: "solutionHighlights",
+      group: "legacy",
       title: "Solution Highlights (optional)",
       type: "array",
       of: [
@@ -397,10 +567,11 @@ export const projectSchema = {
           },
         },
       ],
-      description: "Value-prop cards shown instead of plain Solution prose when filled in",
+      description: "Legacy (ADR 0011): only used while Story sections is empty. Value-prop cards shown instead of plain Solution prose when filled in",
     },
     {
       name: "keyFunctions",
+      group: "legacy",
       title: "Key Functions (legacy, unused)",
       type: "array",
       of: [
@@ -422,11 +593,13 @@ export const projectSchema = {
     // External links
     {
       name: "liveUrl",
+      group: "card",
       title: "Live URL",
       type: "url",
     },
     {
       name: "behanceUrl",
+      group: "legacy",
       title: "Behance URL (legacy, unused)",
       type: "url",
       description:
@@ -434,6 +607,7 @@ export const projectSchema = {
     },
     {
       name: "fbPostUrl",
+      group: "legacy",
       title: "Facebook Post URL (legacy, unused)",
       type: "url",
       description:
