@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Expand, X } from "lucide-react";
 import { cn } from "../../../utils/cn";
-import { fadeUp, EYEBROW, H2 } from "./shared";
+import { fadeUp, EYEBROW, H2, PAGE_WIDTH } from "./shared";
 
 /** Full-screen stack of every frame, opened at the frame that was clicked. */
 function ShowcaseLightbox({ frames, startIndex, title, onClose }) {
@@ -73,7 +73,7 @@ export function ShowcaseSection({ frames, title }) {
   const single = frames.length === 1;
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-6 mb-24 md:mb-32">
+    <section className={cn(PAGE_WIDTH, "mb-24 md:mb-32")}>
       <motion.div {...fadeUp}>
         <header className="flex flex-wrap items-end justify-between gap-4 mb-10 md:mb-12">
           <div>

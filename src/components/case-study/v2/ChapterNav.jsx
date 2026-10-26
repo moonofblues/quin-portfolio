@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "../../../utils/cn";
+import { PAGE_WIDTH } from "./shared";
 
 /**
  * Sticky chapter bar (ADR 0011, D6). `chapters` is [{ id, label }] in page
@@ -44,7 +45,7 @@ export function ChapterNav({ chapters }) {
   return (
     <nav
       aria-label="Case study chapters"
-      className="sticky top-[4.25rem] md:top-[4.75rem] z-40 w-full max-w-7xl mx-auto px-6 mb-10"
+      className={cn("sticky top-[4.25rem] md:top-[4.75rem] z-40 mb-10", PAGE_WIDTH)}
     >
       {/* Wide screens: one row, current chapter highlighted. */}
       <ol className="hidden md:flex w-fit mx-auto items-center gap-1 rounded-full glass border border-border p-1.5">

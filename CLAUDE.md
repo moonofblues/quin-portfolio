@@ -40,6 +40,14 @@ information, is a real cost. When building or reviewing any section:
 
 ### Container width scale
 
+> **Update (v2 case study):** the v2 page (`components/case-study/v2/`) no
+> longer uses `max-w-7xl`. Its outer frame is the `PAGE_WIDTH` constant in
+> `v2/shared.js` (`max-w-[96rem]`, 1536px) so wide screens aren't left with
+> big empty margins. Change the page width there, not per file. Opening prose
+> sits beside the heading in a two-column split (`SPLIT_COLUMNS`) instead of
+> a narrow `max-w-4xl` block under it. The table below still describes the
+> original (v1) page.
+
 Widths had drifted across the case-study page (3xl through 7xl with no
 rule), which both wasted margin space and cramped grid content. Stick to
 this scale — don't invent intermediate widths:

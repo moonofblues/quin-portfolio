@@ -1,13 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { EYEBROW } from "./shared";
+import { EYEBROW, PAGE_WIDTH } from "./shared";
 
 /** One clear next step after a long read (ADR 0011, D17). */
 export function NextCaseStudy({ next }) {
   // Keeps ?v=2 while previewing, so Next stays on the new page.
   const { search } = useLocation();
   return (
-    <section className="w-full max-w-7xl mx-auto px-6">
+    <section className={PAGE_WIDTH}>
       {next && (
         <Link
           to={{ pathname: `/work/${next.slug}`, search }}

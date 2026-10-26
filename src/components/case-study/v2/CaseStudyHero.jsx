@@ -5,7 +5,7 @@ import { Tag } from "../../ui/Tag";
 import { Button } from "../../ui/Button";
 import { Star } from "../../decorative/Stars";
 import { SERVICE_BY_ID } from "../../../data/services";
-import { SCROLL_OFFSET } from "./shared";
+import { PAGE_WIDTH, SCROLL_OFFSET } from "./shared";
 
 function MetaRow({ label, children }) {
   return (
@@ -37,7 +37,7 @@ export function CaseStudyHero({ project, detail, id }) {
     detail && (meta.length || detail.projectStatus || detail.tools?.length || detail.liveUrl || behanceUrl);
 
   return (
-    <section id={id} className={`w-full max-w-7xl mx-auto px-6 mb-10 ${SCROLL_OFFSET}`}>
+    <section id={id} className={`${PAGE_WIDTH} mb-10 ${SCROLL_OFFSET}`}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

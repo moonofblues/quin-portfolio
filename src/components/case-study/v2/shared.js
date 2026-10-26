@@ -15,6 +15,15 @@ export const H2 =
 export const H3_CAPS =
   "font-display text-sm uppercase tracking-wider leading-snug text-text-primary";
 
+// Outer frame of every full-width block on the page (hero, sections, nav).
+// One constant so the page width is a one-line change.
+export const PAGE_WIDTH = "w-full max-w-[96rem] mx-auto px-6 lg:px-10";
+
+// Heading column left, prose column right, from lg up (stacked below). Shared
+// by SectionShell and Reflection so the text always lines up the same way.
+export const SPLIT_COLUMNS =
+  "lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-x-16 xl:gap-x-24";
+
 // Offset for in-page jumps: fixed site nav + sticky chapter bar.
 export const SCROLL_OFFSET = "scroll-mt-36";
 

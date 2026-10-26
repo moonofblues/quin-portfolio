@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { cn } from "../../../utils/cn";
 import { RichText } from "./blocks/RichText";
-import { fadeUp, EYEBROW, H2, SCROLL_OFFSET } from "./shared";
+import { fadeUp, EYEBROW, H2, PAGE_WIDTH, SCROLL_OFFSET, SPLIT_COLUMNS } from "./shared";
 
 /**
  * Outcome & Status (ADR 0011, D7): headline, metric cards from `results`, and
@@ -15,9 +15,9 @@ export function OutcomeSection({ project, id }) {
   if (!project.outcomeHeadline && !results.length && !notes.length) return null;
 
   return (
-    <section id={id} className={cn("w-full max-w-7xl mx-auto px-6 mb-24 md:mb-32", SCROLL_OFFSET)}>
+    <section id={id} className={cn(PAGE_WIDTH, "mb-24 md:mb-32", SCROLL_OFFSET)}>
       <motion.div {...fadeUp}>
-        <header className="max-w-4xl mb-10 md:mb-12">
+        <header className="mb-10 md:mb-12">
           <p className={cn(EYEBROW, "mb-4")}>Outcome &amp; Status</p>
           {project.outcomeHeadline && <h2 className={H2}>{project.outcomeHeadline}</h2>}
         </header>
@@ -62,16 +62,16 @@ export function ReflectionSection({ reflection }) {
   if (!reflection?.headline && !reflection?.body?.length) return null;
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-6 mb-24 md:mb-32">
+    <section className={cn(PAGE_WIDTH, "mb-24 md:mb-32")}>
       <motion.div
-        className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-20 items-start"
+        className={cn("grid gap-8 items-start", SPLIT_COLUMNS)}
         {...fadeUp}
       >
         <header>
           <p className={cn(EYEBROW, "mb-4")}>Reflection</p>
           {reflection.headline && <h2 className={H2}>{reflection.headline}</h2>}
         </header>
-        <RichText value={reflection.body} className="max-w-4xl" />
+        <RichText value={reflection.body} />
       </motion.div>
     </section>
   );
