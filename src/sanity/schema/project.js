@@ -10,10 +10,26 @@ export const projectSchema = {
     { name: "outcome", title: "Outcome" },
     { name: "legacy", title: "Legacy" },
   ],
+  // Boxes inside the "Card & meta" tab. Field order across the whole schema
+  // follows the page's reading order, and the paste sheets follow it too.
+  fieldsets: [
+    { name: "basics", title: "Basics" },
+    {
+      name: "cardDisplay",
+      title: "Project card",
+      description: "How this project looks on the Work page and homepage",
+    },
+    {
+      name: "details",
+      title: "Case study details",
+      description: "The info card at the top of the case study, in the order shown there",
+    },
+  ],
   fields: [
     {
       name: "title",
       group: "card",
+      fieldset: "basics",
       title: "Title",
       type: "string",
       validation: (R) => R.required(),
@@ -21,12 +37,14 @@ export const projectSchema = {
     {
       name: "subtitle",
       group: "card",
+      fieldset: "basics",
       title: "Subtitle",
       type: "string",
     },
     {
       name: "slug",
       group: "card",
+      fieldset: "basics",
       title: "Slug",
       type: "slug",
       options: { source: "title", maxLength: 96 },
@@ -35,6 +53,7 @@ export const projectSchema = {
     {
       name: "type",
       group: "card",
+      fieldset: "basics",
       title: "Type",
       type: "string",
       options: {
@@ -47,18 +66,9 @@ export const projectSchema = {
       validation: (R) => R.required(),
     },
     {
-      name: "categories",
-      group: "card",
-      title: "Categories",
-      type: "array",
-      of: [{ type: "reference", to: [{ type: "category" }] }],
-      description:
-        "The categories this project belongs to. The project's Focus/Service is derived from these — see ADR 0009.",
-      validation: (R) => R.required().min(1),
-    },
-    {
       name: "status",
       group: "card",
+      fieldset: "basics",
       title: "Status",
       type: "string",
       options: {
@@ -72,8 +82,20 @@ export const projectSchema = {
       validation: (R) => R.required(),
     },
     {
+      name: "categories",
+      group: "card",
+      fieldset: "basics",
+      title: "Categories",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "category" }] }],
+      description:
+        "The categories this project belongs to. The project's Focus/Service is derived from these — see ADR 0009.",
+      validation: (R) => R.required().min(1),
+    },
+    {
       name: "featured",
       group: "card",
+      fieldset: "basics",
       title: "Featured",
       type: "boolean",
       initialValue: false,
@@ -81,6 +103,7 @@ export const projectSchema = {
     {
       name: "sortOrder",
       group: "card",
+      fieldset: "basics",
       title: "Sort Order",
       type: "number",
       description: "Lower numbers appear first",
@@ -88,6 +111,7 @@ export const projectSchema = {
     {
       name: "thumbnail",
       group: "card",
+      fieldset: "cardDisplay",
       title: "Thumbnail",
       type: "image",
       options: { hotspot: true },
@@ -95,15 +119,8 @@ export const projectSchema = {
     {
       name: "tags",
       group: "card",
+      fieldset: "cardDisplay",
       title: "Tags",
-      type: "array",
-      of: [{ type: "string" }],
-      options: { layout: "tags" },
-    },
-    {
-      name: "tools",
-      group: "card",
-      title: "Tools Used",
       type: "array",
       of: [{ type: "string" }],
       options: { layout: "tags" },
@@ -111,6 +128,7 @@ export const projectSchema = {
     {
       name: "description",
       group: "card",
+      fieldset: "cardDisplay",
       title: "Short Description",
       type: "text",
       rows: 3,
@@ -119,6 +137,7 @@ export const projectSchema = {
     {
       name: "impact",
       group: "card",
+      fieldset: "cardDisplay",
       title: "Impact (one-liner)",
       type: "string",
       description: "e.g. 60% reduction in task completion time",
@@ -126,18 +145,29 @@ export const projectSchema = {
     {
       name: "year",
       group: "card",
+      fieldset: "details",
       title: "Year",
       type: "string",
     },
     {
+      name: "duration",
+      group: "card",
+      fieldset: "details",
+      title: "Duration",
+      type: "string",
+      description: 'Free text; add a note if useful, e.g. "Nov – Dec 2025 · MVP in 5 weeks"',
+    },
+    {
       name: "role",
       group: "card",
+      fieldset: "details",
       title: "My Role",
       type: "string",
     },
     {
       name: "team",
       group: "card",
+      fieldset: "details",
       title: "Team (optional)",
       type: "string",
       description: 'e.g. "1 designer, 2 frontend and 1 backend developer"',
@@ -145,20 +175,15 @@ export const projectSchema = {
     {
       name: "client",
       group: "card",
+      fieldset: "details",
       title: "Client",
       type: "string",
-    },
-    {
-      name: "duration",
-      group: "card",
-      title: "Duration",
-      type: "string",
-      description: 'Free text; add a note if useful, e.g. "Nov – Dec 2025 · MVP in 5 weeks"',
     },
     {
       // Not named `status` — that field is the Draft/Published switch above.
       name: "projectStatus",
       group: "card",
+      fieldset: "details",
       title: "Project Status (optional)",
       type: "string",
       description: "Where the work stands today, shown in the case study meta card.",
@@ -170,6 +195,22 @@ export const projectSchema = {
           { title: "Concept", value: "Concept" },
         ],
       },
+    },
+    {
+      name: "tools",
+      group: "card",
+      fieldset: "details",
+      title: "Tools Used",
+      type: "array",
+      of: [{ type: "string" }],
+      options: { layout: "tags" },
+    },
+    {
+      name: "liveUrl",
+      group: "card",
+      fieldset: "details",
+      title: "Live URL",
+      type: "url",
     },
     // Case Study fields — the fixed "spine" plus the reorderable story
     // (ADR 0011).
@@ -217,103 +258,6 @@ export const projectSchema = {
             ? "Only one Key Decisions section per case study — Solution at a Glance is built from it"
             : true,
         ),
-    },
-    {
-      name: "process",
-      group: "legacy",
-      title: "Process Steps",
-      description: "Legacy (ADR 0011): only used while Story sections is empty.",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          name: "step",
-          fields: [
-            { name: "title", title: "Step Title", type: "string" },
-            { name: "description", title: "Step Description", type: "text", rows: 3 },
-          ],
-          preview: {
-            select: { title: "title", subtitle: "description" },
-          },
-        },
-      ],
-    },
-    {
-      name: "solution",
-      group: "legacy",
-      title: "The Solution",
-      description: "Legacy (ADR 0011): only used while Story sections is empty.",
-      type: "text",
-      rows: 5,
-    },
-    {
-      name: "results",
-      group: "outcome",
-      title: "Results",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          name: "result",
-          fields: [
-            { name: "metric", title: "Metric", type: "string", description: 'e.g. "60%"' },
-            { name: "label", title: "Label", type: "string", description: 'e.g. "Reduction in task time"' },
-          ],
-          preview: {
-            select: { title: "metric", subtitle: "label" },
-          },
-        },
-      ],
-    },
-    {
-      name: "outcomeHeadline",
-      group: "outcome",
-      title: "Outcome Headline (optional)",
-      type: "string",
-      description: 'One line summing up where things stand, e.g. "Built, but not yet proven in use"',
-    },
-    {
-      name: "outcomeNotes",
-      group: "outcome",
-      title: "Outcome Notes (optional)",
-      type: "array",
-      description:
-        'Up to 3 labelled columns under the metrics. Suggested labels: "Delivered", "Not yet verified", "Measured impact".',
-      of: [
-        {
-          type: "object",
-          name: "outcomeNote",
-          fields: [
-            {
-              name: "label",
-              title: "Label",
-              type: "string",
-              options: {
-                list: ["Delivered", "Not yet verified", "Measured impact", "What's next"],
-              },
-              validation: (R) => R.required(),
-            },
-            { name: "body", title: "Text", type: "portableText", validation: (R) => R.required() },
-          ],
-          preview: { select: { title: "label" } },
-        },
-      ],
-      validation: (R) => R.max(3),
-    },
-    {
-      name: "reflection",
-      group: "outcome",
-      title: "Reflection (optional)",
-      type: "object",
-      fields: [
-        {
-          name: "headline",
-          title: "Headline",
-          type: "string",
-          description: 'e.g. "The fix was in the data flow, not the screens"',
-        },
-        { name: "body", title: "Text", type: "portableText" },
-      ],
     },
     {
       name: "showcaseImages",
@@ -409,6 +353,103 @@ export const projectSchema = {
       ],
       description:
         "One or more embedded frames. Behance and Facebook render inline (Behance can expand to full width); use Custom to paste an <iframe> snippet for anything else. See docs/adr/0010.",
+    },
+    {
+      name: "outcomeHeadline",
+      group: "outcome",
+      title: "Outcome Headline (optional)",
+      type: "string",
+      description: 'One line summing up where things stand, e.g. "Built, but not yet proven in use"',
+    },
+    {
+      name: "results",
+      group: "outcome",
+      title: "Results",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "result",
+          fields: [
+            { name: "metric", title: "Metric", type: "string", description: 'e.g. "60%"' },
+            { name: "label", title: "Label", type: "string", description: 'e.g. "Reduction in task time"' },
+          ],
+          preview: {
+            select: { title: "metric", subtitle: "label" },
+          },
+        },
+      ],
+    },
+    {
+      name: "outcomeNotes",
+      group: "outcome",
+      title: "Outcome Notes (optional)",
+      type: "array",
+      description:
+        'Up to 3 labelled columns under the metrics. Suggested labels: "Delivered", "Not yet verified", "Measured impact".',
+      of: [
+        {
+          type: "object",
+          name: "outcomeNote",
+          fields: [
+            {
+              name: "label",
+              title: "Label",
+              type: "string",
+              options: {
+                list: ["Delivered", "Not yet verified", "Measured impact", "What's next"],
+              },
+              validation: (R) => R.required(),
+            },
+            { name: "body", title: "Text", type: "portableText", validation: (R) => R.required() },
+          ],
+          preview: { select: { title: "label" } },
+        },
+      ],
+      validation: (R) => R.max(3),
+    },
+    {
+      name: "reflection",
+      group: "outcome",
+      title: "Reflection (optional)",
+      type: "object",
+      fields: [
+        {
+          name: "headline",
+          title: "Headline",
+          type: "string",
+          description: 'e.g. "The fix was in the data flow, not the screens"',
+        },
+        { name: "body", title: "Text", type: "portableText" },
+      ],
+    },
+    {
+      name: "process",
+      group: "legacy",
+      title: "Process Steps",
+      description: "Legacy (ADR 0011): only used while Story sections is empty.",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "step",
+          fields: [
+            { name: "title", title: "Step Title", type: "string" },
+            { name: "description", title: "Step Description", type: "text", rows: 3 },
+          ],
+          preview: {
+            select: { title: "title", subtitle: "description" },
+          },
+        },
+      ],
+    },
+    {
+      name: "solution",
+      group: "legacy",
+      title: "The Solution",
+      description: "Legacy (ADR 0011): only used while Story sections is empty.",
+      type: "text",
+      rows: 5,
     },
     // Optional research/UX sections — all unrequired. Each renders on the
     // case study page only when filled in; otherwise the section is omitted
@@ -590,13 +631,7 @@ export const projectSchema = {
       description:
         "No longer rendered — folded into Solution Highlights' per-card image. Field kept so existing content isn't lost; see docs/adr/0004.",
     },
-    // External links
-    {
-      name: "liveUrl",
-      group: "card",
-      title: "Live URL",
-      type: "url",
-    },
+    // Legacy external links
     {
       name: "behanceUrl",
       group: "legacy",
