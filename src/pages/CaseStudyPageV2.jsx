@@ -15,7 +15,7 @@ import { ShowcaseSection } from "../components/case-study/v2/ShowcaseSection";
 import { OutcomeSection, ReflectionSection } from "../components/case-study/v2/OutcomeSection";
 import { NextCaseStudy } from "../components/case-study/v2/NextCaseStudy";
 import { toSections } from "../components/case-study/v2/toSections";
-import { slugify, fadeUp, SCROLL_OFFSET } from "../components/case-study/v2/shared";
+import { slugify, fadeUp, PAGE_WIDTH, SCROLL_OFFSET } from "../components/case-study/v2/shared";
 import { useProjects } from "../context/ProjectsContext";
 import { useProjectDetail } from "../context/useProjectDetail";
 import { CaseStudyPage } from "./CaseStudyPage";
@@ -43,7 +43,7 @@ function planSections(sections) {
 /** In-page "Continue" link at the end of a chapter (the reference's part breaks). */
 function ContinueLink({ to, label }) {
   return (
-    <div className="w-full max-w-7xl mx-auto px-6 -mt-10 mb-24 md:-mt-16 md:mb-32">
+    <div className={`${PAGE_WIDTH} -mt-10 mb-24 md:-mt-16 md:mb-32`}>
       <a
         href={`#${to}`}
         className="group flex min-h-12 items-center justify-between gap-4 border-t border-border pt-6 text-text-secondary hover:text-text-primary transition-[color] duration-200"
@@ -151,7 +151,7 @@ export function CaseStudyPageV2() {
           <div id="outcome" className={SCROLL_OFFSET}>
             <ShowcaseSection frames={showcase} title={card.title} />
             {detail.embeds?.length > 0 && (
-              <section className="w-full max-w-7xl mx-auto px-6 mb-24 md:mb-32">
+              <section className={`${PAGE_WIDTH} mb-24 md:mb-32`}>
                 <motion.div {...fadeUp}>
                   <ProjectEmbeds embeds={detail.embeds} />
                 </motion.div>

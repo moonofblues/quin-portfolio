@@ -59,7 +59,7 @@ function Decision({ decision, index }) {
         </div>
       ) : (
         <div className="grid gap-10 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-16 items-start">
-          <div className="max-w-4xl">{reasoning}</div>
+          <div>{reasoning}</div>
           <SideNotes notes={decision.notes} />
         </div>
       )}

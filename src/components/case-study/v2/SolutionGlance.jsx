@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { fadeUp, H2, H3_CAPS, SCROLL_OFFSET } from "./shared";
+import { fadeUp, H2, H3_CAPS, PAGE_WIDTH, SCROLL_OFFSET } from "./shared";
 
 /** Solution at a Glance. Cards come from getGlanceCards() in glance.js. */
 export function SolutionGlance({ cards, fallbackText, id }) {
@@ -9,7 +9,7 @@ export function SolutionGlance({ cards, fallbackText, id }) {
   return (
     <section
       id={id}
-      className={`w-full max-w-7xl mx-auto px-6 mb-24 md:mb-32 ${SCROLL_OFFSET}`}
+      className={`${PAGE_WIDTH} mb-24 md:mb-32 ${SCROLL_OFFSET}`}
     >
       <motion.div {...fadeUp}>
         <h2 className={`${H2} mb-10 md:mb-12 text-center`}>The Solution at a Glance</h2>
