@@ -1,10 +1,18 @@
+import { useCallback, useState } from "react";
 import { motion } from "framer-motion";
+import { ImageLightbox } from "./blocks/ImageLightbox";
 import { ArrowRight } from "lucide-react";
 import { fadeUp, H2, H3_CAPS, PAGE_WIDTH, SCROLL_OFFSET } from "./shared";
 
 /** Solution at a Glance. Cards come from getGlanceCards() in glance.js. */
 export function SolutionGlance({ cards, fallbackText, id }) {
+  const [openAt, setOpenAt] = useState(null);
+  const close = useCallback(() => setOpenAt(null), []);
   if (!cards.length && !fallbackText) return null;
+
+  const zoomable = cards
+    .filter((card) => card.image)
+    .map((card) => ({ url: card.image, alt: card.title }));
 
   return (
     <section
@@ -18,14 +26,21 @@ export function SolutionGlance({ cards, fallbackText, id }) {
             {cards.map((card) => (
               <div key={card.key}>
                 {card.image && (
-                  <img
-                    src={card.image}
-                    alt=""
-                    className="w-full h-auto rounded-xl mb-5 border border-border"
-                    loading="lazy"
-                    fetchPriority="low"
-                    decoding="async"
-                  />
+                  <button
+                    type="button"
+                    onClick={() => setOpenAt(zoomable.findIndex((z) => z.url === card.image))}
+                    className="block w-full mb-5 cursor-zoom-in"
+                    aria-label={`View larger: ${card.title}`}
+                  >
+                    <img
+                      src={card.image}
+                      alt=""
+                      className="w-full h-auto rounded-xl border border-border"
+                      loading="lazy"
+                      fetchPriority="low"
+                      decoding="async"
+                    />
+                  </button>
                 )}
                 <h3 className={`${H3_CAPS} mb-3`}>{card.title}</h3>
                 {card.text && (
@@ -52,6 +67,7 @@ export function SolutionGlance({ cards, fallbackText, id }) {
           </p>
         )}
       </motion.div>
+      {openAt !== null && <ImageLightbox images={zoomable} startIndex={openAt} onClose={close} />}
     </section>
   );
 }
