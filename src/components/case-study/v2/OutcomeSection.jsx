@@ -42,8 +42,10 @@ export function OutcomeSection({ project, id }) {
         {results.length > 0 && (
           <div className="grid gap-6 grid-cols-[repeat(auto-fit,minmax(15rem,1fr))]">
             {results.map((result, i) => (
-              <div key={i} className="rounded-2xl border border-border bg-bg-secondary p-7 md:p-8">
-                <p className="font-display text-4xl md:text-5xl leading-none text-accent">
+              // The one tinted, larger treatment on the page: these are the
+              // results, the thing a reader came for.
+              <div key={i} className="rounded-2xl border border-border-hover bg-accent-subtle p-7 md:p-9">
+                <p className="font-display text-5xl md:text-6xl leading-none text-accent">
                   {result.metric}
                 </p>
                 {result.label && (
@@ -64,7 +66,7 @@ export function OutcomeSection({ project, id }) {
                 <RichText
                   value={note.body}
                   size="base"
-                  className="border-l-2 border-border pl-5"
+                  className="border-l border-border-hover pl-5"
                 />
               </div>
             ))}
@@ -80,16 +82,13 @@ export function ReflectionSection({ reflection }) {
 
   return (
     <section className={cn(PAGE_WIDTH, SECTION_GAP)}>
-      <motion.div
-        className={cn("grid gap-8 items-start", SPLIT_COLUMNS)}
-        {...fadeUp}
-      >
+      <div className={cn("grid gap-8 items-start", SPLIT_COLUMNS)}>
         <header>
           <p className={cn(EYEBROW, "mb-4")}>Reflection</p>
           {reflection.headline && <h2 className={H2}>{reflection.headline}</h2>}
         </header>
         <RichText value={reflection.body} />
-      </motion.div>
+      </div>
     </section>
   );
 }

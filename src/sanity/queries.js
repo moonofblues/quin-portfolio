@@ -35,7 +35,12 @@ const IMAGE = `
 // Case-study images can be marked confidential (NDA). For those, the query
 // returns ONLY a Sanity-blurred URL (?blur=…), so the sharp original's URL
 // never reaches the page. `blurred` tells the component to show a badge.
-const BLUR_STRENGTH = 80;
+// Light enough that the layout, colours and structure of a screen still read,
+// heavy enough that no text can. Checked on a 1685px spreadsheet screenshot:
+// at 25 large column headers were still guessable, at 40 nothing was, while the
+// table grid, header band and checkboxes stayed visible. Raise it for anything
+// sensitive; the original file stays in Sanity either way.
+const BLUR_STRENGTH = 40;
 const MEDIA_BLOCK = `
   ...,
   images[] {

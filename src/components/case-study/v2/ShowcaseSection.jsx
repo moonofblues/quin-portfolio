@@ -1,61 +1,36 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { Expand, X } from "lucide-react";
+import { Expand } from "lucide-react";
 import { cn } from "../../../utils/cn";
-import { fadeUp, EYEBROW, H2, HEADER_GAP, PAGE_WIDTH, SECTION_GAP } from "./shared";
+import { LightboxShell } from "./blocks/LightboxShell";
+import { H2, HEADER_GAP, PAGE_WIDTH, SECTION_GAP } from "./shared";
 
 /** Full-screen stack of every frame, opened at the frame that was clicked. */
 function ShowcaseLightbox({ frames, startIndex, title, onClose }) {
   const frameRefs = useRef([]);
 
   useEffect(() => {
-    const handleKey = (e) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handleKey);
-    document.body.style.overflow = "hidden";
     frameRefs.current[startIndex]?.scrollIntoView({ block: "start" });
-    return () => {
-      window.removeEventListener("keydown", handleKey);
-      document.body.style.overflow = "";
-    };
-  }, [onClose, startIndex]);
+  }, [startIndex]);
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label={`${title} — design showcase`}
-      className="fixed inset-0 z-50 bg-black/95 overflow-y-auto"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <button
-        type="button"
-        onClick={onClose}
-        className="fixed top-4 right-4 z-50 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-[background-color] duration-200 text-white"
-        aria-label="Close showcase"
-        autoFocus
-      >
-        <X size={24} />
-      </button>
+    <LightboxShell label={`${title}: design showcase`} closeLabel="Close showcase" onClose={onClose}>
       <div className="max-w-5xl mx-auto py-12 px-4 flex flex-col">
         {frames.map((frame, i) => (
           <img
             key={i}
             ref={(el) => (frameRefs.current[i] = el)}
             src={frame.url}
-            alt={frame.alt || `${title} — frame ${i + 1}`}
+            alt={frame.alt || `${title}, frame ${i + 1}`}
             width={frame.width}
             height={frame.height}
             className="w-full h-auto block"
             loading={Math.abs(i - startIndex) <= 1 ? "eager" : "lazy"}
             decoding="async"
+            onClick={(e) => e.stopPropagation()}
           />
         ))}
       </div>
-    </div>
+    </LightboxShell>
   );
 }
 
@@ -74,12 +49,9 @@ export function ShowcaseSection({ frames, title }) {
 
   return (
     <section className={cn(PAGE_WIDTH, SECTION_GAP)}>
-      <motion.div {...fadeUp}>
+      <div>
         <header className={cn("flex flex-wrap items-end justify-between gap-4", HEADER_GAP)}>
-          <div>
-            <p className={cn(EYEBROW, "mb-4")}>Design Showcase</p>
-            <h2 className={H2}>The finished work</h2>
-          </div>
+          <h2 className={H2}>The finished work</h2>
           <button
             type="button"
             onClick={() => setOpenAt(0)}
@@ -129,7 +101,7 @@ export function ShowcaseSection({ frames, title }) {
             </figure>
           ))}
         </div>
-      </motion.div>
+      </div>
 
       {openAt !== null && (
         <ShowcaseLightbox

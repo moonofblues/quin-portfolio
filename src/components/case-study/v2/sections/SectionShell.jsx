@@ -22,7 +22,19 @@ import {
  * lines up with the media below instead of stopping short of it; phones stack
  * the two.
  */
-export function SectionShell({ id, eyebrow, heading, headline, intro, className, children }) {
+export function SectionShell({
+  id,
+  eyebrow,
+  heading,
+  headline,
+  intro,
+  className,
+  reveal = true,
+  children,
+}) {
+  // Only the section that opens a chapter fades in; the rest just scroll. The
+  // same entrance on every section reads as decoration, not as a cue.
+  const Wrapper = reveal ? motion.div : "div";
   const label = headline ? heading : eyebrow;
   const title = headline || heading;
   const hasHeader = Boolean(label || title);
@@ -41,7 +53,7 @@ export function SectionShell({ id, eyebrow, heading, headline, intro, className,
 
   return (
     <section id={id} className={cn(PAGE_WIDTH, SECTION_GAP, SCROLL_OFFSET, className)}>
-      <motion.div {...fadeUp}>
+      <Wrapper {...(reveal ? fadeUp : {})}>
         {(hasHeader || intro) && (
           <div
             className={cn(
@@ -55,7 +67,7 @@ export function SectionShell({ id, eyebrow, heading, headline, intro, className,
           </div>
         )}
         {children}
-      </motion.div>
+      </Wrapper>
     </section>
   );
 }

@@ -12,7 +12,7 @@ const SECTION_COMPONENTS = {
   decisionsSection: DecisionsSection,
 };
 
-export function SectionRenderer({ section, id }) {
+export function SectionRenderer({ section, id, reveal }) {
   const Component = SECTION_COMPONENTS[section?._type];
   if (!Component) {
     if (import.meta.env.DEV) {
@@ -20,5 +20,5 @@ export function SectionRenderer({ section, id }) {
     }
     return null;
   }
-  return <Component section={section} id={id} />;
+  return <Component section={section} id={id} reveal={reveal} />;
 }

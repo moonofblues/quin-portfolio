@@ -45,7 +45,7 @@ export function NextCaseStudy({ next }) {
       )}
       <Link
         to="/work"
-        className="mt-8 inline-flex min-h-11 items-center gap-2 text-text-secondary hover:text-text-primary transition-[color] duration-200"
+        className="mt-8 inline-flex min-h-[44px] items-center gap-2 text-text-secondary hover:text-text-primary transition-[color] duration-200"
       >
         <ArrowLeft size={16} />
         Back to Work

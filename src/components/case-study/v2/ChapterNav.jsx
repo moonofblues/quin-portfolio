@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "../../../utils/cn";
 import { PAGE_WIDTH } from "./shared";
@@ -13,6 +13,7 @@ import { PAGE_WIDTH } from "./shared";
 export function ChapterNav({ chapters }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [open, setOpen] = useState(false);
+  const navRef = useRef(null);
 
   useEffect(() => {
     const targets = chapters
@@ -39,16 +40,34 @@ export function ChapterNav({ chapters }) {
     return () => observer.disconnect();
   }, [chapters]);
 
+  // The phone menu closes on Esc, or a tap anywhere outside the bar.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    const onPointer = (e) => {
+      if (!navRef.current?.contains(e.target)) setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("pointerdown", onPointer);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("pointerdown", onPointer);
+    };
+  }, [open]);
+
   if (chapters.length < 2) return null;
   const active = chapters[activeIndex] ?? chapters[0];
 
   return (
     <nav
+      ref={navRef}
       aria-label="Case study chapters"
       className={cn("sticky top-[4.25rem] md:top-[4.75rem] z-40 mb-14", PAGE_WIDTH)}
     >
       {/* Wide screens: one row, current chapter highlighted. */}
-      <ol className="hidden md:flex w-fit mx-auto items-center gap-1 rounded-full glass border border-border p-1.5">
+      <ol className="hidden md:flex w-fit mx-auto items-center gap-1 rounded-full bg-bg-secondary/95 border border-border p-1.5">
         {chapters.map((chapter, i) => (
           <li key={chapter.id}>
             <a
@@ -73,7 +92,8 @@ export function ChapterNav({ chapters }) {
           type="button"
           onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
-          className="w-full flex items-center justify-between gap-3 rounded-full glass border border-border px-5 py-2.5 min-h-[44px] text-sm text-text-primary"
+          aria-controls="chapter-list"
+          className="w-full flex items-center justify-between gap-3 rounded-full bg-bg-secondary/95 border border-border px-5 py-2.5 min-h-[44px] text-sm text-text-primary"
         >
           <span>
             <span className="text-text-muted">
@@ -87,7 +107,7 @@ export function ChapterNav({ chapters }) {
           />
         </button>
         {open && (
-          <ol className="mt-2 rounded-2xl glass border border-border p-2">
+          <ol id="chapter-list" className="mt-2 rounded-2xl bg-bg-secondary border border-border p-2">
             {chapters.map((chapter, i) => (
               <li key={chapter.id}>
                 <a

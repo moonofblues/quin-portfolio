@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, MotionConfig } from "framer-motion";
 import { Button } from "../components/ui/Button";
 import { HeroCollage } from "../components/case-study/HeroCollage";
 import { ProjectEmbeds } from "../components/case-study/ProjectEmbeds";
@@ -36,11 +36,14 @@ function planSections(sections) {
   const used = new Set(RESERVED_IDS);
   const chapters = [{ id: "overview", label: "Overview" }];
   const placed = sections.map((section, i) => {
-    let id = section.navLabel ? slugify(section.navLabel) : `section-${i + 1}`;
+    // A process section is always its own chapter, so it never shows up under
+    // the chapter before it; a navLabel set in Studio still wins.
+    const navLabel = section.navLabel || (section._type === "processSection" ? "Process" : "");
+    let id = navLabel ? slugify(navLabel) : `section-${i + 1}`;
     if (used.has(id) || id.startsWith("decision-")) id = `${id}-${i + 1}`;
     used.add(id);
-    if (section.navLabel) chapters.push({ id, label: section.navLabel });
-    return { section, id, startsChapter: Boolean(section.navLabel) };
+    if (navLabel) chapters.push({ id, label: navLabel });
+    return { section, id, startsChapter: Boolean(navLabel) };
   });
   return { placed, chapters };
 }
@@ -91,6 +94,10 @@ export function CaseStudyPageV2() {
   const allChapters = [...chapters, { id: "outcome", label: "Outcome" }];
 
   return (
+    // reducedMotion="user": framer-motion entrances (the fade-ups) honour the
+    // visitor's "reduce motion" setting. The CSS rule in index.css only covers
+    // CSS animations.
+    <MotionConfig reducedMotion="user">
     <div className="min-h-screen pt-24 pb-20">
       <title>{`${card.title} — Quin Ledesma`}</title>
       <meta name="description" content={card.description} />
@@ -141,7 +148,7 @@ export function CaseStudyPageV2() {
             // A section that opens a chapter gets extra air above it, so the
             // chapters read as distinct parts of the story.
             <div key={section._key ?? id} className={startsChapter ? CHAPTER_START : undefined}>
-              <SectionRenderer section={section} id={id} />
+              <SectionRenderer section={section} id={id} reveal={startsChapter} />
             </div>
           ))}
 
@@ -166,5 +173,6 @@ export function CaseStudyPageV2() {
         </>
       )}
     </div>
+    </MotionConfig>
   );
 }

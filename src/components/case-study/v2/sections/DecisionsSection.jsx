@@ -47,14 +47,17 @@ function Decision({ decision, index }) {
     <article id={decisionId(index)} className={SCROLL_OFFSET}>
       {hasMedia ? (
         <div className="lg:grid lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-16 lg:items-start">
-          <div className="lg:sticky lg:top-36 space-y-8">
-            <div>{reasoning}</div>
-            <SideNotes notes={decision.notes} />
-          </div>
+          {/* Only the reasoning is pinned. The notes ride with the media on the
+              right, so that column is never left with a gap under short
+              screenshots while a long reasoning column runs on. On short
+              screens (a pinned column taller than the window gets cut off)
+              nothing is pinned. */}
+          <div className="lg:sticky lg:top-36 [@media(max-height:760px)]:lg:static">{reasoning}</div>
           <div className="mt-14 lg:mt-0 space-y-16">
             {media.map((block, i) => (
               <MediaBlock key={block._key ?? i} block={block} />
             ))}
+            <SideNotes notes={decision.notes} />
           </div>
         </div>
       ) : (
@@ -67,7 +70,7 @@ function Decision({ decision, index }) {
   );
 }
 
-export function DecisionsSection({ section, id }) {
+export function DecisionsSection({ section, id, reveal }) {
   const decisions = (section.decisions ?? []).filter((d) => d?.headline);
   if (!decisions.length) return null;
 
@@ -77,6 +80,7 @@ export function DecisionsSection({ section, id }) {
       eyebrow={section.eyebrow}
       heading={section.heading}
       headline={section.headline}
+      reveal={reveal}
     >
       <div className="divide-y divide-border">
         {decisions.map((decision, i) => (

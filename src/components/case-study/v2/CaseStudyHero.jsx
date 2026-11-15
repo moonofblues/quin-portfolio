@@ -25,6 +25,9 @@ function MetaRow({ label, children }) {
  */
 export function CaseStudyHero({ project, detail, id }) {
   const focusLabel = SERVICE_BY_ID[project.categories?.[0]?.focus]?.label;
+  const showFocusLabel =
+    focusLabel &&
+    !project.tags?.some((tag) => tag.trim().toLowerCase() === focusLabel.trim().toLowerCase());
   const behanceUrl = detail?.embeds?.find((e) => e.platform === "behance" && e.url)?.url;
   const meta = detail && [
     detail.year && ["Year", detail.year],
@@ -43,11 +46,14 @@ export function CaseStudyHero({ project, detail, id }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <Link to="/work" className="inline-block mb-8">
-          <Button variant="ghost" size="small" className="min-h-[44px]">
-            <ArrowLeft size={16} />
-            Back to Work
-          </Button>
+        {/* A link styled like the ghost button. A <button> inside a <Link>
+            is invalid HTML and gave keyboard users two tab stops. */}
+        <Link
+          to="/work"
+          className="mb-8 -ml-4 inline-flex min-h-[44px] items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-text-secondary transition-[color] duration-200 hover:text-accent"
+        >
+          <ArrowLeft size={16} />
+          Back to Work
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_20rem] gap-10 lg:gap-16 items-start">
@@ -62,7 +68,8 @@ export function CaseStudyHero({ project, detail, id }) {
             <div className="flex items-start gap-4">
               <Star size={30} className="mt-2 shrink-0" />
               <div>
-                {focusLabel && (
+                {/* Skipped when a tag already says the same thing. */}
+                {showFocusLabel && (
                   <p className="font-display text-xs uppercase tracking-[0.14em] mb-2 text-accent">
                     {focusLabel}
                   </p>

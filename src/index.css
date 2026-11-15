@@ -599,3 +599,46 @@ img {
     animation: none !important;
   }
 }
+
+/* ── Case-study image viewer (LightboxShell.jsx) ──
+   Opens with a quick fade and a slight scale-up, and plays the reverse on
+   close (EXIT_MS in LightboxShell must match the 160ms exits). Only opacity and
+   transform move, so the compositor owns it. `backwards` fill on the entrance
+   leaves no transform behind afterwards: a lingering transform would turn the
+   panel into the containing block for any position: fixed descendant. The
+   global reduced-motion rule collapses all of this to a cut. */
+@keyframes lightbox-scrim-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes lightbox-scrim-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes lightbox-panel-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes lightbox-panel-out {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.98); }
+}
+
+.lightbox-scrim {
+  animation: lightbox-scrim-in 200ms ease-out backwards;
+}
+
+.lightbox-panel {
+  animation: lightbox-panel-in 240ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+[data-closing="true"] .lightbox-scrim {
+  animation: lightbox-scrim-out 160ms ease-in forwards;
+}
+
+[data-closing="true"] .lightbox-panel {
+  animation: lightbox-panel-out 160ms ease-in forwards;
+}

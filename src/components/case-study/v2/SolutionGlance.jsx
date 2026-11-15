@@ -20,7 +20,7 @@ export function SolutionGlance({ cards, fallbackText, id }) {
       className={`${PAGE_WIDTH} ${SECTION_GAP} ${SCROLL_OFFSET}`}
     >
       <motion.div {...fadeUp}>
-        <h2 className={`${H2} ${HEADER_GAP} text-center`}>The Solution at a Glance</h2>
+        <h2 className={`${H2} ${HEADER_GAP}`}>The Solution at a Glance</h2>
         {cards.length ? (
           <div className="grid gap-12 md:gap-16 grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]">
             {cards.map((card) => (
@@ -62,7 +62,7 @@ export function SolutionGlance({ cards, fallbackText, id }) {
             ))}
           </div>
         ) : (
-          <p className="max-w-4xl mx-auto text-lg leading-relaxed text-text-secondary">
+          <p className="max-w-4xl text-lg leading-relaxed text-text-secondary">
             {fallbackText}
           </p>
         )}
