@@ -1,3 +1,4 @@
+import { EyeOff } from "lucide-react";
 import { cn } from "../../../../utils/cn";
 
 function Frame({ image }) {
@@ -8,10 +9,18 @@ function Frame({ image }) {
           {image.label}
         </p>
       )}
-      <div className="rounded-xl overflow-hidden border border-border shadow-xl bg-white">
+      <div className="relative rounded-xl overflow-hidden border border-border shadow-xl bg-white">
+        {image.blurred && (
+          <p className="absolute left-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-black/70 px-3 py-1 text-xs text-white">
+            <EyeOff size={14} aria-hidden="true" />
+            Blurred for confidentiality
+          </p>
+        )}
         <img
           src={image.url}
-          alt={image.alt || ""}
+          // A blurred image shows nothing readable, so a generic alt avoids
+          // leaking what the hidden screen contained.
+          alt={image.blurred ? "Screenshot blurred for confidentiality" : image.alt || ""}
           width={image.width}
           height={image.height}
           className="block w-full h-auto"

@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowDown } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { HeroCollage } from "../components/case-study/HeroCollage";
 import { ProjectEmbeds } from "../components/case-study/ProjectEmbeds";
@@ -35,31 +34,9 @@ function planSections(sections) {
     if (used.has(id) || id.startsWith("decision-")) id = `${id}-${i + 1}`;
     used.add(id);
     if (section.navLabel) chapters.push({ id, label: section.navLabel });
-    return { section, id, startsChapter: Boolean(section.navLabel) };
+    return { section, id };
   });
   return { placed, chapters };
-}
-
-/** In-page "Continue" link at the end of a chapter (the reference's part breaks). */
-function ContinueLink({ to, label }) {
-  return (
-    <div className={`${PAGE_WIDTH} -mt-10 mb-24 md:-mt-16 md:mb-32`}>
-      <a
-        href={`#${to}`}
-        className="group flex min-h-12 items-center justify-between gap-4 border-t border-border pt-6 text-text-secondary hover:text-text-primary transition-[color] duration-200"
-      >
-        <span>
-          <span className="text-accent">Continue</span>
-          <span className="mx-2 text-text-muted">·</span>
-          {label}
-        </span>
-        <ArrowDown
-          size={18}
-          className="text-accent transition-transform duration-200 group-hover:translate-y-0.5 motion-reduce:transform-none"
-        />
-      </a>
-    </div>
-  );
 }
 
 export function CaseStudyPageV2() {
@@ -136,17 +113,9 @@ export function CaseStudyPageV2() {
           <StatementPanel label="The Problem" text={detail.challenge} />
           <SolutionGlance cards={glanceCards} fallbackText={detail.solution} />
 
-          {placed.map(({ section, id, startsChapter }, i) => {
-            const chapter = startsChapter && i > 0 && chapters.find((c) => c.id === id);
-            return (
-              <div key={section._key ?? id}>
-                {chapter && <ContinueLink to={chapter.id} label={chapter.label} />}
-                <SectionRenderer section={section} id={id} />
-              </div>
-            );
-          })}
-
-          <ContinueLink to="outcome" label="Showcase, outcome and reflection" />
+          {placed.map(({ section, id }) => (
+            <SectionRenderer key={section._key ?? id} section={section} id={id} />
+          ))}
 
           <div id="outcome" className={SCROLL_OFFSET}>
             <ShowcaseSection frames={showcase} title={card.title} />

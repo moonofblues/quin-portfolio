@@ -32,9 +32,24 @@ const IMAGE = `
   "height": asset->metadata.dimensions.height
 `;
 
+// Case-study images can be marked confidential (NDA). For those, the query
+// returns ONLY a Sanity-blurred URL (?blur=…), so the sharp original's URL
+// never reaches the page. `blurred` tells the component to show a badge.
+const BLUR_STRENGTH = 80;
 const MEDIA_BLOCK = `
   ...,
-  images[] { ${IMAGE}, alt, label, caption }
+  images[] {
+    "url": select(
+      blur == true => asset->url + "?blur=${BLUR_STRENGTH}",
+      asset->url
+    ),
+    "width": asset->metadata.dimensions.width,
+    "height": asset->metadata.dimensions.height,
+    "blurred": blur == true,
+    alt,
+    label,
+    caption
+  }
 `;
 
 const DETAIL_FIELDS = `

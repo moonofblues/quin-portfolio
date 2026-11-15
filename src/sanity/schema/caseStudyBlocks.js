@@ -60,6 +60,14 @@ export const caseStudyImage = {
       validation: (R) => R.required(),
     },
     {
+      name: "blur",
+      title: "Blur this image (confidential)",
+      type: "boolean",
+      initialValue: false,
+      description:
+        "Tick for screenshots of internal company systems, processes or documents (NDA). The site then only ever loads a blurred copy. Leave unticked for your own designs. Note: pins or numbers drawn on the image get blurred too, and the original file stays in Sanity, so for anything highly sensitive redact it before uploading.",
+    },
+    {
       name: "label",
       title: "Label (optional)",
       type: "string",
