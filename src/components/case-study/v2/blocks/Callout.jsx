@@ -6,7 +6,7 @@ export function Callout({ block }) {
   return (
     <aside className="rounded-2xl border-l-4 border-accent bg-accent-subtle p-6 md:p-8">
       {block.label && <p className={`${EYEBROW} mb-3`}>{block.label}</p>}
-      <RichText value={block.body} size="base" className="max-w-5xl [&_p]:text-text-primary" />
+      <RichText value={block.body} size="base" className="max-w-[75ch] [&_p]:text-text-primary" />
     </aside>
   );
 }

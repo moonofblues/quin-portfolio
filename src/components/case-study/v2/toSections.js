@@ -42,7 +42,7 @@ export function toSections(project) {
 
   const questions = (project.researchObjectives ?? [])
     .filter(Boolean)
-    .map((title, i) => ({ _key: `q${i}`, title }));
+    .map((body, i) => ({ _key: `q${i}`, body }));
   const methods = cards(project.researchMethods);
   if (project.researchFindings || questions.length || methods.length) {
     sections.push({
@@ -70,7 +70,7 @@ export function toSections(project) {
 
   const hmw = (project.howMightWe ?? [])
     .filter(Boolean)
-    .map((title, i) => ({ _key: `h${i}`, title }));
+    .map((body, i) => ({ _key: `h${i}`, body }));
   if (hmw.length) {
     sections.push({
       _type: "storySection",

@@ -23,6 +23,8 @@ function BrowserFrame({ src, alt, className }) {
       <img
         src={src}
         alt={alt}
+        width="1600"
+        height="1000"
         className="w-full aspect-[16/10] object-cover"
         loading="lazy"
         decoding="async"
@@ -37,13 +39,19 @@ export function HeroCollage({ images, title }) {
   if (frames.length < 3) {
     const single = frames[0];
     return (
-      <div className="rounded-2xl overflow-hidden bg-bg-tertiary aspect-video">
+      // Wide and short, capped at 60% of the screen height: a lone cover image
+      // is context, not the main event, and a full 16:9 block pushed the real
+      // content a full screen down. It sits below The Problem, so it is lazy.
+      <div className="relative rounded-2xl overflow-hidden bg-bg-tertiary aspect-video md:aspect-[21/9] max-h-[60vh]">
         {single ? (
           <img
             src={single}
             alt={title}
-            className="w-full h-full object-cover"
+            width="1600"
+            height="900"
+            className="absolute inset-0 w-full h-full object-cover object-top"
             loading="lazy"
+            fetchPriority="low"
             decoding="async"
           />
         ) : (

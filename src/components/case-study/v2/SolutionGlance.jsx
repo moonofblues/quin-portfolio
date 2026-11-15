@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import { ImageLightbox } from "./blocks/ImageLightbox";
 import { ArrowRight } from "lucide-react";
-import { fadeUp, H2, H3_CAPS, PAGE_WIDTH, SCROLL_OFFSET } from "./shared";
+import { fadeUp, H2, H3_CAPS, HEADER_GAP, PAGE_WIDTH, SCROLL_OFFSET, SECTION_GAP } from "./shared";
 
 /** Solution at a Glance. Cards come from getGlanceCards() in glance.js. */
 export function SolutionGlance({ cards, fallbackText, id }) {
@@ -17,12 +17,12 @@ export function SolutionGlance({ cards, fallbackText, id }) {
   return (
     <section
       id={id}
-      className={`${PAGE_WIDTH} mb-24 md:mb-32 ${SCROLL_OFFSET}`}
+      className={`${PAGE_WIDTH} ${SECTION_GAP} ${SCROLL_OFFSET}`}
     >
       <motion.div {...fadeUp}>
-        <h2 className={`${H2} mb-10 md:mb-12 text-center`}>The Solution at a Glance</h2>
+        <h2 className={`${H2} ${HEADER_GAP} text-center`}>The Solution at a Glance</h2>
         {cards.length ? (
-          <div className="grid gap-10 md:gap-12 grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]">
+          <div className="grid gap-12 md:gap-16 grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]">
             {cards.map((card) => (
               <div key={card.key}>
                 {card.image && (
@@ -49,7 +49,7 @@ export function SolutionGlance({ cards, fallbackText, id }) {
                 {card.href && (
                   <a
                     href={card.href}
-                    className="group mt-4 inline-flex min-h-11 items-center gap-2 font-semibold text-accent hover:text-accent-hover transition-[color] duration-200"
+                    className="group mt-4 inline-flex min-h-[44px] items-center gap-2 font-semibold text-accent hover:text-accent-hover transition-[color] duration-200"
                   >
                     Read the reasoning
                     <ArrowRight

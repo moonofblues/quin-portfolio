@@ -3,7 +3,7 @@ import { RichText } from "../blocks/RichText";
 import { MediaBlock } from "../blocks/MediaBlock";
 import { CardGrid } from "../blocks/CardGrid";
 import { Callout } from "../blocks/Callout";
-import { SPLIT_COLUMNS } from "../shared";
+import { BLOCK_GAP, SPLIT_COLUMNS } from "../shared";
 
 // Media and grids take the section's full width. Prose that comes after them
 // sits in the right-hand column (SPLIT_COLUMNS), the same column the opening
@@ -54,7 +54,7 @@ export function StorySection({ section, id }) {
       headline={section.headline}
       intro={intro}
     >
-      <div className="space-y-12 md:space-y-14">
+      <div className={BLOCK_GAP}>
         {body.map((block, i) => {
           const Block = BLOCKS[block._type];
           return Block ? <Block key={block._key ?? i} block={block} /> : null;

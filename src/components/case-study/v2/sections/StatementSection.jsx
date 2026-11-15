@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { cn } from "../../../../utils/cn";
-import { fadeUp, EYEBROW, PAGE_WIDTH, SCROLL_OFFSET, isShortStatement } from "../shared";
+import { fadeUp, EYEBROW, PAGE_WIDTH, SCROLL_OFFSET, SECTION_GAP, isShortStatement } from "../shared";
 
 /**
  * A single large sentence in a panel. Used by the Statement section (e.g.
@@ -13,7 +13,7 @@ export function StatementPanel({ id, label, text, className }) {
   return (
     <section
       id={id}
-      className={cn(PAGE_WIDTH, "mb-24 md:mb-32", SCROLL_OFFSET, className)}
+      className={cn(PAGE_WIDTH, SECTION_GAP, SCROLL_OFFSET, className)}
     >
       <motion.div
         className={cn(

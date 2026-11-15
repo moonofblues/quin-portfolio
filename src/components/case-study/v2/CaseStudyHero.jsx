@@ -10,7 +10,7 @@ import { PAGE_WIDTH, SCROLL_OFFSET } from "./shared";
 function MetaRow({ label, children }) {
   return (
     <div>
-      <dt className="font-display text-[0.6875rem] uppercase tracking-[0.14em] text-text-muted">
+      <dt className="font-display text-[11px] uppercase tracking-[0.14em] text-text-muted">
         {label}
       </dt>
       <dd className="mt-1.5 font-semibold leading-snug text-text-primary">{children}</dd>
@@ -44,7 +44,7 @@ export function CaseStudyHero({ project, detail, id }) {
         transition={{ duration: 0.4 }}
       >
         <Link to="/work" className="inline-block mb-8">
-          <Button variant="ghost" size="small">
+          <Button variant="ghost" size="small" className="min-h-[44px]">
             <ArrowLeft size={16} />
             Back to Work
           </Button>
@@ -89,15 +89,18 @@ export function CaseStudyHero({ project, detail, id }) {
               aria-label="Project details"
               className="rounded-3xl border border-border bg-bg-secondary p-7 md:p-8"
             >
-              <dl className="grid gap-5">
+              {/* Two columns until the card becomes a narrow sidebar (lg), so on a
+                  phone the details take half the height. Status and tools need
+                  the full row. */}
+              <dl className="grid grid-cols-2 gap-x-6 gap-y-5 lg:grid-cols-1">
                 {meta.map(([label, value]) => (
                   <MetaRow key={label} label={label}>
                     {value}
                   </MetaRow>
                 ))}
                 {detail.projectStatus && (
-                  <div>
-                    <dt className="font-display text-[0.6875rem] uppercase tracking-[0.14em] text-text-muted">
+                  <div className="col-span-2 lg:col-span-1">
+                    <dt className="font-display text-[11px] uppercase tracking-[0.14em] text-text-muted">
                       Status
                     </dt>
                     <dd className="mt-2 inline-flex items-center gap-2 rounded-full border border-accent px-3.5 py-1.5 text-sm font-semibold text-accent">
@@ -107,8 +110,8 @@ export function CaseStudyHero({ project, detail, id }) {
                   </div>
                 )}
                 {detail.tools?.length > 0 && (
-                  <div>
-                    <dt className="font-display text-[0.6875rem] uppercase tracking-[0.14em] text-text-muted mb-2.5">
+                  <div className="col-span-2 lg:col-span-1">
+                    <dt className="font-display text-[11px] uppercase tracking-[0.14em] text-text-muted mb-2.5">
                       Tools used
                     </dt>
                     <dd className="flex flex-wrap gap-2">

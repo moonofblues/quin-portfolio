@@ -18,7 +18,7 @@
 
   --color-text-primary: #f2f1ee;
   --color-text-secondary: #8a8f9a;
-  --color-text-muted: #5f646e;
+  --color-text-muted: #80858f;   /* 5.1:1 on surface, 4.7:1 on pills (was #5f646e, 3.2:1) */
 
   --color-on-accent: #07090d;
 

@@ -11,7 +11,7 @@ function SideNotes({ notes }) {
     <dl className="rounded-2xl border border-border bg-bg-secondary p-6 md:p-7 grid gap-5">
       {filled.map((note, i) => (
         <div key={note._key ?? i}>
-          <dt className="font-display text-[0.6875rem] uppercase tracking-[0.12em] text-accent">
+          <dt className="font-display text-[11px] uppercase tracking-[0.12em] text-accent">
             {note.label}
           </dt>
           <dd className="mt-2 leading-relaxed text-text-secondary">{note.body}</dd>
@@ -51,7 +51,7 @@ function Decision({ decision, index }) {
             <div>{reasoning}</div>
             <SideNotes notes={decision.notes} />
           </div>
-          <div className="mt-12 lg:mt-0 space-y-14">
+          <div className="mt-14 lg:mt-0 space-y-16">
             {media.map((block, i) => (
               <MediaBlock key={block._key ?? i} block={block} />
             ))}
@@ -80,7 +80,7 @@ export function DecisionsSection({ section, id }) {
     >
       <div className="divide-y divide-border">
         {decisions.map((decision, i) => (
-          <div key={decision._key ?? i} className="py-16 md:py-20 first:pt-0 last:pb-0">
+          <div key={decision._key ?? i} className="py-20 md:py-28 first:pt-0 last:pb-0">
             <Decision decision={decision} index={i} />
           </div>
         ))}

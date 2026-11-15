@@ -39,14 +39,15 @@ function makeComponents(paragraphClass) {
 }
 
 const COMPONENTS = {
-  lg: makeComponents("text-lg leading-relaxed text-text-secondary"),
-  base: makeComponents("text-base leading-relaxed text-text-secondary"),
+  lg: makeComponents("text-lg leading-[1.75] text-text-secondary"),
+  base: makeComponents("text-base leading-[1.7] text-text-secondary"),
 };
 
 export function RichText({ value, size = "lg", className }) {
   if (!value?.length) return null;
   return (
-    <div className={cn(size === "lg" ? "space-y-5" : "space-y-3", className)}>
+    // 68ch keeps lines in the comfortable 65-75 character range.
+    <div className={cn("max-w-[68ch]", size === "lg" ? "space-y-6" : "space-y-4", className)}>
       <PortableText value={value} components={COMPONENTS[size]} />
     </div>
   );

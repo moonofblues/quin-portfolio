@@ -22,7 +22,7 @@ function Frame({ image, onExpand }) {
   return (
     <div>
       {image.label && (
-        <p className="inline-flex mb-3 px-3 py-1 rounded-full bg-bg-tertiary font-display text-[0.6875rem] uppercase tracking-widest text-accent">
+        <p className="inline-flex mb-3 px-3 py-1 rounded-full bg-bg-tertiary font-display text-[11px] uppercase tracking-widest text-accent">
           {image.label}
         </p>
       )}

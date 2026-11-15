@@ -45,7 +45,7 @@ export function ChapterNav({ chapters }) {
   return (
     <nav
       aria-label="Case study chapters"
-      className={cn("sticky top-[4.25rem] md:top-[4.75rem] z-40 mb-10", PAGE_WIDTH)}
+      className={cn("sticky top-[4.25rem] md:top-[4.75rem] z-40 mb-14", PAGE_WIDTH)}
     >
       {/* Wide screens: one row, current chapter highlighted. */}
       <ol className="hidden md:flex w-fit mx-auto items-center gap-1 rounded-full glass border border-border p-1.5">
@@ -73,7 +73,7 @@ export function ChapterNav({ chapters }) {
           type="button"
           onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
-          className="w-full flex items-center justify-between gap-3 rounded-full glass border border-border px-5 py-2.5 text-sm text-text-primary"
+          className="w-full flex items-center justify-between gap-3 rounded-full glass border border-border px-5 py-2.5 min-h-[44px] text-sm text-text-primary"
         >
           <span>
             <span className="text-text-muted">

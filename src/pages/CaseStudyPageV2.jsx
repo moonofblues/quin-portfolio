@@ -14,7 +14,13 @@ import { ShowcaseSection } from "../components/case-study/v2/ShowcaseSection";
 import { OutcomeSection, ReflectionSection } from "../components/case-study/v2/OutcomeSection";
 import { NextCaseStudy } from "../components/case-study/v2/NextCaseStudy";
 import { toSections } from "../components/case-study/v2/toSections";
-import { slugify, fadeUp, PAGE_WIDTH, SCROLL_OFFSET } from "../components/case-study/v2/shared";
+import {
+  slugify,
+  fadeUp,
+  CHAPTER_START,
+  PAGE_WIDTH,
+  SECTION_GAP,
+} from "../components/case-study/v2/shared";
 import { useProjects } from "../context/ProjectsContext";
 import { useProjectDetail } from "../context/useProjectDetail";
 import { CaseStudyPage } from "./CaseStudyPage";
@@ -34,7 +40,7 @@ function planSections(sections) {
     if (used.has(id) || id.startsWith("decision-")) id = `${id}-${i + 1}`;
     used.add(id);
     if (section.navLabel) chapters.push({ id, label: section.navLabel });
-    return { section, id };
+    return { section, id, startsChapter: Boolean(section.navLabel) };
   });
   return { placed, chapters };
 }
@@ -94,10 +100,31 @@ export function CaseStudyPageV2() {
 
       <CaseStudyHero id="overview" project={card} detail={detail} />
 
-      {/* Full-bleed (small gutter): 3–4 screenshots in one row need the width.
-          No entrance delay — this is the page's largest element (LCP). */}
+      {/* Chapter bar and The Problem come straight after the title block, so a
+          skimmer sees what the project is and why it existed before the cover
+          image. The image follows, below the first screen. */}
+      {detail && (
+        <>
+          <ChapterNav chapters={allChapters} />
+          <StatementPanel
+            label="The Problem"
+            text={detail.challenge}
+            className="mb-10 md:mb-12"
+          />
+        </>
+      )}
+
+      {/* A single cover image sits in the page frame so its edges line up with
+          the text. 3–4 screenshots in one row go near full-bleed instead, since
+          they need the width. No entrance delay on either. */}
       {heroImages.length > 0 && (
-        <section className="w-full px-4 sm:px-6 mb-12">
+        <section
+          className={
+            heroImages.length < 3
+              ? `${PAGE_WIDTH} mb-16 md:mb-20`
+              : "w-full px-4 sm:px-6 mb-12"
+          }
+        >
           <HeroCollage images={heroImages} title={card.title} />
         </section>
       )}
@@ -108,26 +135,31 @@ export function CaseStudyPageV2() {
         </p>
       ) : (
         <>
-          <ChapterNav chapters={allChapters} />
-
-          <StatementPanel label="The Problem" text={detail.challenge} />
           <SolutionGlance cards={glanceCards} fallbackText={detail.solution} />
 
-          {placed.map(({ section, id }) => (
-            <SectionRenderer key={section._key ?? id} section={section} id={id} />
+          {placed.map(({ section, id, startsChapter }) => (
+            // A section that opens a chapter gets extra air above it, so the
+            // chapters read as distinct parts of the story.
+            <div key={section._key ?? id} className={startsChapter ? CHAPTER_START : undefined}>
+              <SectionRenderer section={section} id={id} />
+            </div>
           ))}
 
-          <div id="outcome" className={SCROLL_OFFSET}>
+          {/* Opens the Outcome chapter: results and reflection first, then the
+              finished-work gallery and embeds as supporting evidence. Its
+              scroll offset is smaller than the sections' because CHAPTER_START
+              padding already sits above it. */}
+          <div id="outcome" className={`${CHAPTER_START} scroll-mt-20`}>
+            <OutcomeSection project={detail} />
+            <ReflectionSection reflection={detail.reflection} />
             <ShowcaseSection frames={showcase} title={card.title} />
             {detail.embeds?.length > 0 && (
-              <section className={`${PAGE_WIDTH} mb-24 md:mb-32`}>
+              <section className={`${PAGE_WIDTH} ${SECTION_GAP}`}>
                 <motion.div {...fadeUp}>
                   <ProjectEmbeds embeds={detail.embeds} />
                 </motion.div>
               </section>
             )}
-            <OutcomeSection project={detail} />
-            <ReflectionSection reflection={detail.reflection} />
           </div>
 
           <NextCaseStudy next={next} />

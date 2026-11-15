@@ -19,7 +19,7 @@ export function ProcessSection({ section, id }) {
     >
       <ProcessTimeline steps={steps} />
       {section.note && (
-        <p className="mt-10 max-w-4xl border-l-2 border-accent pl-5 leading-relaxed text-text-secondary">
+        <p className="mt-12 md:mt-14 max-w-4xl border-l-2 border-accent pl-5 leading-relaxed text-text-secondary">
           {section.note}
         </p>
       )}
