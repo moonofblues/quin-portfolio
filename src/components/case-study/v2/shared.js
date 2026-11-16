@@ -75,7 +75,7 @@ export function getBehanceUrl(detail) {
   );
 }
 
-export const decisionId =(index) => `decision-${index + 1}`;
+export const decisionId = (index) => `decision-${index + 1}`;
 
 // Big centred statements only read well when short; longer text drops to a
 // left-aligned, smaller treatment (same ~30-word rule as The Problem).
