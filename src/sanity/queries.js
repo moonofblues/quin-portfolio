@@ -91,6 +91,7 @@ const DETAIL_FIELDS = `
   "showcase": showcaseImages[] { ${IMAGE}, title, caption, alt },
   embeds[] { platform, url, embedCode, title },
   liveUrl,
+  behanceUrl,
   process[] { title, description },
   solution,
   background,

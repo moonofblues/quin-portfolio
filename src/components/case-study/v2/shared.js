@@ -65,7 +65,17 @@ export function textToBlocks(text) {
     }));
 }
 
-export const decisionId = (index) => `decision-${index + 1}`;
+// The Behance link for a project: the Embeds entry wins; the old "legacy"
+// field is a fallback so links not yet re-entered in Studio still show up.
+export function getBehanceUrl(detail) {
+  return (
+    detail?.embeds?.find((e) => e.platform === "behance" && e.url)?.url ||
+    detail?.behanceUrl ||
+    null
+  );
+}
+
+export const decisionId =(index) => `decision-${index + 1}`;
 
 // Big centred statements only read well when short; longer text drops to a
 // left-aligned, smaller treatment (same ~30-word rule as The Problem).

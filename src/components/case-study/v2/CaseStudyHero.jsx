@@ -5,7 +5,7 @@ import { Tag } from "../../ui/Tag";
 import { Button } from "../../ui/Button";
 import { Star } from "../../decorative/Stars";
 import { SERVICE_BY_ID } from "../../../data/services";
-import { PAGE_WIDTH, SCROLL_OFFSET } from "./shared";
+import { PAGE_WIDTH, SCROLL_OFFSET, getBehanceUrl } from "./shared";
 
 function MetaRow({ label, children }) {
   return (
@@ -28,7 +28,7 @@ export function CaseStudyHero({ project, detail, id }) {
   const showFocusLabel =
     focusLabel &&
     !project.tags?.some((tag) => tag.trim().toLowerCase() === focusLabel.trim().toLowerCase());
-  const behanceUrl = detail?.embeds?.find((e) => e.platform === "behance" && e.url)?.url;
+  const behanceUrl = getBehanceUrl(detail);
   const meta = detail && [
     detail.year && ["Year", detail.year],
     detail.duration && ["Duration", detail.duration],

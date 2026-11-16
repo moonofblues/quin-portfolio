@@ -20,6 +20,7 @@ import {
   CHAPTER_START,
   PAGE_WIDTH,
   SECTION_GAP,
+  getBehanceUrl,
 } from "../components/case-study/v2/shared";
 import { useProjects } from "../context/ProjectsContext";
 import { useProjectDetail } from "../context/useProjectDetail";
@@ -159,7 +160,11 @@ export function CaseStudyPageV2() {
           <div id="outcome" className={`${CHAPTER_START} scroll-mt-20`}>
             <OutcomeSection project={detail} />
             <ReflectionSection reflection={detail.reflection} />
-            <ShowcaseSection frames={showcase} title={card.title} />
+            <ShowcaseSection
+              frames={showcase}
+              title={card.title}
+              behanceUrl={getBehanceUrl(detail)}
+            />
             {detail.embeds?.length > 0 && (
               <section className={`${PAGE_WIDTH} ${SECTION_GAP}`}>
                 <motion.div {...fadeUp}>
