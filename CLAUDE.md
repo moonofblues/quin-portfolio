@@ -153,7 +153,7 @@ the target, not a dev machine.
 
 Run `npm run build` and look at what the **homepage** pulls in — the
 `<script>` plus preloaded chunks in `dist/index.html`, not the total.
-That set is currently ~698 KB raw / ~227 KB gzipped across
+That set is currently ~730 KB raw / ~232 KB gzipped (measured 2026-11-17) across
 `index`, `vendor-react`, `vendor-router`, `vendor-motion`. If a change
 grows it noticeably, something got pulled into the critical path that
 should have been lazy. Vendor splitting lives in `vite.config.js`; do not
@@ -162,9 +162,11 @@ chunk Rollup derives from `App.jsx`.
 
 ## Conventions
 
-- Case-study page sections are extracted into
-  `src/components/case-study/` (`HeroCollage`, `StatRing`,
-  `ProcessTimeline`) rather than inlined in `CaseStudyPage.jsx`.
+- Case studies render through `pages/CaseStudyPageV2.jsx` (the default since
+  2026-11-17; ADR 0011). The old `CaseStudyPage.jsx` is kept only for
+  Showcase-type projects, until that branch is moved out and the file is
+  deleted. Page sections live in `src/components/case-study/` (`v2/` for the
+  current page) rather than inlined in the page file.
 - Optional case-study fields render only when filled in, never as empty
   states — see `docs/adr/0002-*`.
 - Architecture decisions go in `docs/adr/`, domain terms in
@@ -172,6 +174,6 @@ chunk Rollup derives from `App.jsx`.
 
 ## Notes
 
-- `npm run lint` has ~30 pre-existing errors (unused `motion` imports,
+- `npm run lint` has ~13 pre-existing errors (unused `motion` imports,
   react-hooks warnings) unrelated to any given change — check that your
   change doesn't _add_ to the count rather than expecting a clean run.

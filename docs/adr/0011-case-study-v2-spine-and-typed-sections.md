@@ -57,7 +57,9 @@ Full design discussion: `docs/case-study-v2-plan.md`.
 7. **Queries split**: the site-wide fetch carries card fields only, and the
    case study page fetches its full story by slug.
 8. **Rollout behind `?v=2`** until approved, then the new page becomes the
-   default and the old `CaseStudyPage.jsx` is deleted.
+   default and the old `CaseStudyPage.jsx` is deleted. *Status (2026-11-17):
+   approved and v2 is the default. The old page remains only for Showcase
+   projects and is deleted once that branch is extracted.*
 
 ## Consequences
 

@@ -92,7 +92,7 @@ Files: new `src/sanity/schema/caseStudyBlocks.js` (shared objects + section type
 
 **Rendering of missing content:** every spine element and block renders only when filled (ADR 0002). A project with empty `sections` and no legacy fields shows Hero → Problem → Glance fallback → Showcase → Outcome.
 
-**`App.jsx`:** the case-study route renders V2 when `?v=2`, otherwise the old page. After approval, V2 becomes the default and the old page is deleted.
+**`App.jsx`:** the case-study route renders V2 by default (since 2026-11-17). The `?v=2` switch is gone. The old page is kept only for Showcase-type projects and is deleted once that branch is extracted.
 
 ## Implementation sequence (each step builds and is checkable before the next)
 1. **Docs.** ADR `0011-case-study-v2-spine-and-typed-sections.md`. Note that two ADRs already share number 0010, so 0011 is the next free one. Glossary entries: Spine, Section, Block, Chapter, Glance. Copy the reference exports to `docs/reference/case-study-v2/`.
@@ -118,6 +118,15 @@ Files: new `src/sanity/schema/caseStudyBlocks.js` (shared objects + section type
   - no horizontal scroll
   - stars visible behind sections
 - Studio: the "≤1 Key Decisions" and "alt required" validations fire; the legacy tab shows old content untouched.
+
+## Update (2026-11-17)
+
+- ✅ Step 6: ERP content entered. ✅ Step 7 review gate: approved by Quin after a browser check.
+- ✅ **V2 is now the default** at `/work/<slug>` (commit "Make case study v2 the default page"). The `?v=2` switch and the `?v=2` carry in `NextCaseStudy` are removed.
+- ⏳ **Still open:** Showcase-type projects still use the old `CaseStudyPage.jsx`. Extract that branch into its own page, then delete the old file and any components only it used.
+- ⏳ Step 8 (hand-migrate the other 6, then remove the adapter and legacy fields) is unchanged.
+- Measured: homepage critical JS about 730 KB raw / 232 KB gz; lint 13 errors.
+- The sections below this one record the original rollout and still mention `?v=2` as it was at the time.
 
 ## Progress (2026-10-15)
 - ✅ Steps 1–5 implemented. The new page is reachable at `/work/<slug>?v=2`; the live default is unchanged.

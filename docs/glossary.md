@@ -68,8 +68,10 @@ section of `docs/redesign-plan.md`.
 
 ## Case study page
 
-- **Case study** — a `project` document with `type: "case-study"`, rendered
-  by `CaseStudyPage.jsx` in this order: Hero (title/subtitle/overview/meta
+- **Case study** — a `project` document with `type: "case-study"`. Since
+  2026-11-17 it renders through the v2 page (`CaseStudyPageV2.jsx`, see
+  "Case study v2" below). The description that follows is the original (v1)
+  layout from `CaseStudyPage.jsx`, which now only serves Showcase projects: Hero (title/subtitle/overview/meta
   card + screenshot collage), The Problem, The Solution, Process,
   Background, Research, Persona, How Might We, Results, Design Showcase.
   See [ADR 0004](adr/0004-case-study-narrative-restructure.md) for why
