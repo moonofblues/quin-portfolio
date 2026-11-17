@@ -1,16 +1,14 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { EYEBROW, PAGE_WIDTH } from "./shared";
 
 /** One clear next step after a long read (ADR 0011, D17). */
 export function NextCaseStudy({ next }) {
-  // Keeps ?v=2 while previewing, so Next stays on the new page.
-  const { search } = useLocation();
   return (
     <section className={PAGE_WIDTH}>
       {next && (
         <Link
-          to={{ pathname: `/work/${next.slug}`, search }}
+          to={`/work/${next.slug}`}
           className="group grid overflow-hidden rounded-3xl border border-border bg-bg-secondary md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] hover:border-accent/50 transition-[border-color] duration-200"
         >
           <div className="flex flex-col justify-center gap-4 p-8 md:p-12">

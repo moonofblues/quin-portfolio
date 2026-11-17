@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, useParams, useSearchParams } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
 import { ProjectsProvider, useProjects } from "./context/ProjectsContext";
 import { Layout } from "./components/layout/Layout";
 import { HomePage } from "./pages/HomePage";
@@ -20,9 +20,9 @@ const CaseStudyPage = lazy(() =>
   import("./pages/CaseStudyPage").then((m) => ({ default: m.CaseStudyPage })),
 );
 
-// Case study v2 preview (ADR 0011, D14): /work/<slug>?v=2 renders the new
-// page while the current one stays the default. Remove this switch, and the
-// old page, once v2 is approved.
+// Case study v2 (ADR 0011) is the default page for case studies. The old
+// CaseStudyPage is kept only for Showcase-type projects until that branch is
+// moved out of it.
 const CaseStudyPageV2 = lazy(() =>
   import("./pages/CaseStudyPageV2").then((m) => ({ default: m.CaseStudyPageV2 })),
 );
@@ -34,7 +34,6 @@ const PhotoSetPage = lazy(() =>
 );
 
 function CaseStudyRoute() {
-  const [params] = useSearchParams();
   const { slug } = useParams();
   const { getProjectBySlug, loading } = useProjects();
   const card = getProjectBySlug(slug);
@@ -44,10 +43,13 @@ function CaseStudyRoute() {
   // the case study page first.
   if (!card && loading) return <RouteFallback />;
 
-  // A photo set always gets the gallery page, with or without ?v=2.
+  // A photo set gets the gallery page.
   if (card?.type === "photo-set") return <PhotoSetPage />;
 
-  return params.get("v") === "2" ? <CaseStudyPageV2 /> : <CaseStudyPage />;
+  // Showcase projects keep the old page; everything else gets v2.
+  if (card?.type === "showcase") return <CaseStudyPage />;
+
+  return <CaseStudyPageV2 />;
 }
 
 /** Neutral placeholder while a route chunk streams in. */
