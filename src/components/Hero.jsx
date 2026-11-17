@@ -1,5 +1,6 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, X } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "./ui/Button";
 import { Tag } from "./ui/Tag";
@@ -17,13 +18,17 @@ const DEFAULT_HEADLINE = [
 ];
 const DEFAULT_DESCRIPTION =
   "From pixel to production — I bridge design and development to create interfaces that are as functional as they are beautiful.";
-const DEFAULT_TAGS = [
-  "UI/UX Design",
-  "Front-End Dev",
-  "Web Development",
-  "Low-Code/No-Code Dev",
-  "Video Editing",
-  "Graphic Designing",
+// The pills in the default view. Each one is a button that switches the page to
+// that Focus (the same ?focus=<id> the Focus chooser sets). The labels are
+// shorter than the official Focus names on purpose, so they fit on one line.
+const DEFAULT_PILLS = [
+  { label: "UI/UX Design", id: "ui-ux" },
+  { label: "Front-End Dev", id: "front-end" },
+  { label: "Web Development", id: "web-dev" },
+  { label: "Low-Code/No-Code Dev", id: "low-code" },
+  { label: "Video Editing", id: "video" },
+  { label: "Graphic Designing", id: "graphic-design" },
+  { label: "Photography", id: "photography" },
 ];
 
 // Entrance timings.
@@ -36,9 +41,26 @@ const DEFAULT_TAGS = [
 const EASE_OUT = [0.22, 1, 0.36, 1];
 
 export function Hero() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const focusId = searchParams.get("focus");
   const service = focusId ? SERVICE_BY_ID[focusId] : null;
+
+  // Clicking a pill removes that pill (the hero swaps to the Focus's own tags),
+  // so keyboard focus would fall back to the top of the page. Remember that the
+  // change came from a pill, then move focus to the "Show all work" button.
+  const clearRef = useRef(null);
+  const cameFromPill = useRef(false);
+  useEffect(() => {
+    if (service && cameFromPill.current) {
+      clearRef.current?.focus();
+      cameFromPill.current = false;
+    }
+  }, [service]);
+
+  const chooseFocus = (id) => {
+    cameFromPill.current = true;
+    setSearchParams({ focus: id });
+  };
 
   // When a focus is active, build a single headline line with gradient spans
   // parsed from the *marked* segments in the copy. When no focus, use the
@@ -60,7 +82,6 @@ export function Hero() {
     : DEFAULT_HEADLINE;
 
   const description = service ? service.heroDescription : DEFAULT_DESCRIPTION;
-  const tags = service ? service.heroTags : DEFAULT_TAGS;
 
   return (
     <section
@@ -104,15 +125,50 @@ export function Hero() {
           Portfolio in progress — more of my works are still being added
         </motion.div>
 
+        {/* Tells screen-reader users the view changed (sighted users see the
+            headline change and the "Viewing" pill below). Always in the page so
+            the change is announced when it appears. */}
+        <p role="status" className="sr-only">
+          {service ? `Showing ${service.label} work` : ""}
+        </p>
+
+        {service && (
+          // "Where am I" indicator. It sits in the hero, where the visitor is
+          // looking, because the small pill in the nav bar is easy to miss.
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium bg-accent/10 border border-accent/30 text-accent mb-4">
+            <span>Viewing: {service.label}</span>
+            <button
+              ref={clearRef}
+              type="button"
+              onClick={() => setSearchParams({})}
+              className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs text-text-secondary hover:text-text-primary hover:bg-bg-tertiary transition-[color,background-color] duration-200"
+            >
+              Show all work
+              <X size={12} aria-hidden="true" />
+            </button>
+          </div>
+        )}
+
         <motion.div
           className="flex flex-wrap justify-center max-w-2xl gap-2 mb-8"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1, ease: EASE_OUT }}
         >
-          {tags.map((tag) => (
-            <Tag key={tag}>{tag}</Tag>
-          ))}
+          {service
+            ? service.heroTags.map((tag) => <Tag key={tag}>{tag}</Tag>)
+            : DEFAULT_PILLS.map((pill) => (
+                // Real buttons, not labels: clicking one opens that Focus.
+                // Hover is CSS only (project performance rules).
+                <button
+                  key={pill.id}
+                  type="button"
+                  onClick={() => chooseFocus(pill.id)}
+                  className="inline-flex items-center px-3 py-2 rounded-full text-sm font-medium bg-accent/15 text-accent cursor-pointer transition-[background-color,color] duration-200 hover:bg-accent/30 hover:text-text-primary active:bg-accent/40"
+                >
+                  {pill.label}
+                </button>
+              ))}
         </motion.div>
 
         {/* Q4 (Hero): re-skin + motion, no restructure — the collage and LCP
