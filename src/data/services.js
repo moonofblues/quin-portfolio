@@ -1,4 +1,4 @@
-import { Palette, Code, Smartphone, Layers, Video, Wand2 } from "lucide-react";
+import { Palette, Code, Smartphone, Layers, Video, Wand2, Camera } from "lucide-react";
 
 // Single source of truth for the Service taxonomy (Phase 6, ADR 0008).
 // Drives: Focus chooser, Focused hero, work filter, and What I Do pills.
@@ -103,6 +103,24 @@ export const SERVICES = [
       "Promotional Videos",
       "Event Coverage",
       "Social Media Content",
+    ],
+  },
+  {
+    // Added after ADR 0008/0009 (see ADR 0012). Photography is a personal
+    // practice, so the copy below sticks to what the work shows: portraits and
+    // street moments, shown as finished sets.
+    id: "photography",
+    label: "Photography",
+    description: "Portraits and street photography",
+    icon: Camera,
+    heroHeadline: "People and *Street Moments*, Framed With Care",
+    heroDescription:
+      "A personal practice: portraits of friends and moments caught on the street, shown as finished sets that hold together as one story.",
+    heroTags: [
+      "Portraits",
+      "Street Photography",
+      "Candid Moments",
+      "Photo Sets",
     ],
   },
 ];

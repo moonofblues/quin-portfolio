@@ -18,8 +18,10 @@ export function FeaturedWork() {
   // Q8 rule (Phase 6): featured-in-focus first, then top up with the most
   // recent projects in that focus, up to 6. Preserves the sortOrder the
   // Sanity query already applies (sortOrder asc, _createdAt desc).
-  // Q9: if the focus has no projects yet, fall back to the full featured set
-  // and show a "work coming soon" note.
+  // Q9 (changed, ADR 0012): if the focus has no projects yet, show a "coming
+  // soon" card and no projects at all. It used to fall back to the general
+  // featured set, which put unrelated work (e.g. UI/UX) under a Focus the
+  // visitor had just picked.
   let featuredProjects;
   let comingSoon = false;
 
@@ -27,7 +29,7 @@ export function FeaturedWork() {
     const inFocus = getProjectsByFocus(focusId);
     if (inFocus.length === 0) {
       comingSoon = true;
-      featuredProjects = getFeaturedProjects().slice(0, 6);
+      featuredProjects = [];
     } else {
       const featuredInFocus = inFocus.filter((p) => p.featured);
       const restInFocus = inFocus.filter((p) => !p.featured);
@@ -53,21 +55,25 @@ export function FeaturedWork() {
           </Link>
         </div>
 
-        {comingSoon && (
-          <p className="text-text-secondary text-sm mb-8">
-            No projects tagged{" "}
-            <span className="text-text-primary font-medium">
-              {service.label}
-            </span>{" "}
-            yet — showing all featured work in the meantime.
-          </p>
+        {comingSoon ? (
+          <div className="rounded-2xl border border-bg-tertiary bg-bg-secondary p-8 md:p-12 text-center">
+            <p className="font-display text-xl md:text-2xl text-text-primary mb-3">
+              {service.label} work is coming soon
+            </p>
+            <p className="text-text-secondary mb-6">
+              Nothing is published under {service.label} yet.
+            </p>
+            <Link to="/work">
+              <Button variant="ghost">Browse all work</Button>
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+            {featuredProjects.map((project, index) => (
+              <ProjectCard key={project.id} project={project} index={index} />
+            ))}
+          </div>
         )}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {featuredProjects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
-          ))}
-        </div>
       </div>
     </section>
   );

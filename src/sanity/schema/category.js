@@ -1,7 +1,7 @@
 // A Category is a finer bucket within one Focus — e.g. "Travel Montage" under
 // Video Editing, "Branding" under Graphic Design. See ADR 0009. Each Category
 // belongs to exactly one Focus via its `focus` field; the values here are the
-// six focus ids from src/data/services.js, so a project's Focuses can be
+// seven focus ids from src/data/services.js (ADR 0012 added Photography), so a project's Focuses can be
 // derived from its categories. A project references Categories (not Services);
 // Service/Focus is never stored on the project.
 export const categorySchema = {
@@ -28,7 +28,7 @@ export const categorySchema = {
       name: "focus",
       title: "Focus",
       type: "string",
-      description: "Which of the six services this category lives under.",
+      description: "Which of the seven services this category lives under.",
       options: {
         list: [
           { title: "UI/UX Design", value: "ui-ux" },
@@ -37,6 +37,7 @@ export const categorySchema = {
           { title: "Low-Code / No-Code", value: "low-code" },
           { title: "Graphic Design", value: "graphic-design" },
           { title: "Video Editing", value: "video" },
+          { title: "Photography", value: "photography" },
         ],
         layout: "radio",
       },

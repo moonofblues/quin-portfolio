@@ -2,6 +2,8 @@
 
 Date: 2026-09-08
 Status: Accepted (plan stage — documents intent; not yet implemented)
+Amended by [ADR 0012](0012-photography-as-a-seventh-focus.md): a seventh Focus,
+Photography, was added, so "six" below is now seven.
 
 ## Context
 

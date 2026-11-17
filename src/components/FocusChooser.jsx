@@ -112,7 +112,10 @@ export function FocusChooser() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+            {/* Centered wrap (not a grid) so an odd number of Focuses leaves a
+                centered last button instead of one stranded at the left. The
+                basis maths is 2 columns on phones, 3 from sm up, with gap-3. */}
+            <div className="flex flex-wrap justify-center gap-3 mb-6">
               {SERVICES.map((service) => {
                 const Icon = service.icon;
                 return (
@@ -120,7 +123,7 @@ export function FocusChooser() {
                     key={service.id}
                     type="button"
                     onClick={() => close(service.id)}
-                    className="flex flex-col items-center gap-2 p-4 rounded-xl bg-bg-primary border border-bg-tertiary hover:border-accent/40 hover:bg-bg-hover transition-[background-color,border-color] text-center"
+                    className="flex flex-col items-center gap-2 p-4 rounded-xl bg-bg-primary border border-bg-tertiary hover:border-accent/40 hover:bg-bg-hover transition-[background-color,border-color] text-center basis-[calc(50%-0.375rem)] sm:basis-[calc(33.333%-0.5rem)]"
                   >
                     <Icon size={24} className="text-accent-secondary" />
                     <span className="text-sm font-medium text-text-primary leading-tight">

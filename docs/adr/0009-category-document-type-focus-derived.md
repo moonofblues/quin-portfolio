@@ -3,6 +3,8 @@
 Date: 2026-09-09
 Status: Accepted (plan stage — documents intent; not yet implemented).
 Amends [ADR 0008](0008-focus-chooser-and-service-taxonomy.md).
+Amended by [ADR 0012](0012-photography-as-a-seventh-focus.md): Photography was
+added as a seventh Focus, so "stick to only the 6" below is superseded.
 
 ## Context
 
