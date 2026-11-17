@@ -7,7 +7,7 @@ import { cn } from "../utils/cn";
 export function ProjectCard({ project, index = 0 }) {
   return (
     <motion.article
-      className="group relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-card h-full"
+      className="group relative rounded-2xl overflow-hidden transition-transform duration-300 hover:-translate-y-1 motion-reduce:transform-none shadow-card h-full"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -20,6 +20,8 @@ export function ProjectCard({ project, index = 0 }) {
               <img
                 src={project.thumbnail}
                 alt={project.title}
+                width={1600}
+                height={900}
                 className="w-full h-full object-cover"
                 loading="lazy"
                 decoding="async"

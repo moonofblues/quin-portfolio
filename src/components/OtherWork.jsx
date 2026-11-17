@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionTitle } from "./ui/SectionTitle";
 import { cn } from "../utils/cn";
@@ -59,10 +60,10 @@ export function OtherWork() {
               key={tab.id}
               onClick={() => setActiveFilter(tab.id)}
               className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium transition-[background-color,color] duration-200 hover:bg-accent-hover",
+                "px-4 py-2 rounded-full text-sm font-medium transition-[background-color,color] duration-200",
                 activeFilter === tab.id
-                  ? "bg-accent text-text-primary text-lg"
-                  : "bg-bg-tertiary text-text-secondary",
+                  ? "bg-accent text-on-accent hover:bg-accent-hover"
+                  : "bg-bg-tertiary text-text-secondary hover:bg-bg-hover hover:text-text-primary",
               )}
             >
               {tab.label}
@@ -84,31 +85,37 @@ export function OtherWork() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
-                className="group relative aspect-square rounded-xl overflow-hidden cursor-pointer card-hover bg-bg-tertiary"
+                className="group relative aspect-square rounded-xl overflow-hidden card-hover motion-reduce:transform-none bg-bg-tertiary"
               >
-                {project.thumbnail ? (
-                  <img
-                    src={project.thumbnail}
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-100"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center p-4">
-                    <span className="font-display text-sm text-center text-text-muted">
+                <Link
+                  to={`/work/${project.slug}`}
+                  className="block w-full h-full"
+                >
+                  {project.thumbnail ? (
+                    <img
+                      src={project.thumbnail}
+                      alt={project.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-100"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center p-4">
+                      <span className="font-display text-sm text-center text-text-muted">
+                        {project.title}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Hover/focus overlay: dark ground so the lavender title
+                      and grey label stay readable (was near-white, ~2.2:1). */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center bg-bg-primary/85">
+                    <span className="font-display text-sm text-accent mb-2">
                       {project.title}
                     </span>
+                    <span className="text-xs text-text-secondary">
+                      {focusLabelOf(project)}
+                    </span>
                   </div>
-                )}
-
-                {/* Hover overlay */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center bg-text-primary">
-                  <span className="font-display text-sm text-accent mb-2">
-                    {project.title}
-                  </span>
-                  <span className="text-xs text-text-secondary">
-                    {focusLabelOf(project)}
-                  </span>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </AnimatePresence>

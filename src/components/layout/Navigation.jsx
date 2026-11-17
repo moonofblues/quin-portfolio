@@ -99,7 +99,7 @@ export function Navigation() {
                   type="button"
                   onClick={() => setSearchParams({})}
                   aria-label="Clear focus filter"
-                  className="hover:text-text-primary transition-colors duration-200 leading-none"
+                  className="p-2 -m-2 hover:text-text-primary transition-colors duration-200 leading-none"
                 >
                   <X size={11} />
                 </button>
@@ -161,7 +161,7 @@ export function Navigation() {
                       type="button"
                       onClick={() => setSearchParams({})}
                       aria-label="Clear focus filter"
-                      className="hover:text-text-primary transition-colors duration-200 leading-none"
+                      className="p-3 -m-3 hover:text-text-primary transition-colors duration-200 leading-none"
                     >
                       <X size={13} />
                     </button>
