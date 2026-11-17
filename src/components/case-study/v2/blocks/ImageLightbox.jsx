@@ -3,7 +3,10 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { LightboxShell, LIGHTBOX_BUTTON } from "./LightboxShell";
 
 /**
- * Full-screen viewer for case-study images. `images` is [{ url, alt, width }];
+ * Full-screen viewer for case-study images and photo sets. `images` is
+ * [{ url, alt, width, height, caption, recognition }] (caption and recognition
+ * are optional and show under the image; recognition is an award line for a
+ * highlighted photo); with more than one, an "n / m" counter appears;
  * with more than one (e.g. a before/after pair) arrows and the arrow keys flip
  * between them. The image shows at its real size (never upscaled) and the
  * overlay scrolls for tall screenshots, like the Design Showcase viewer.
@@ -30,6 +33,14 @@ export function ImageLightbox({ images, startIndex = 0, onClose }) {
   const controls =
     count > 1 ? (
       <>
+        {/* "3 / 12". aria-live="polite" makes screen readers say the new
+            position after each flip without interrupting anything else. */}
+        <p
+          aria-live="polite"
+          className="fixed left-1/2 top-5 z-50 -translate-x-1/2 text-sm text-white/80"
+        >
+          {index + 1} / {count}
+        </p>
         <button
           type="button"
           onClick={flip(-1)}
@@ -66,6 +77,14 @@ export function ImageLightbox({ images, startIndex = 0, onClose }) {
           decoding="async"
           onClick={(e) => e.stopPropagation()}
         />
+        {image.recognition && (
+          <p className="mt-3 text-center text-sm font-medium leading-relaxed text-white">
+            {image.recognition}
+          </p>
+        )}
+        {image.caption && (
+          <p className="mt-3 text-center text-sm leading-relaxed text-white/70">{image.caption}</p>
+        )}
       </div>
     </LightboxShell>
   );

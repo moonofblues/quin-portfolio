@@ -108,7 +108,20 @@ const DETAIL_FIELDS = `
     tools
   },
   howMightWe,
-  solutionHighlights[] { title, description, "image": image.asset->url }
+  solutionHighlights[] { title, description, "image": image.asset->url },
+  photoIntro,
+  photoLocation,
+  photoGear,
+  photos[] {
+    "url": image.asset->url,
+    "width": image.asset->metadata.dimensions.width,
+    "height": image.asset->metadata.dimensions.height,
+    "color": image.asset->metadata.palette.dominant.background,
+    alt,
+    caption,
+    highlight,
+    recognition
+  }
 `;
 
 export async function fetchAllProjects() {

@@ -11,14 +11,14 @@ section of `docs/redesign-plan.md`.
 
 - **Focus** — one discipline a visitor can choose to view the homepage
   through: UI/UX, Front-End Dev, Web Dev, Low-Code/No-Code, Graphic Design,
-  or Video. A Focus is exactly a **Service** (see below) — the two words name
+  Video, or Photography ([ADR 0012](adr/0012-photography-as-a-seventh-focus.md)). A Focus is exactly a **Service** (see below) — the two words name
   the same thing from two sides: *Service* is what Quin offers, *Focus* is the
   visitor's chosen slice of it. The active Focus lives in the URL as
   `?focus=<id>` (e.g. `?focus=video`), which makes it shareable and lets a
   link skip the Focus chooser.
 
 - **Focus chooser** — the dismissible pop-up (a modal dialog) shown once to a
-  first-time visitor, offering all six Focuses plus a prominent **Skip**. Seen
+  first-time visitor, offering all seven Focuses plus a prominent **Skip**. Seen
   state is remembered in `localStorage`; a URL that already names a Focus
   skips it. Not a blocking gate — Skip (or Esc) dismisses it to the Default
   view. See ADR 0008 for why a dismissible pop-up was chosen over both a hard
@@ -33,7 +33,7 @@ section of `docs/redesign-plan.md`.
   choosing, after Skip, or any link without a `?focus=` param): the original
   generic hero and the unfiltered featured set.
 
-- **Service** — the canonical top-level taxonomy of what Quin does (six
+- **Service** — the canonical top-level taxonomy of what Quin does (seven
   values). Same thing as **Focus**, named from Quin's side. Defined once in
   code (`src/data/services.js`) and the single source of truth for the Focus
   chooser, the Focused hero, and the "What I Do" section. A project does **not**
@@ -56,6 +56,15 @@ section of `docs/redesign-plan.md`.
   the project and retired `category`. ADR 0009 reverses that split — Category
   returns as a managed document type and Service becomes derived — to avoid two
   taxonomy fields drifting apart.
+
+- **Photo set** — a `project` document with `type: "photo-set"`: a finished
+  series of photographs (portraits, street moments), shown on its own
+  gallery-style page (`PhotoSetPage.jsx`) where the photos lead and the text is
+  quiet. It is a *Type* (how the project is presented), not a Focus: a photo
+  set is usually tagged with a Photography Category, which is what places it
+  under the Photography Focus ([ADR 0012](adr/0012-photography-as-a-seventh-focus.md)).
+  Photos are laid out automatically from their shape, with no per-photo layout
+  setting. See [ADR 0013](adr/0013-photo-set-project-type.md).
 
 ## Case study page
 

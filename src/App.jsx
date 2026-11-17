@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, useSearchParams } from "react-router-dom";
-import { ProjectsProvider } from "./context/ProjectsContext";
+import { BrowserRouter, Routes, Route, useParams, useSearchParams } from "react-router-dom";
+import { ProjectsProvider, useProjects } from "./context/ProjectsContext";
 import { Layout } from "./components/layout/Layout";
 import { HomePage } from "./pages/HomePage";
 
@@ -27,8 +27,26 @@ const CaseStudyPageV2 = lazy(() =>
   import("./pages/CaseStudyPageV2").then((m) => ({ default: m.CaseStudyPageV2 })),
 );
 
+// Photo sets (ADR 0013) have their own gallery page. Loaded lazily like the
+// others, so the homepage bundle does not grow.
+const PhotoSetPage = lazy(() =>
+  import("./pages/PhotoSetPage").then((m) => ({ default: m.PhotoSetPage })),
+);
+
 function CaseStudyRoute() {
   const [params] = useSearchParams();
+  const { slug } = useParams();
+  const { getProjectBySlug, loading } = useProjects();
+  const card = getProjectBySlug(slug);
+
+  // The project's type is only known once the list has loaded. Until then show
+  // the neutral placeholder instead of guessing, so a photo set never flashes
+  // the case study page first.
+  if (!card && loading) return <RouteFallback />;
+
+  // A photo set always gets the gallery page, with or without ?v=2.
+  if (card?.type === "photo-set") return <PhotoSetPage />;
+
   return params.get("v") === "2" ? <CaseStudyPageV2 /> : <CaseStudyPage />;
 }
 

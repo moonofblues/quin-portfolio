@@ -37,7 +37,11 @@ export function ProjectCard({ project, index = 0 }) {
             {/* CSS hover instead of whileHover — this renders once per card in
                 a grid, so per-instance JS pointer listeners add up. */}
             <div className="flex items-center gap-2 px-6 py-3 rounded-full font-medium bg-accent text-on-accent transition-transform duration-200 hover:scale-105 motion-reduce:transform-none">
-              {project.type === "case-study" ? "View Case Study" : "View Project"}
+              {project.type === "case-study"
+                ? "View Case Study"
+                : project.type === "photo-set"
+                  ? "View Photos"
+                  : "View Project"}
               <ArrowUpRight size={18} />
             </div>
           </div>

@@ -1,14 +1,40 @@
+const isPhotoSet = ({ document }) => document?.type === "photo-set";
+
+// Photo sets (ADR 0013) have no story, outcome or legacy content, so those
+// tabs and every field inside them are hidden for them. Each field keeps any
+// `hidden` rule it already had: either rule being true hides the field.
+// Hidden fields are not validated, so they cannot block publishing a photo set.
+const CASE_STUDY_GROUPS = ["story", "outcome", "legacy"];
+function hideForPhotoSets(fields) {
+  return fields.map((field) => {
+    if (!CASE_STUDY_GROUPS.includes(field.group)) return field;
+    const own = field.hidden;
+    return {
+      ...field,
+      hidden: (context) =>
+        isPhotoSet(context) || (typeof own === "function" ? own(context) : own === true),
+    };
+  });
+}
+
 export const projectSchema = {
   name: "project",
   title: "Project",
   type: "document",
   // Studio tabs (ADR 0011). "Legacy" holds pre-v2 fields that the page's
   // adapter still reads until each case study is rewritten into `sections`.
+  // For photo sets (ADR 0013) the case-study tabs are hidden and "Photos"
+  // shows instead.
   groups: [
     { name: "card", title: "Card & meta", default: true },
-    { name: "story", title: "Story" },
-    { name: "outcome", title: "Outcome" },
-    { name: "legacy", title: "Legacy" },
+    { name: "story", title: "Story", hidden: isPhotoSet },
+    { name: "outcome", title: "Outcome", hidden: isPhotoSet },
+    { name: "legacy", title: "Legacy", hidden: isPhotoSet },
+    {
+      name: "photos",
+      title: "Photos",
+      hidden: ({ document }) => document?.type !== "photo-set",
+    },
   ],
   // Boxes inside the "Card & meta" tab. Field order across the whole schema
   // follows the page's reading order, and the paste sheets follow it too.
@@ -25,7 +51,7 @@ export const projectSchema = {
       description: "The info card at the top of the case study, in the order shown there",
     },
   ],
-  fields: [
+  fields: hideForPhotoSets([
     {
       name: "title",
       group: "card",
@@ -60,6 +86,7 @@ export const projectSchema = {
         list: [
           { title: "Case Study", value: "case-study" },
           { title: "Showcase", value: "showcase" },
+          { title: "Photo set", value: "photo-set" },
         ],
         layout: "radio",
       },
@@ -648,7 +675,106 @@ export const projectSchema = {
       description:
         "Deprecated — being migrated into Embeds above (platform: Facebook). No longer rendered anywhere. Kept temporarily as a reference while re-entering existing values by hand; delete once migration is complete. See docs/adr/0010.",
     },
-  ],
+    // Photo set fields (ADR 0013). Shown only for type "Photo set". The page
+    // lays the photos out automatically from their shape, so there is no
+    // per-photo layout choice here.
+    {
+      name: "photos",
+      group: "photos",
+      title: "Photos",
+      type: "array",
+      description:
+        "In the order they appear. The first photo opens the page, so make it the strongest one.",
+      hidden: ({ document }) => document?.type !== "photo-set",
+      of: [
+        {
+          type: "object",
+          name: "photo",
+          fields: [
+            {
+              name: "image",
+              title: "Photo",
+              type: "image",
+              options: { hotspot: true },
+              validation: (R) => R.required(),
+            },
+            {
+              name: "alt",
+              title: "Alt text",
+              type: "string",
+              description: "Describes the photo for screen readers, e.g. 'Two friends laughing on a jeepney'.",
+              validation: (R) => R.required(),
+            },
+            { name: "caption", title: "Caption (optional)", type: "string" },
+            {
+              name: "highlight",
+              title: "Highlight this photo",
+              type: "boolean",
+              description:
+                "Highlighted photos are shown first, large, under a 'Highlights' label, and are not repeated further down. Use it for the best shots or ones that were recognised.",
+              initialValue: false,
+            },
+            {
+              name: "recognition",
+              title: "Recognition (optional)",
+              type: "string",
+              description:
+                "A short line shown on the photo, e.g. 'Top 20 Finalist, Mindanao · Fujifilm National Photo and Video Walk 2026'. Only shown when Highlight is on.",
+              hidden: ({ parent }) => !parent?.highlight,
+            },
+          ],
+          preview: {
+            select: { title: "caption", subtitle: "alt", media: "image", highlight: "highlight" },
+            prepare({ title, subtitle, media, highlight }) {
+              return {
+                title: title || subtitle,
+                subtitle: highlight ? "Highlight" : undefined,
+                media,
+              };
+            },
+          },
+        },
+      ],
+      validation: (R) => [
+        R.custom((photos, context) =>
+          context.document?.type === "photo-set" && !(photos ?? []).length
+            ? "Add at least one photo"
+            : true,
+        ),
+        // Only a nudge, not a block: how many highlights suit a set depends on
+        // the set.
+        R.custom((photos) =>
+          (photos ?? []).filter((p) => p?.highlight).length > 3
+            ? "Highlights work best with 1 to 3 photos. With more, they stop standing out."
+            : true,
+        ).warning(),
+      ],
+    },
+    {
+      name: "photoIntro",
+      group: "photos",
+      title: "Intro (optional)",
+      type: "text",
+      rows: 3,
+      description: "Two or three sentences about the set.",
+      hidden: ({ document }) => document?.type !== "photo-set",
+    },
+    {
+      name: "photoLocation",
+      group: "photos",
+      title: "Location (optional)",
+      type: "string",
+      hidden: ({ document }) => document?.type !== "photo-set",
+    },
+    {
+      name: "photoGear",
+      group: "photos",
+      title: "Gear (optional)",
+      type: "string",
+      description: "e.g. the camera",
+      hidden: ({ document }) => document?.type !== "photo-set",
+    },
+  ]),
   preview: {
     select: {
       title: "title",
@@ -658,7 +784,8 @@ export const projectSchema = {
     prepare({ title, subtitle, media }) {
       return {
         title,
-        subtitle: subtitle === "case-study" ? "Case Study" : "Showcase",
+        subtitle:
+          subtitle === "case-study" ? "Case Study" : subtitle === "photo-set" ? "Photo set" : "Showcase",
         media,
       };
     },
