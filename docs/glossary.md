@@ -25,9 +25,11 @@ Introduced by [ADR 0014](adr/0014-visual-experience.md); build plan in
   cross-link). Kept small on purpose: anything only one Experience needs
   stays in that Experience.
 
-- **Main page** (of a project) — the one address a project lives at, picked
-  from its Type: case studies on Product (`/work/<slug>`), photo sets and
-  Visual-only Showcases on Visual (`/visual/<slug>`).
+- **Main page** (of a project) — the Experience a project belongs to, picked
+  from its Type: case studies on Product (`/work/<slug>`); photo sets and films
+  on Visual (`/visual/<slug>`, and `/work/<slug>` redirects there); Showcases by
+  their Focuses. A Visual-only Showcase is listed on the Visual index and has a
+  page in both Experiences.
 
 ## Focus (homepage entry experience)
 
@@ -95,6 +97,22 @@ section of `docs/redesign-plan.md`.
   under the Photography Focus ([ADR 0012](adr/0012-photography-as-a-seventh-focus.md)).
   Photos are laid out automatically from their shape, with no per-photo layout
   setting. See [ADR 0013](adr/0013-photo-set-project-type.md).
+
+- **Film** — a `project` document with `type: "film"`: one film, shown on its
+  own page at `/visual/<slug>` with the lights down. It has a YouTube link
+  (the video loads only when played), runtime, synopsis, credits and stills,
+  and requires a thumbnail (the poster). See
+  [ADR 0015](adr/0015-film-project-type.md) and `docs/film-paste-sheet.md`.
+
+- **Graphic design page** — the Visual page for a Showcase whose Focuses are
+  all Visual (`VisualGraphic.jsx`, at `/visual/<slug>`). It stays on paper (no
+  lights down), shows the piece's images at their own proportions, and opens
+  them in the viewer. The same Showcase keeps its Product page at
+  `/work/<slug>`, so it can be linked from either side.
+
+- **Lights down** — a work page that shows photos or film in true colour asks
+  the Visual layout (with `useNight()`) to fade to blue-black. The index, About,
+  Contact and graphic design pages stay on paper.
 
 ## Case study page
 

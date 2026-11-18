@@ -1,18 +1,20 @@
 const isPhotoSet = ({ document }) => document?.type === "photo-set";
+const isFilm = ({ document }) => document?.type === "film";
+const hasOwnPage = (context) => isPhotoSet(context) || isFilm(context);
 
-// Photo sets (ADR 0013) have no story, outcome or legacy content, so those
-// tabs and every field inside them are hidden for them. Each field keeps any
-// `hidden` rule it already had: either rule being true hides the field.
-// Hidden fields are not validated, so they cannot block publishing a photo set.
+// Photo sets (ADR 0013) and films (ADR 0015) have no story, outcome or legacy
+// content, so those tabs and every field inside them are hidden for them. Each
+// field keeps any `hidden` rule it already had: either rule being true hides
+// the field. Hidden fields are not validated, so they cannot block publishing.
 const CASE_STUDY_GROUPS = ["story", "outcome", "legacy"];
-function hideForPhotoSets(fields) {
+function hideForOwnPages(fields) {
   return fields.map((field) => {
     if (!CASE_STUDY_GROUPS.includes(field.group)) return field;
     const own = field.hidden;
     return {
       ...field,
       hidden: (context) =>
-        isPhotoSet(context) || (typeof own === "function" ? own(context) : own === true),
+        hasOwnPage(context) || (typeof own === "function" ? own(context) : own === true),
     };
   });
 }
@@ -93,13 +95,18 @@ export const projectSchema = {
   // shows instead.
   groups: [
     { name: "card", title: "Card & meta", default: true },
-    { name: "story", title: "Story", hidden: isPhotoSet },
-    { name: "outcome", title: "Outcome", hidden: isPhotoSet },
-    { name: "legacy", title: "Legacy", hidden: isPhotoSet },
+    { name: "story", title: "Story", hidden: hasOwnPage },
+    { name: "outcome", title: "Outcome", hidden: hasOwnPage },
+    { name: "legacy", title: "Legacy", hidden: hasOwnPage },
     {
       name: "photos",
       title: "Photos",
       hidden: ({ document }) => document?.type !== "photo-set",
+    },
+    {
+      name: "film",
+      title: "Film",
+      hidden: ({ document }) => document?.type !== "film",
     },
   ],
   // Boxes inside the "Card & meta" tab. Field order across the whole schema
@@ -117,7 +124,7 @@ export const projectSchema = {
       description: "The info card at the top of the case study, in the order shown there",
     },
   ],
-  fields: hideForPhotoSets([
+  fields: hideForOwnPages([
     {
       name: "title",
       group: "card",
@@ -153,6 +160,7 @@ export const projectSchema = {
           { title: "Case Study", value: "case-study" },
           { title: "Showcase", value: "showcase" },
           { title: "Photo set", value: "photo-set" },
+          { title: "Film", value: "film" },
         ],
         layout: "radio",
       },
@@ -208,6 +216,14 @@ export const projectSchema = {
       title: "Thumbnail",
       type: "image",
       options: { hotspot: true },
+      description:
+        "The card picture. For a film it is also the poster shown before the video plays, and the film's frame on the Visual page.",
+      validation: (R) =>
+        R.custom((thumbnail, context) =>
+          isFilm(context) && !thumbnail?.asset
+            ? "A film needs a thumbnail: it is the poster and the frame on the Visual page"
+            : true,
+        ),
     },
     {
       name: "tags",
@@ -813,6 +829,109 @@ export const projectSchema = {
         },
       ],
     },
+    // Film fields (ADR 0015). Shown only for type "Film". The page is built
+    // from these: poster and YouTube video, a short synopsis, credits, stills.
+    // Year, Role and Client come from the Card & meta tab as usual.
+    {
+      name: "videoUrl",
+      group: "film",
+      title: "YouTube link",
+      type: "url",
+      description:
+        "Paste the video's address from YouTube (a watch link, a youtu.be link or a Shorts link). It loads only when a visitor clicks play.",
+      hidden: ({ document }) => document?.type !== "film",
+      validation: (R) =>
+        R.custom((value, context) => {
+          if (!isFilm(context)) return true;
+          if (!value) return "Add the YouTube link";
+          return /(?:youtube\.com|youtu\.be)\//i.test(value)
+            ? true
+            : "This should be a YouTube address (youtube.com or youtu.be)";
+        }),
+    },
+    {
+      name: "runtime",
+      group: "film",
+      title: "Runtime (optional)",
+      type: "string",
+      description: 'Shown as written, e.g. "3:12".',
+      hidden: ({ document }) => document?.type !== "film",
+    },
+    {
+      name: "filmSynopsis",
+      group: "film",
+      title: "Synopsis (optional)",
+      type: "text",
+      rows: 3,
+      description: "Two or three sentences about the film.",
+      hidden: ({ document }) => document?.type !== "film",
+    },
+    {
+      name: "filmGear",
+      group: "film",
+      title: "Gear (optional)",
+      type: "string",
+      description: "e.g. the camera and lens",
+      hidden: ({ document }) => document?.type !== "film",
+    },
+    {
+      name: "filmCredits",
+      group: "film",
+      title: "Credits (optional)",
+      type: "array",
+      description: "Who did what, in the order they should read.",
+      hidden: ({ document }) => document?.type !== "film",
+      of: [
+        {
+          type: "object",
+          name: "credit",
+          fields: [
+            { name: "role", title: "Role", type: "string", validation: (R) => R.required() },
+            { name: "name", title: "Name", type: "string", validation: (R) => R.required() },
+          ],
+          preview: {
+            select: { title: "name", subtitle: "role" },
+          },
+        },
+      ],
+    },
+    {
+      name: "filmStills",
+      group: "film",
+      title: "Stills (optional)",
+      type: "array",
+      description: "Frames from the film. They open in the full-screen viewer.",
+      hidden: ({ document }) => document?.type !== "film",
+      of: [
+        {
+          type: "object",
+          name: "still",
+          fields: [
+            {
+              name: "image",
+              title: "Still",
+              type: "image",
+              options: { hotspot: true },
+              validation: (R) => R.required(),
+            },
+            {
+              name: "alt",
+              title: "Alt text",
+              type: "string",
+              description: "Describes the frame for screen readers.",
+              validation: (R) => R.required(),
+            },
+            { name: "caption", title: "Caption (optional)", type: "string" },
+          ],
+          preview: {
+            select: { title: "caption", subtitle: "alt", media: "image" },
+            prepare({ title, subtitle, media }) {
+              return { title: title || subtitle, media };
+            },
+          },
+        },
+      ],
+    },
   ]),
   preview: {
     select: {
@@ -824,7 +943,13 @@ export const projectSchema = {
       return {
         title,
         subtitle:
-          subtitle === "case-study" ? "Case Study" : subtitle === "photo-set" ? "Photo set" : "Showcase",
+          subtitle === "case-study"
+            ? "Case Study"
+            : subtitle === "photo-set"
+              ? "Photo set"
+              : subtitle === "film"
+                ? "Film"
+                : "Showcase",
         media,
       };
     },

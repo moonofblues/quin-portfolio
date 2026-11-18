@@ -20,7 +20,7 @@ export function sizeFromUrl(url) {
 /** Which of the three index groups a Visual project belongs to. */
 export function groupOf(project) {
   const focuses = focusIdsOf(project);
-  if (focuses.includes("video")) return "film";
+  if (project.type === "film" || focuses.includes("video")) return "film";
   if (project.type === "photo-set" || focuses.includes("photography")) {
     return "photography";
   }
@@ -28,13 +28,13 @@ export function groupOf(project) {
 }
 
 /**
- * Where a project's own page lives. Photo sets are Visual pages (plan step 4).
- * Everything else is still on the Work route until steps 5 and 6.
+ * Where a project's page is when reached from the Visual index. Photo sets and
+ * films only have a Visual page. A graphic design piece (a Showcase) has both:
+ * its Visual page here, and the Product one at /work/<slug>, which the Product
+ * site keeps linking to.
  */
 export function projectPath(project) {
-  return project.type === "photo-set"
-    ? `/visual/${project.slug}`
-    : `/work/${project.slug}`;
+  return `/visual/${project.slug}`;
 }
 
 /** Featured first, otherwise keep Studio's order. */

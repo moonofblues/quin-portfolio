@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useProjects } from "../../../shared/context/ProjectsContext";
 import { useProjectDetail } from "../../../shared/context/useProjectDetail";
+import { useNight } from "../theme";
 import { PhotoGallery } from "./PhotoGallery";
 
 // No framer-motion on purpose: the page has no animations to configure, and the
@@ -12,6 +13,7 @@ import { PhotoGallery } from "./PhotoGallery";
  * photos show in true colour. The photos lead; the text around them is quiet.
  */
 export function VisualPhotoSet() {
+  useNight();
   const { slug } = useParams();
   const { projects, getProjectBySlug, loading: listLoading } = useProjects();
   const { project: detail, loading: detailLoading } = useProjectDetail(slug);

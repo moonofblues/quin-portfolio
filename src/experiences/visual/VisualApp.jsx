@@ -1,8 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { VisualLayout } from "./VisualLayout";
 import { VisualHome } from "./VisualHome";
-import { VisualWork } from "./VisualWork";
-/**
+import { VisualWork } from "./VisualWork";/**
  * The Visual experience (ADR 0014), mounted at /visual/* by App.jsx.
  *
  * Rule: nothing in this folder imports from the Product code (src/components,

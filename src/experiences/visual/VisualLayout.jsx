@@ -1,5 +1,6 @@
-import { useEffect } from "react";
-import { Link, useLocation, useMatch } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { NightContext } from "./theme";
 import "./visual.css";
 
 // Visual's own typefaces. They are added here, when a Visual page opens, and
@@ -14,11 +15,12 @@ const NIGHT = "#050818";
 
 export function VisualLayout({ children }) {
   const { pathname, hash } = useLocation();
-  // Lights down: any work page (/visual/<slug>) dims the whole layout to
-  // blue-black so the work shows in true colour. The index, About and Contact
-  // stay on paper. The layout stays mounted between the two, so the colour
-  // change fades (see .v-root in visual.css) instead of cutting.
-  const dark = Boolean(useMatch("/visual/:slug"));
+  // Lights down: a page that shows work in true colour (a photo set or a film)
+  // asks for it with useNight(), and the whole layout dims to blue-black. The
+  // index, About, Contact and graphic design pages stay on paper. The layout
+  // stays mounted between pages, so the colour change fades (see .v-root in
+  // visual.css) instead of cutting.
+  const [dark, setDark] = useState(false);
 
   useEffect(() => {
     if (document.getElementById(FONTS_ID)) return;
@@ -61,6 +63,7 @@ export function VisualLayout({ children }) {
   }, [pathname, hash]);
 
   return (
+    <NightContext.Provider value={setDark}>
     <div className={dark ? "v-root v-dark" : "v-root"}>
       <header className="v-bar">
         <Link className="v-brand" to="/visual" aria-label="Quin Ledesma, visual work">
@@ -77,5 +80,6 @@ export function VisualLayout({ children }) {
       </header>
       <main>{children}</main>
     </div>
+    </NightContext.Provider>
   );
 }

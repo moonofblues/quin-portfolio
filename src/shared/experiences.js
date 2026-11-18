@@ -37,14 +37,14 @@ export function experiencesOf(project) {
 /**
  * The one Experience a project's own page lives in.
  *
- * - Photo set: Visual.
+ * - Photo set and film: Visual.
  * - Case study: Product.
  * - Showcase: Product if any of its Focuses is a Product one, Visual if it has
  *   only Visual Focuses. A Showcase with no Focus yet stays in Product, which
  *   is where every project lived before the split.
  */
 export function mainExperienceOf(project) {
-  if (project?.type === "photo-set") return VISUAL;
+  if (project?.type === "photo-set" || project?.type === "film") return VISUAL;
   if (project?.type === "case-study") return PRODUCT;
 
   const experiences = experiencesOf(project);

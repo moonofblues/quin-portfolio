@@ -123,7 +123,20 @@ const DETAIL_FIELDS = `
     recognition
   },
   photoEmbeds[] { platform, url, embedCode, title },
-  photoLink { url, label }
+  photoLink { url, label },
+  videoUrl,
+  runtime,
+  filmSynopsis,
+  filmGear,
+  filmCredits[] { role, name },
+  filmStills[] {
+    "url": image.asset->url,
+    "width": image.asset->metadata.dimensions.width,
+    "height": image.asset->metadata.dimensions.height,
+    "color": image.asset->metadata.palette.dominant.background,
+    alt,
+    caption
+  }
 `;
 
 export async function fetchAllProjects() {

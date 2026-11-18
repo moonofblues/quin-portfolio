@@ -5,10 +5,11 @@ Working plan for [ADR 0014](adr/0014-visual-experience.md), written
 overall structure. Read the ADR first: it holds the decisions, and this file
 holds the order of work.
 
-**Status (2026-11-18):** Steps 0 to 4 are done. The design direction is
+**Status (2026-11-18):** Steps 0 to 6 are done. The design direction is
 agreed and written up in [`visual-design-direction.md`](visual-design-direction.md),
 with a browser prototype in `reference/visual-direction/prototype.html`.
-Next: step 5 (the Visual index for graphic design) and step 6 (video).
+Remaining: the Introduction line and the homepage invitation (step 7, which
+needs your wording), the Work page change (step 8) and the clean-up (step 9).
 
 ## Summary
 
@@ -80,7 +81,8 @@ Rule for the main page:
 | --- | --- |
 | Case study | Product (`/work/<slug>`) |
 | Photo set | Visual (`/visual/<slug>`) |
-| Showcase with only Visual Focuses | Visual |
+| Film (step 6) | Visual (`/visual/<slug>`) |
+| Showcase with only Visual Focuses | Visual (listed on the Visual index; it also keeps its Product page, see step 5) |
 | Showcase with any Product Focus | Product |
 
 No visible change yet.
@@ -176,17 +178,50 @@ Product code: their classes are Visual's own (`vp-*` in `visual.css`).
 **Check:** old photo-set links land on the new page. The Next set link still
 works. The image viewer still opens.
 
-## Step 5 — Visual index at `/visual`
+## Step 5 — Visual index and graphic design pages — ✅ DONE (2026-11-18)
 
-- An index of Visual work, grouped as Film, Photo and Graphic design.
-- Graphic design pieces (Showcases) shown in Visual's style.
+The index itself (film, photography and graphic design groups) was built in
+step 3. Step 5 added the graphic design **page**: `VisualGraphic` at
+`/visual/<slug>` for a Showcase whose Focuses are all Visual.
 
-## Step 6 — Video page
+- It stays on **paper** (print belongs in the light). To make that possible the
+  "lights down" state moved out of the layout's route matching and into a
+  `useNight()` hook (`theme.js`): a photo set or film page asks for the lights
+  to go down, and any other page does not.
+- It shows the piece's own images at their real proportions (never cropped),
+  large, in true colour, with the shared full-screen viewer, plus the usual
+  year, client, role and tools in one mono line and any embeds. A single-image
+  post falls back to its thumbnail.
+- **Both Experiences keep a page for the same Showcase.** The Visual index now
+  links every piece to `/visual/<slug>`, and `/work/<slug>` stays the Product
+  page that the homepage "Other Works" and the Work page link to. This is a
+  change from the first draft of the plan, which would have redirected
+  `/work/<slug>` to Visual. It was not done: most of the graphic design is
+  hospital IT announcements that suit the Product audience, and sending a
+  hiring manager from "Other Works" into a different-looking site would be
+  jarring.
+- `/visual/<slug>` for a Showcase that is **not** Visual-only redirects to
+  `/work/<slug>`.
+- Checked in a browser with real data (`converse-concept-poster`): paper
+  background, ink title, viewer, and the Product page unchanged.
 
-- Needs its own short ADR first: is video a new project Type (like photo
-  sets) or a Showcase shown differently? What does a film page look like
-  (full-bleed player, credits, stills)?
-- Then build it inside `src/experiences/visual/`.
+## Step 6 — Film page — ✅ DONE (2026-11-18)
+
+Decision recorded in [ADR 0015](adr/0015-film-project-type.md): film is a
+fourth project **Type**, not a Showcase. Built as `film/VisualFilm.jsx`,
+`film/YouTubePlayer.jsx` and `film/youtube.js` in `src/experiences/visual/`.
+
+- **Studio:** a new Film type with a Film tab (YouTube link, runtime, synopsis,
+  gear, credits, stills); the Story/Outcome/Legacy tabs are hidden; a thumbnail
+  is required. See `docs/film-paste-sheet.md`.
+- **Page:** lights down; poster with a play button, the video loaded **only on
+  click** (no iframe until then), stills in the viewer, credits, next film.
+- **Routing:** `/work/<slug>` for a film redirects to `/visual/<slug>`; a
+  Video-tagged project joins the "film" group on the index.
+- Checked in a browser with sample data (a real open-licence YouTube video and
+  real Sanity images, because no film is published yet): zero iframes before
+  the click, the player after it, stills and viewer, 390px and desktop. The
+  first real film is the real test.
 
 ## Step 7 — Homepage changes (Product)
 

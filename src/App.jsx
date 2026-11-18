@@ -43,9 +43,11 @@ function CaseStudyRoute() {
   // the case study page first.
   if (!card && loading) return <RouteFallback />;
 
-  // Photo sets live in the Visual experience (ADR 0014). Links that were shared
-  // as /work/<slug> keep working by redirecting to the new address.
-  if (card?.type === "photo-set") return <Navigate to={`/visual/${slug}`} replace />;
+  // Photo sets and films live in the Visual experience (ADR 0014, 0015). Links
+  // shared as /work/<slug> keep working by redirecting to the new address.
+  if (card?.type === "photo-set" || card?.type === "film") {
+    return <Navigate to={`/visual/${slug}`} replace />;
+  }
 
   // Showcase projects keep the old page; everything else gets v2.
   if (card?.type === "showcase") return <CaseStudyPage />;

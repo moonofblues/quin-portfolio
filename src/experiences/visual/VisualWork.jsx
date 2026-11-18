@@ -1,11 +1,17 @@
 import { Link, Navigate, useParams } from "react-router-dom";
 import { useProjects } from "../../shared/context/ProjectsContext";
+import { VISUAL, mainExperienceOf } from "../../shared/experiences";
+import { VisualFilm } from "./film/VisualFilm";
+import { VisualGraphic } from "./graphic/VisualGraphic";
 import { VisualPhotoSet } from "./photo-set/VisualPhotoSet";
 
 /**
- * /visual/<slug>: decides which page a work gets. Photo sets live here. Anything
- * else is not a Visual page yet (graphic design pieces arrive in plan step 5,
- * film in step 6), so it is sent to its Work page instead of showing nothing.
+ * /visual/<slug>: decides which page a work gets, by its type.
+ *   photo set -> the gallery (lights down)
+ *   film      -> the film page (lights down)
+ *   showcase  -> a graphic design page (on paper), when its main Experience is
+ *                Visual
+ * Anything else belongs to the Product site, so it is sent to its Work page.
  */
 export function VisualWork() {
   const { slug } = useParams();
@@ -29,5 +35,9 @@ export function VisualWork() {
   }
 
   if (card.type === "photo-set") return <VisualPhotoSet />;
+  if (card.type === "film") return <VisualFilm />;
+  if (card.type === "showcase" && mainExperienceOf(card) === VISUAL) {
+    return <VisualGraphic />;
+  }
   return <Navigate to={`/work/${slug}`} replace />;
 }
