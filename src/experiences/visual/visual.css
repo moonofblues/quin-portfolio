@@ -1,0 +1,214 @@
+/* Visual experience styles (ADR 0014, docs/visual-design-direction.md).
+   Everything is scoped under .v-root so none of it leaks into the Product
+   site. This file is imported only by the lazy Visual chunk. Plain CSS rather
+   than Tailwind utilities, because the Product theme's tokens are global and
+   this experience has its own palette. */
+
+.v-root {
+  --paper: #eee8d6;
+  --paper-2: #e4ddc7;
+  --ink: #0b2fb3;
+  --ink-deep: #071e78;
+  --text: #0a1030;
+  --night: #050818;
+  --ink-light: #8ea2ff;
+  --v-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --v-serif: "Instrument Serif", Georgia, serif;
+  --v-mono: "DM Mono", ui-monospace, Menlo, monospace;
+  --v-pad: clamp(1rem, 3vw, 2.5rem);
+  --v-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  position: relative;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--text);
+  font-family: var(--v-display);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+/* Paper grain: one static layer, painted once. Baked into the artwork later. */
+.v-root::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.09;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.v-root *,
+.v-root *::before,
+.v-root *::after {
+  box-sizing: border-box;
+}
+.v-root a { color: inherit; }
+.v-root :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.v-mono {
+  font-family: var(--v-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ── top bar ── */
+.v-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem var(--v-pad);
+  color: var(--ink);
+  background: var(--paper);
+  border-bottom: 1px solid rgba(11, 47, 179, 0.25);
+}
+.v-bar a { text-decoration: none; }
+.v-brand { font-weight: 800; font-size: 1.15rem; letter-spacing: -0.04em; text-transform: lowercase; }
+.v-bar nav { display: flex; gap: clamp(0.9rem, 2.4vw, 2rem); align-items: center; }
+.v-bar nav a { font-weight: 700; letter-spacing: -0.02em; text-transform: lowercase; font-size: 1rem; }
+.v-bar nav a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.v-bar .v-xlink {
+  font-family: var(--v-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+  border: 1px solid currentColor; padding: 0.5rem 0.9rem; border-radius: 99px; font-weight: 400;
+}
+@media (max-width: 640px) { .v-bar .v-xlink { display: none; } }
+
+/* ── frame: the contact-sheet print ──
+   Duotone: a grayscale copy is screened over the ink, then multiplied by
+   paper. On hover the true-colour copy fades in over the top (opacity only).
+   On touch screens there is no hover, so colour is shown straight away. */
+.v-frame {
+  position: relative; display: block; overflow: hidden; width: 100%;
+  background: var(--ink); isolation: isolate;
+}
+.v-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.v-pic { filter: grayscale(1) contrast(1.3) brightness(1.05); mix-blend-mode: screen; }
+.v-frame::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; mix-blend-mode: multiply;
+  transition: opacity 0.5s var(--v-ease);
+  background: radial-gradient(circle at 50% 50%, rgba(5, 8, 40, 0.55) 0 0.9px, transparent 1.1px) 0 0 / 4px 4px;
+}
+.v-frame::after {
+  content: ""; position: absolute; inset: 0; background: var(--paper); mix-blend-mode: multiply;
+  transition: opacity 0.5s var(--v-ease);
+}
+.v-col { z-index: 2; opacity: 0; transition: opacity 0.5s var(--v-ease); }
+.v-link:hover .v-col, .v-link:focus-visible .v-col { opacity: 1; }
+.v-link:hover .v-frame::after, .v-link:focus-visible .v-frame::after,
+.v-link:hover .v-frame::before, .v-link:focus-visible .v-frame::before { opacity: 0; }
+@media (hover: none) {
+  .v-col { opacity: 1; }
+  .v-frame::after, .v-frame::before { opacity: 0; }
+}
+.v-no {
+  position: absolute; z-index: 3; left: 0.5rem; top: 0.45rem;
+  font-family: var(--v-mono); font-size: 0.72rem; color: var(--paper);
+  text-shadow: 0 0 6px rgba(5, 8, 24, 0.7);
+}
+.v-link { display: block; text-decoration: none; color: inherit; }
+.v-cap { display: flex; justify-content: space-between; gap: 1rem; margin-top: 0.5rem; color: var(--ink); }
+.v-cap b { font-weight: 700; text-transform: lowercase; letter-spacing: -0.02em; font-size: 0.98rem; }
+.v-cap span { font-family: var(--v-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8; white-space: nowrap; }
+
+/* ── hero ── */
+.v-hero {
+  position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 5.5rem var(--v-pad) 3rem; overflow: hidden;
+}
+.v-hero-f { position: absolute; }
+.v-hero-f .v-frame { height: 100%; }
+.v-hero-f1 { top: 11%; right: 5%; width: clamp(11rem, 34vw, 34rem); aspect-ratio: 16 / 9; }
+.v-hero-f2 { top: 30%; right: 31%; width: clamp(5.5rem, 13vw, 13rem); aspect-ratio: 2 / 3; }
+.v-hero-f3 { top: 13%; left: 41%; width: clamp(6rem, 14vw, 14rem); aspect-ratio: 1 / 1; }
+.v-hero-f4 { top: 44%; right: 9%; width: clamp(7rem, 17vw, 17rem); aspect-ratio: 3 / 2; }
+.v-lede { position: relative; z-index: 4; max-width: 34rem; margin-bottom: 1.25rem; color: var(--ink); }
+.v-lede p { font-family: var(--v-serif); font-style: italic; font-size: clamp(1.4rem, 2.6vw, 2.2rem); line-height: 1.25; margin: 0; }
+.v-lede .v-mono { margin-top: 0.8rem; display: block; }
+.v-name {
+  position: relative; z-index: 3; margin: 0 0 0 -0.04em; font-weight: 800; color: var(--ink); font-stretch: 90%;
+  font-size: clamp(4.4rem, 21vw, 23rem); line-height: 0.82; letter-spacing: -0.04em; text-transform: lowercase;
+}
+.v-name span { display: block; }
+.v-name span:last-child { margin-left: 0.35em; }
+@media (max-width: 640px) {
+  .v-hero-f2, .v-hero-f4 { display: none; }
+  .v-hero-f1 { top: 9%; width: 62vw; }
+  .v-hero-f3 { top: 24%; left: auto; right: 6%; width: 30vw; }
+  .v-name { font-size: clamp(4rem, 26vw, 9rem); }
+  .v-name span:last-child { margin-left: 0.1em; }
+}
+
+/* ── ticker band: also the nav between the three kinds of work ── */
+.v-ticker { background: var(--ink); color: var(--paper); overflow: hidden; border-block: 2px solid var(--ink-deep); }
+.v-track { display: flex; width: max-content; animation: v-tick 38s linear infinite; will-change: transform; }
+.v-track span, .v-track a {
+  display: block; white-space: nowrap; padding: 0.7rem 1.6rem; text-decoration: none; font-weight: 800;
+  text-transform: lowercase; letter-spacing: -0.03em; font-size: clamp(1.1rem, 2.4vw, 1.7rem);
+}
+.v-track i { font-style: normal; opacity: 0.55; margin-left: 3.2rem; }
+.v-ticker:hover .v-track { animation-play-state: paused; }
+@keyframes v-tick { to { transform: translate3d(-50%, 0, 0); } }
+
+/* ── work index ── */
+.v-section { padding: clamp(3.5rem, 9vw, 8rem) var(--v-pad); }
+.v-group { margin-bottom: clamp(4rem, 9vw, 8rem); scroll-margin-top: 4.5rem; }
+.v-group:last-child { margin-bottom: 0; }
+.v-ghead {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+  border-top: 2px solid var(--ink); padding-top: 0.8rem; margin-bottom: 1.6rem; color: var(--ink);
+}
+.v-ghead h2 { margin: 0; font-weight: 800; font-stretch: 90%; text-transform: lowercase; font-size: clamp(3rem, 10vw, 9rem); line-height: 0.85; letter-spacing: -0.04em; }
+.v-ghead .v-mono { white-space: nowrap; }
+.v-gnote { max-width: 38rem; margin: -0.6rem 0 1.8rem; font-family: var(--v-serif); font-style: italic; font-size: 1.35rem; line-height: 1.35; color: var(--ink); }
+.v-film { display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(0.9rem, 1.8vw, 1.6rem); }
+.v-film .v-item { grid-column: span 6; }
+.v-film .v-item:first-child { grid-column: span 8; }
+.v-film .v-frame { aspect-ratio: 16 / 9; }
+.v-cols { column-count: 3; column-gap: clamp(0.9rem, 1.8vw, 1.6rem); }
+.v-cols .v-item { break-inside: avoid; margin-bottom: clamp(0.9rem, 1.8vw, 1.6rem); }
+@media (max-width: 900px) {
+  .v-cols { column-count: 2; }
+  .v-film .v-item, .v-film .v-item:first-child { grid-column: span 12; }
+}
+@media (max-width: 520px) { .v-cols { column-count: 1; } }
+
+/* ── about: the slate ── */
+.v-about { background: var(--paper-2); }
+.v-slate { max-width: 76rem; margin: 0 auto; border: 3px solid var(--ink); color: var(--ink); background: var(--paper); }
+.v-clap { height: 2.6rem; border-bottom: 3px solid var(--ink); background: repeating-linear-gradient(-58deg, var(--ink) 0 1.4rem, var(--paper) 1.4rem 2.8rem); }
+.v-slate-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 3px solid var(--ink); }
+.v-slate-grid div { padding: 0.6rem 0.9rem; border-right: 3px solid var(--ink); }
+.v-slate-grid div:last-child { border-right: 0; }
+.v-slate-grid .v-mono { display: block; opacity: 0.7; }
+.v-slate-grid b { font-weight: 800; font-size: 1.5rem; letter-spacing: -0.04em; text-transform: lowercase; }
+.v-slate-body { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr); gap: clamp(1.2rem, 3vw, 3rem); padding: clamp(1rem, 3vw, 2.5rem); }
+.v-slate-body .v-frame { aspect-ratio: 4 / 5; }
+.v-slate-body h3 { margin: 0 0 1.2rem; font-weight: 800; font-stretch: 90%; text-transform: lowercase; letter-spacing: -0.04em; line-height: 0.9; font-size: clamp(2.4rem, 6vw, 5.2rem); }
+.v-slate-body p { font-family: var(--v-serif); font-size: clamp(1.25rem, 2vw, 1.65rem); line-height: 1.25; margin: 0 0 1rem; max-width: 36rem; color: var(--text); }
+.v-slate-body em { color: var(--ink); }
+@media (max-width: 760px) {
+  .v-slate-body { grid-template-columns: 1fr; }
+  .v-slate-grid { grid-template-columns: 1fr 1fr; }
+  .v-slate-grid div:nth-child(2) { border-right: 0; }
+  .v-slate-grid div:nth-child(3) { border-top: 3px solid var(--ink); grid-column: span 2; }
+}
+
+/* ── contact: end credits ── */
+.v-credits { background: var(--ink); color: var(--paper); padding-block: clamp(4rem, 10vw, 9rem); }
+.v-credits h2 { margin: 0 0 clamp(2rem, 5vw, 4rem); font-weight: 800; font-stretch: 90%; text-transform: lowercase; letter-spacing: -0.04em; line-height: 0.84; font-size: clamp(3.6rem, 17vw, 19rem); }
+.v-roll { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 1.5rem 3rem; border-top: 2px solid var(--paper); padding-top: 1.2rem; max-width: 70rem; margin: 0; }
+.v-roll dt { font-family: var(--v-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.8; margin-bottom: 0.25rem; }
+.v-roll dd { margin: 0; font-weight: 700; font-size: clamp(1.15rem, 1.9vw, 1.5rem); letter-spacing: -0.03em; overflow-wrap: anywhere; }
+.v-roll a { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.v-foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-top: clamp(3rem, 7vw, 6rem); font-family: var(--v-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.v-foot a { border: 1px solid var(--paper); border-radius: 99px; padding: 0.5rem 0.9rem; text-decoration: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .v-track { animation: none; }
+  .v-ticker { overflow-x: auto; }
+}

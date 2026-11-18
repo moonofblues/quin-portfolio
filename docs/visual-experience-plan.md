@@ -85,7 +85,38 @@ Rule for the main page:
 
 No visible change yet.
 
-## Step 3 — Visual shell (empty but real)
+## Step 3 — Visual shell (empty but real) — ✅ DONE (2026-11-18)
+
+Built in `src/experiences/visual/` (`VisualApp`, `VisualLayout`, `VisualHome`,
+`Frame`, `helpers.js`, `visual.css`) and mounted as a lazy `/visual/*` route in
+`App.jsx`, outside the Product `Layout`. A "Visual" link was added to the
+Product nav. It is fed by real Sanity projects, with no placeholders: a project
+shows when `mainExperienceOf(project)` is Visual and it has a thumbnail. Groups
+with no work are not drawn.
+
+Checked in a browser against real data (desktop and a 390px frame): hero,
+ticker, index, hover "develop", About slate, credits, `#hash` links, and the
+round trip Product <-> Visual (Visual's fonts, paper background and stylesheet
+are only active on `/visual`). The build passes; the Visual chunk is 8.6 KB JS
+plus 9.2 KB CSS, and the homepage critical set is about 729 KB raw / 232 KB
+gzipped. Lint is clean for the new files.
+
+Choices made on the way, easy to change:
+
+- **Touch screens** show true colour straight away (no hover to develop it).
+  This is the default for the open question in the design doc.
+- **Graphic design shows at most 8 pieces** (`GRAPHIC_LIMIT` in `helpers.js`),
+  featured first, with an "all N" link to the Work page. Curate by tagging
+  Categories in Studio.
+- **The tint is a live CSS blend for now.** The design doc says to bake it into
+  the image files; that is a follow-up once real photos exist.
+- **Frames link to `/work/<slug>`** for now. `projectPath()` in `helpers.js` is
+  the one place to change when step 4 moves photo sets to `/visual/<slug>`.
+- Today only graphic design appears. The photo set has no photos and there is
+  no film yet.
+
+Testing note: Sanity only answers requests from approved web addresses.
+`localhost:5173` works; an unusual port (we tried 5199) gets a network error.
 
 - `src/experiences/visual/`: `VisualLayout`, its own navigation and footer,
   and a theme wrapper that overrides the colour and font variables.

@@ -33,6 +33,12 @@ const PhotoSetPage = lazy(() =>
   import("./pages/PhotoSetPage").then((m) => ({ default: m.PhotoSetPage })),
 );
 
+// The Visual experience (ADR 0014) is its own lazy chunk with its own layout
+// and stylesheet, so the homepage bundle does not grow.
+const VisualApp = lazy(() =>
+  import("./experiences/visual/VisualApp").then((m) => ({ default: m.VisualApp })),
+);
+
 function CaseStudyRoute() {
   const { slug } = useParams();
   const { getProjectBySlug, loading } = useProjects();
@@ -68,6 +74,17 @@ function App() {
               <Suspense fallback={<RouteFallback />}>
                 <StudioPage />
               </Suspense>
+            }
+          />
+          {/* Visual has its own layout, so it sits outside the Product Layout. */}
+          <Route
+            path="/visual/*"
+            element={
+              <ProjectsProvider>
+                <Suspense fallback={<RouteFallback />}>
+                  <VisualApp />
+                </Suspense>
+              </ProjectsProvider>
             }
           />
           <Route

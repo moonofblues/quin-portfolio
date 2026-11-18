@@ -8,6 +8,7 @@ import { SERVICE_BY_ID } from "../../data/services";
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Work", href: "/work" },
+  { label: "Visual", href: "/visual" },
   { label: "About", href: "/#about" },
   { label: "Contact", href: "/#contact" },
 ];
