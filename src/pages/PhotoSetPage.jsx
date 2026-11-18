@@ -56,8 +56,14 @@ export function PhotoSetPage() {
   }
 
   const description = detail?.photoIntro || card.description;
-  // One quiet line: year, place, camera. Only the ones that exist.
-  const meta = [card.year, detail?.photoLocation, detail?.photoGear].filter(Boolean);
+  // One quiet line: year, duration, role, place, camera. Only the ones that exist.
+  const meta = [
+    card.year,
+    detail?.duration,
+    detail?.role,
+    detail?.photoLocation,
+    detail?.photoGear,
+  ].filter(Boolean);
 
   return (
     <>
@@ -95,7 +101,11 @@ export function PhotoSetPage() {
               Loading photos…
             </p>
           ) : (
-            <PhotoGallery photos={photos} />
+            <PhotoGallery
+              photos={photos}
+              embeds={detail.photoEmbeds}
+              photoLink={detail.photoLink}
+            />
           )}
         </section>
 

@@ -121,7 +121,9 @@ const DETAIL_FIELDS = `
     caption,
     highlight,
     recognition
-  }
+  },
+  photoEmbeds[] { platform, url, embedCode, title },
+  photoLink { url, label }
 `;
 
 export async function fetchAllProjects() {

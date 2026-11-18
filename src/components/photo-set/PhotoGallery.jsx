@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
+import { ExternalLink } from "lucide-react";
 import { ImageLightbox } from "../case-study/v2/blocks/ImageLightbox";
+import { ProjectEmbeds } from "../case-study/ProjectEmbeds";
 import { PhotoFrame } from "./PhotoFrame";
 import { layoutPhotos } from "./layoutPhotos";
 import { photoUrl } from "./photoUrl";
@@ -39,8 +41,11 @@ function Rows({ rows, total, onOpen }) {
  * "Highlights" label, and are NOT repeated further down. The rest of the set
  * follows in its Studio order. With no highlights the page looks as it always
  * did: no labels, the first photo is the opener.
+ *
+ * `embeds` (optional) and `photoLink` (optional button) are shown between the
+ * highlights and the rest of the set.
  */
-export function PhotoGallery({ photos }) {
+export function PhotoGallery({ photos, embeds, photoLink }) {
   const [openAt, setOpenAt] = useState(null);
   const close = useCallback(() => setOpenAt(null), []);
 
@@ -84,6 +89,20 @@ export function PhotoGallery({ photos }) {
         <div>
           <h2 className={LABEL}>Highlights</h2>
           <Rows rows={highlightRows} total={ordered.length} onOpen={setOpenAt} />
+        </div>
+      )}
+      {embeds?.length > 0 && <ProjectEmbeds embeds={embeds} />}
+      {photoLink?.url && (
+        <div className="flex justify-center">
+          <a
+            href={photoLink.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-bg-tertiary px-5 text-sm text-text-primary hover:text-accent transition-[color] duration-200"
+          >
+            {photoLink.label || "View on Facebook"}
+            <ExternalLink size={16} />
+          </a>
         </div>
       )}
       {restRows.length > 0 && (

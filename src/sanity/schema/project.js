@@ -17,6 +17,72 @@ function hideForPhotoSets(fields) {
   });
 }
 
+// One embed (Behance, Facebook or custom). Shared by the case study Embeds
+// field and the photo set Embed field, so both show the same Studio form.
+const EMBED_OF = [
+  {
+    type: "object",
+    name: "embed",
+    fields: [
+      {
+        name: "platform",
+        title: "Platform",
+        type: "string",
+        options: {
+          list: [
+            { title: "Behance", value: "behance" },
+            { title: "Facebook", value: "facebook" },
+            { title: "Custom (paste embed code)", value: "custom" },
+          ],
+          layout: "radio",
+        },
+        initialValue: "behance",
+        validation: (R) => R.required(),
+      },
+      {
+        name: "url",
+        title: "URL",
+        type: "url",
+        description: "The Behance project URL or Facebook post URL to embed.",
+        hidden: ({ parent }) => parent?.platform === "custom",
+        validation: (R) =>
+          R.custom((value, context) =>
+            context.parent?.platform !== "custom" && !value
+              ? "URL is required for this platform"
+              : true,
+          ),
+      },
+      {
+        name: "embedCode",
+        title: "Embed Code",
+        type: "text",
+        rows: 4,
+        description:
+          "Paste the <iframe> embed snippet from the platform's own Share → Embed button.",
+        hidden: ({ parent }) => parent?.platform !== "custom",
+        validation: (R) =>
+          R.custom((value, context) =>
+            context.parent?.platform === "custom" && !value
+              ? "Embed code is required for a custom embed"
+              : true,
+          ),
+      },
+      {
+        name: "title",
+        title: "Label (optional)",
+        type: "string",
+        description: 'e.g. "Full case study on Behance" — shown above the embed',
+      },
+    ],
+    preview: {
+      select: { title: "title", platform: "platform", url: "url" },
+      prepare({ title, platform, url }) {
+        return { title: title || url || "Embed", subtitle: platform };
+      },
+    },
+  },
+];
+
 export const projectSchema = {
   name: "project",
   title: "Project",
@@ -315,69 +381,7 @@ export const projectSchema = {
       group: "outcome",
       title: "Embeds (optional)",
       type: "array",
-      of: [
-        {
-          type: "object",
-          name: "embed",
-          fields: [
-            {
-              name: "platform",
-              title: "Platform",
-              type: "string",
-              options: {
-                list: [
-                  { title: "Behance", value: "behance" },
-                  { title: "Facebook", value: "facebook" },
-                  { title: "Custom (paste embed code)", value: "custom" },
-                ],
-                layout: "radio",
-              },
-              initialValue: "behance",
-              validation: (R) => R.required(),
-            },
-            {
-              name: "url",
-              title: "URL",
-              type: "url",
-              description: "The Behance project URL or Facebook post URL to embed.",
-              hidden: ({ parent }) => parent?.platform === "custom",
-              validation: (R) =>
-                R.custom((value, context) =>
-                  context.parent?.platform !== "custom" && !value
-                    ? "URL is required for this platform"
-                    : true,
-                ),
-            },
-            {
-              name: "embedCode",
-              title: "Embed Code",
-              type: "text",
-              rows: 4,
-              description:
-                "Paste the <iframe> embed snippet from the platform's own Share → Embed button.",
-              hidden: ({ parent }) => parent?.platform !== "custom",
-              validation: (R) =>
-                R.custom((value, context) =>
-                  context.parent?.platform === "custom" && !value
-                    ? "Embed code is required for a custom embed"
-                    : true,
-                ),
-            },
-            {
-              name: "title",
-              title: "Label (optional)",
-              type: "string",
-              description: 'e.g. "Full case study on Behance" — shown above the embed',
-            },
-          ],
-          preview: {
-            select: { title: "title", platform: "platform", url: "url" },
-            prepare({ title, platform, url }) {
-              return { title: title || url || "Embed", subtitle: platform };
-            },
-          },
-        },
-      ],
+      of: EMBED_OF,
       description:
         "One or more embedded frames. Behance and Facebook render inline (Behance can expand to full width); use Custom to paste an <iframe> snippet for anything else. See docs/adr/0010.",
     },
@@ -773,6 +777,41 @@ export const projectSchema = {
       type: "string",
       description: "e.g. the camera",
       hidden: ({ document }) => document?.type !== "photo-set",
+    },
+    {
+      // Photo sets only. Shown between the Highlights and "The full set".
+      name: "photoEmbeds",
+      group: "photos",
+      title: "Embed (optional)",
+      type: "array",
+      of: EMBED_OF,
+      description:
+        "A post or page to show between the highlights and the full set, e.g. the Facebook post that lists your entry.",
+      hidden: ({ document }) => document?.type !== "photo-set",
+    },
+    {
+      // Photo sets only. A plain button to a page, for posts that can't be embedded.
+      name: "photoLink",
+      group: "photos",
+      title: "Link button (optional)",
+      type: "object",
+      description:
+        "A button that opens a page in a new tab, shown between the highlights and the full set. Use it when a post can't be embedded.",
+      hidden: ({ document }) => document?.type !== "photo-set",
+      fields: [
+        {
+          name: "url",
+          title: "URL",
+          type: "url",
+          validation: (R) => R.uri({ scheme: ["http", "https"] }),
+        },
+        {
+          name: "label",
+          title: "Button label",
+          type: "string",
+          description: 'e.g. "View the Top 20 post on Facebook"',
+        },
+      ],
     },
   ]),
   preview: {
