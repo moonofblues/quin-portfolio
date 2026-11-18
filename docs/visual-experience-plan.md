@@ -223,13 +223,26 @@ fourth project **Type**, not a Showcase. Built as `film/VisualFilm.jsx`,
   the click, the player after it, stills and viewer, 390px and desktop. The
   first real film is the real test.
 
-## Step 7 — Homepage changes (Product)
+## Step 7 — Homepage changes (Product) — ✅ DONE (2026-11-19)
 
-Partly done early (2026-11-18), since these parts don't depend on Visual's
-design: the Focus chooser is removed (file deleted, `HomePage.jsx` and two
-comments updated) and About now mentions the camera. Still waiting: the
-Introduction line and the homepage invitation section, which need `/visual`
-to exist.
+The Focus chooser was removed and About mentions the camera (2026-11-18). On
+2026-11-19 the last two parts were built:
+
+- **Introduction line** (`Introduction.jsx`): "Away from the screen, I'm usually
+  behind a camera, shooting portraits, street scenes and short films. See the
+  visual work →", linking to `/visual`.
+- **"The other side" section** (`VisualInvite.jsx`, placed after Other Works in
+  `HomePage.jsx`): a short sentence, a button to `/visual`, and up to four
+  thumbnails of real Visual pieces (featured first, only those with a
+  thumbnail), each linking to `/visual/<slug>`. It imports nothing from
+  `src/experiences/visual/`, only `src/shared/`. It reads the project list the
+  page has already loaded, so it adds no network request; images are lazy.
+- Checked in a browser at desktop width (the thumbnails and both links render,
+  no sideways overflow). **Not checked at phone width** (the browser window
+  could not be narrowed). Build passes; the homepage critical set is about
+  732 KB raw (was about 729 KB). Lint is clean for the three files.
+- Today the thumbnails are all graphic design, since the photo set has no
+  thumbnail and there is no film yet. It fills in as those are added.
 
 - ✅ Remove the Focus chooser (`FocusChooser.jsx` and its use in
   `HomePage.jsx`). `?focus=` links keep working, and so do the What I Do

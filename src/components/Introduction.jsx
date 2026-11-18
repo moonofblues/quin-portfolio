@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 export function Introduction() {
@@ -40,6 +41,16 @@ export function Introduction() {
                 Ateneo de Zamboanga University
               </span>
               .
+            </p>
+            <p className="mt-3 text-base text-text-muted">
+              Away from the screen, I&rsquo;m usually behind a camera, shooting
+              portraits, street scenes and short films.{" "}
+              <Link
+                to="/visual"
+                className="whitespace-nowrap text-accent underline underline-offset-4 hover:text-accent-hover transition-colors"
+              >
+                See the visual work →
+              </Link>
             </p>
           </motion.div>
         </motion.div>
