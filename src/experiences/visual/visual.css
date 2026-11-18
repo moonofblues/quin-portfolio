@@ -236,13 +236,29 @@
 .vp-intro { max-width: 40rem; margin: 0 0 1rem; font-family: var(--v-serif); font-size: clamp(1.25rem, 2vw, 1.65rem); line-height: 1.3; }
 .vp-meta { margin: 0; font-family: var(--v-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-light); }
 
-.vp-gallery { display: flex; flex-direction: column; gap: clamp(3rem, 6vw, 4rem); }
+.vp-gallery { display: flex; flex-direction: column; gap: clamp(4rem, 9vw, 8rem); }
 .vp-label { margin: 0 0 1.25rem; font-family: var(--v-mono); font-size: 0.72rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-light); }
-.vp-rows { display: flex; flex-direction: column; gap: clamp(1.5rem, 3vw, 2.5rem); }
-.vp-pair { display: grid; align-items: start; gap: clamp(1.5rem, 3vw, 2.5rem); }
-@media (min-width: 768px) { .vp-pair { grid-template-columns: 1fr 1fr; } }
+/* Editorial rhythm: generous space between rows, and rows zig-zag left and
+   right (data-side) instead of stacking in one column. On phones everything is
+   a single column, so only the spacing remains. */
+.vp-rows { display: flex; flex-direction: column; gap: clamp(3.5rem, 8vw, 7.5rem); }
+.vp-row[data-kind="pair"] { display: grid; gap: clamp(3rem, 6vw, 6rem); align-items: start; }
+.vp-row[data-kind="solo"] { display: flex; justify-content: center; }
+@media (min-width: 768px) {
+  /* Landscapes and squares sit a little inset, alternating sides. The opener
+     stays full width. */
+  .vp-row[data-kind="full"] .vp-figure { width: 86%; }
+  .vp-row[data-kind="full"][data-side="end"] .vp-figure { margin-left: auto; }
+  /* Two portraits, unequal widths, the second dropped lower. The wide one
+     swaps sides every other row. */
+  .vp-row[data-kind="pair"] { grid-template-columns: 7fr 5fr; column-gap: clamp(2rem, 6vw, 6rem); }
+  .vp-row[data-kind="pair"][data-side="end"] { grid-template-columns: 5fr 7fr; }
+  .vp-row[data-kind="pair"] .vp-figure:nth-child(2) { margin-top: clamp(4rem, 12vw, 11rem); }
+  /* A lone portrait hangs to one side, leaving the other as open space. */
+  .vp-row[data-kind="solo"] { justify-content: flex-start; padding-left: clamp(0rem, 6vw, 6rem); }
+  .vp-row[data-kind="solo"][data-side="end"] { justify-content: flex-end; padding-left: 0; padding-right: clamp(0rem, 6vw, 6rem); }
+}
 .vp-figure { margin: 0; width: 100%; }
-.vp-solo { margin-inline: auto; }
 .vp-photo-btn { display: block; width: 100%; padding: 0; border: 0; background: none; font: inherit; cursor: zoom-in; border-radius: 2px; }
 .vp-photo-btn:focus-visible { outline: 2px solid var(--ink-light); outline-offset: 4px; }
 .vp-photo { position: relative; display: block; overflow: hidden; }
@@ -254,7 +270,10 @@
   text-transform: uppercase; line-height: 1.4; text-align: left; padding: 0.45rem 0.65rem; border-radius: 0.3rem;
 }
 .vp-stamp svg { flex: none; margin-top: 1px; }
-.vp-caption { margin-top: 0.75rem; font-family: var(--v-serif); font-style: italic; font-size: 1.1rem; line-height: 1.4; color: rgba(238, 232, 214, 0.75); }
+/* Frame number in mono, like a contact sheet; the caption in large serif italics. */
+.vp-caption { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 1rem; }
+.vp-no { font-family: var(--v-mono); font-size: 0.72rem; letter-spacing: 0.08em; color: var(--ink-light); }
+.vp-text { max-width: 32rem; font-family: var(--v-serif); font-style: italic; font-size: clamp(1.25rem, 2.2vw, 1.85rem); line-height: 1.25; color: rgba(238, 232, 214, 0.88); }
 .vp-linkrow { display: flex; justify-content: center; }
 .v-root .vp-linkbtn {
   display: inline-flex; gap: 0.5rem; align-items: center; min-height: 44px; padding: 0 1.25rem; font-weight: 700; letter-spacing: -0.01em;

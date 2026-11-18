@@ -34,7 +34,7 @@ export function PhotoFrame({ photo, index, total, kind, onOpen }) {
       : undefined;
 
   return (
-    <figure className={`vp-figure${kind === "solo" ? " vp-solo" : ""}`} style={soloStyle}>
+    <figure className="vp-figure" style={soloStyle}>
       <button
         type="button"
         onClick={() => onOpen(index)}
@@ -71,7 +71,14 @@ export function PhotoFrame({ photo, index, total, kind, onOpen }) {
           )}
         </span>
       </button>
-      {photo.caption && <figcaption className="vp-caption">{photo.caption}</figcaption>}
+      {/* Every photo carries its frame number, like a contact sheet; a caption,
+          when there is one, sits under it in large serif italics. */}
+      <figcaption className="vp-caption">
+        <span className="vp-no">
+          {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+        </span>
+        {photo.caption && <span className="vp-text">{photo.caption}</span>}
+      </figcaption>
     </figure>
   );
 }

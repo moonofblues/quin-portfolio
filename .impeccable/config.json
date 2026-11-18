@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/experiences/visual/visual.css"
+        ],
+        "createdAt": "2026-11-18T08:29:31.547Z",
+        "reason": "Claude: false positive. Line 185 is the thin column divider between cells of the film-slate grid (roll / scene / shot in), a table rule, not an accent stripe on a card. Quin has not reviewed this."
+      }
+    ]
+  }
+}

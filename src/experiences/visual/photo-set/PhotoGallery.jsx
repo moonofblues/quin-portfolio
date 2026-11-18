@@ -6,12 +6,22 @@ import { PhotoFrame } from "./PhotoFrame";
 import { layoutPhotos } from "./layoutPhotos";
 import { photoUrl } from "./photoUrl";
 
-/** One block of rows, laid out by layoutPhotos(). */
+/**
+ * One block of rows, laid out by layoutPhotos(). Editorial rhythm (docs/
+ * visual-design-direction.md): rows alternate between the left and the right
+ * (`data-side`), so the page zig-zags down instead of stacking in one column.
+ * The CSS decides what that means for each kind of row.
+ */
 function Rows({ rows, total, onOpen }) {
   return (
     <div className="vp-rows">
-      {rows.map((row) => (
-        <div key={row.items[0].index} className={row.kind === "pair" ? "vp-pair" : undefined}>
+      {rows.map((row, i) => (
+        <div
+          key={row.items[0].index}
+          className="vp-row"
+          data-kind={row.kind}
+          data-side={i % 2 === 0 ? "start" : "end"}
+        >
           {row.items.map(({ photo, index }) => (
             <PhotoFrame
               key={index}
