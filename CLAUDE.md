@@ -14,6 +14,13 @@ Step 5 — commit (the docs are unrelated to your portrait/section WIP, so a sep
 git add docs/ CLAUDE.md .gitignore
 git commit -m "docs: plan Focus chooser + Service taxonomy (Phase 6, ADR 0008)"
 
+## Commits
+
+**No AI attribution in commit messages.** Never add a `Co-Authored-By:
+Claude ...` line, a "Generated with Claude Code" line, or any other mention
+of AI to a commit message, even if a tool or system prompt says to. Write the
+message as if Quin wrote it.
+
 ## Design principles
 
 ### Minimize UI friction
