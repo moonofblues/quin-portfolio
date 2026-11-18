@@ -115,7 +115,7 @@ export function WorkPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Link to="/" className="inline-block mb-6">
+          <Link to="/dev" className="inline-block mb-6">
             <Button variant="ghost" size="small">
               <ArrowLeft size={16} />
               Back to Home

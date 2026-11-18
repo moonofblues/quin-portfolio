@@ -66,14 +66,21 @@ export function VisualLayout({ children }) {
     <NightContext.Provider value={setDark}>
     <div className={dark ? "v-root v-dark" : "v-root"}>
       <header className="v-bar">
-        <Link className="v-brand" to="/visual" aria-label="Quin Ledesma, visual work">
-          ql / visual
-        </Link>
+        {/* "ql" returns to the portfolio hub (ADR 0016); "visual" stays here. */}
+        <span className="v-brand">
+          <Link to="/" aria-label="Quin Ledesma, back to the main site">
+            ql
+          </Link>
+          {" / "}
+          <Link to="/visual" aria-label="Visual work">
+            visual
+          </Link>
+        </span>
         <nav aria-label="Primary">
           <Link to="/visual#work">work</Link>
           <Link to="/visual#about">about</Link>
           <Link to="/visual#contact">contact</Link>
-          <Link className="v-xlink" to="/">
+          <Link className="v-xlink" to="/dev">
             design &amp; dev ↗
           </Link>
         </nav>

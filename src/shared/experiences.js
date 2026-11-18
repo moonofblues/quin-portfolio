@@ -24,6 +24,21 @@ export function focusIdsOf(project) {
   return (project?.categories ?? []).map((c) => c.focus).filter(Boolean);
 }
 
+/**
+ * Which of the three Visual index groups a project belongs to: "film",
+ * "photography" or "graphic". The group id is also the anchor on /visual
+ * (/visual#film and so on). Shared because the Product homepage links into
+ * these groups too.
+ */
+export function visualGroupOf(project) {
+  const focuses = focusIdsOf(project);
+  if (project?.type === "film" || focuses.includes("video")) return "film";
+  if (project?.type === "photo-set" || focuses.includes("photography")) {
+    return "photography";
+  }
+  return "graphic";
+}
+
 /** Every Experience a project belongs to, without repeats. */
 export function experiencesOf(project) {
   const found = new Set();

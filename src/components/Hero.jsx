@@ -21,14 +21,12 @@ const DEFAULT_DESCRIPTION =
 // The pills in the default view. Each one is a button that switches the page to
 // that Focus (the ?focus=<id> in the URL). The labels are
 // shorter than the official Focus names on purpose, so they fit on one line.
+// Only Product Focuses: Visual work is reached from the hub at / (ADR 0016).
 const DEFAULT_PILLS = [
   { label: "UI/UX Design", id: "ui-ux" },
   { label: "Front-End Dev", id: "front-end" },
   { label: "Web Development", id: "web-dev" },
   { label: "Low-Code/No-Code Dev", id: "low-code" },
-  { label: "Video Editing", id: "video" },
-  { label: "Graphic Designing", id: "graphic-design" },
-  { label: "Photography", id: "photography" },
 ];
 
 // Entrance timings.

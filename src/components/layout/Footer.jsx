@@ -3,8 +3,9 @@ import { cn } from "../../utils/cn";
 
 const footerLinks = [
   { label: "Work", href: "/work" },
-  { label: "About", href: "/#about" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Visual", href: "/visual" },
+  { label: "About", href: "/dev#about" },
+  { label: "Contact", href: "/dev#contact" },
 ];
 
 export function Footer() {

@@ -3,7 +3,6 @@ import { Hero } from "../components/Hero";
 import { Introduction } from "../components/Introduction";
 import { FeaturedWork } from "../components/FeaturedWork";
 import { OtherWork } from "../components/OtherWork";
-import { VisualInvite } from "../components/VisualInvite";
 import { Services } from "../components/Services";
 import { About } from "../components/About";
 import { Now } from "../components/Now";
@@ -59,7 +58,6 @@ export function HomePage() {
         <Introduction />
         <FeaturedWork />
         <OtherWork />
-        <VisualInvite />
         <Services />
         <About />
         {/* Placed here, not per any explicit ordering in the plan (Q1 only

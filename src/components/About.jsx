@@ -4,40 +4,9 @@ import { MapPin, Briefcase, GraduationCap } from "lucide-react";
 import { SectionTitle } from "./ui/SectionTitle";
 import { cn } from "../utils/cn";
 import quinPortrait from "../assets/quin-portrait.webp";
+import { TIMELINE as timeline } from "../shared/timeline";
 
-const timeline = [
-  {
-    period: "Dec 2025 – Present",
-    role: "Information Systems Analyst II",
-    company: "Zamboanga City Medical Center",
-    type: "work",
-  },
-  {
-    period: "Aug 2025 – Nov 2025",
-    role: "Computer Programmer II",
-    company: "Zamboanga City Medical Center",
-    type: "work",
-  },
-  {
-    period: "2023 – Present",
-    role: "College Instructor",
-    company: "Ateneo de Zamboanga University",
-    type: "work",
-  },
-  {
-    period: "2023 – 2025",
-    role: "System Developer",
-    company: "AdZU Center for IT Services",
-    type: "work",
-  },
-  {
-    period: "2019 – 2023",
-    role: "BS Information Technology",
-    company: "Ateneo de Zamboanga University",
-    extra: "Cum Laude",
-    type: "education",
-  },
-];
+
 
 export function About() {
   // Q6 (Settled → Option A): a scroll-drawn connector linking the timeline
@@ -118,7 +87,10 @@ export function About() {
               </p>
             </div>
 
-            <div>
+            {/* id="experience" gives the timeline its own link (/#experience)
+                for a résumé or LinkedIn. scroll-mt keeps it clear of the fixed
+                nav bar when the page jumps here. */}
+            <div id="experience" className="scroll-mt-28">
               <h4 className="font-display text-sm uppercase tracking-wider mb-4 text-text-muted">
                 Experience
               </h4>

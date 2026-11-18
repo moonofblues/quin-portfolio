@@ -3,9 +3,12 @@ import { BrowserRouter, Navigate, Routes, Route, useParams } from "react-router-
 import { ProjectsProvider, useProjects } from "./shared/context/ProjectsContext";
 import { Layout } from "./components/layout/Layout";
 import { HomePage } from "./pages/HomePage";
+import { HubPage } from "./hub/HubPage";
 
-// Route-level code splitting. HomePage stays eager because it is the landing
-// route — lazying it would only add a round trip before first paint.
+// Route-level code splitting. The hub (/) and the Product homepage (/dev) stay
+// eager: the hub is the landing page, and /dev is where résumé and LinkedIn
+// links go, so lazying it would add a round trip for exactly the hiring
+// managers it is meant for.
 //
 // StudioPage matters most: it pulls in the whole Sanity Studio (~4.5 MB). As a
 // static import that shipped in the entry chunk, so every visitor downloaded
@@ -73,6 +76,16 @@ function App() {
               </Suspense>
             }
           />
+          {/* The portfolio hub (ADR 0016): its own screen, outside both
+              Experiences' layouts. */}
+          <Route
+            path="/"
+            element={
+              <ProjectsProvider>
+                <HubPage />
+              </ProjectsProvider>
+            }
+          />
           {/* Visual has its own layout, so it sits outside the Product Layout. */}
           <Route
             path="/visual/*"
@@ -91,7 +104,7 @@ function App() {
                 <Layout>
                   <Suspense fallback={<RouteFallback />}>
                     <Routes>
-                      <Route path="/" element={<HomePage />} />
+                      <Route path="/dev" element={<HomePage />} />
                       <Route path="/work" element={<WorkPage />} />
                       <Route path="/work/:slug" element={<CaseStudyRoute />} />
                     </Routes>

@@ -2,6 +2,8 @@
 
 Date: 2026-11-18
 Status: Accepted (plan stage: documents intent; not yet implemented)
+Amended by [ADR 0016](0016-portfolio-hub.md): `/` is now a portfolio hub and
+the Product homepage moved to `/dev`.
 Amends [ADR 0008](0008-focus-chooser-and-service-taxonomy.md): the Focus
 chooser pop-up is removed. The build plan is in
 [`docs/visual-experience-plan.md`](../visual-experience-plan.md).

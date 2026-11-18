@@ -1,5 +1,3 @@
-import { focusIdsOf } from "../../shared/experiences";
-
 /** How many graphic design pieces the index shows. The rest stay on Work. */
 export const GRAPHIC_LIMIT = 8;
 
@@ -18,14 +16,7 @@ export function sizeFromUrl(url) {
 }
 
 /** Which of the three index groups a Visual project belongs to. */
-export function groupOf(project) {
-  const focuses = focusIdsOf(project);
-  if (project.type === "film" || focuses.includes("video")) return "film";
-  if (project.type === "photo-set" || focuses.includes("photography")) {
-    return "photography";
-  }
-  return "graphic";
-}
+export { visualGroupOf as groupOf } from "../../shared/experiences";
 
 /**
  * Where a project's page is when reached from the Visual index. Photo sets and

@@ -258,7 +258,7 @@ export function VisualHome() {
         </dl>
         <div className="v-foot">
           <span>© {year} quin ledesma</span>
-          <Link to="/">also by quin: design &amp; development ↗</Link>
+          <Link to="/dev">also by quin: design &amp; development ↗</Link>
         </div>
       </section>
     </>

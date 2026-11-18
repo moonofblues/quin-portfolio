@@ -1,0 +1,693 @@
+/* The portfolio hub (ADR 0016). Scoped to .hub so nothing here touches the
+   Product or Visual experiences.
+
+   The hub is the meeting point of the two portfolios:
+   - ground and text: Product's night (#07090d) or Visual's paper (#eee8d6),
+     switchable; night is the default.
+   - voice: Visual's Bricolage Grotesque and Instrument Serif, with Product's
+     Instrument Sans for body copy.
+   - colour: Product's lavender marks Digital, Visual's ink blue marks Visual,
+     and each appears only where its own portfolio is named. */
+
+.hub {
+  --h-bg: #07090d;
+  --h-text: #f2f1ee;
+  --h-muted: #9aa0ab;
+  --h-rule: rgba(242, 241, 238, 0.16);
+  --h-dev: #a99ce4;
+  --h-vis: #6384ff;
+  --h-sel: rgba(169, 156, 228, 0.35);
+  --h-pad: clamp(1.25rem, 4vw, 3rem);
+  --h-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --h-serif: "Instrument Serif", Georgia, serif;
+  --h-sans: "Instrument Sans", system-ui, sans-serif;
+  --h-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  min-height: 100svh;
+  background: var(--h-bg);
+  color: var(--h-text);
+  font-family: var(--h-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  color-scheme: dark;
+  scrollbar-color: var(--h-muted) var(--h-bg);
+}
+
+.hub[data-theme="light"] {
+  --h-bg: #eee8d6;
+  --h-text: #0a1030;
+  --h-muted: #4a4f66;
+  --h-rule: rgba(10, 16, 48, 0.18);
+  --h-dev: #5646ab;
+  --h-vis: #0b2fb3;
+  --h-sel: rgba(11, 47, 179, 0.25);
+  color-scheme: light;
+}
+
+/* The contact band takes the other portfolio's ground, so both grounds meet on
+   one page: paper under night, night under paper. */
+.hub[data-theme="night"] .hub-flip,
+.hub:not([data-theme]) .hub-flip {
+  --h-bg: #eee8d6;
+  --h-text: #0a1030;
+  --h-muted: #4a4f66;
+  --h-rule: rgba(10, 16, 48, 0.18);
+  --h-dev: #5646ab;
+  --h-vis: #0b2fb3;
+  --h-sel: rgba(11, 47, 179, 0.25);
+}
+.hub[data-theme="light"] .hub-flip {
+  --h-bg: #07090d;
+  --h-text: #f2f1ee;
+  --h-muted: #9aa0ab;
+  --h-rule: rgba(242, 241, 238, 0.16);
+  --h-dev: #a99ce4;
+  --h-vis: #6384ff;
+  --h-sel: rgba(169, 156, 228, 0.35);
+}
+
+/* Anchor jumps glide, and stop gliding for people who ask for less motion. */
+html:has(.hub) {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html:has(.hub) {
+    scroll-behavior: auto;
+  }
+}
+
+.hub ::selection {
+  background: var(--h-sel);
+  color: var(--h-text);
+}
+.hub a {
+  color: inherit;
+  text-decoration: none;
+}
+.hub :focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+.hub section[id] {
+  scroll-margin-top: 4.5rem;
+}
+.hub img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Header: always visible, only ever points inside the hub. */
+.hub-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem max(var(--h-pad), calc((100% - 90rem) / 2 + var(--h-pad)));
+  background: var(--h-bg);
+  border-bottom: 1px solid var(--h-rule);
+}
+.hub-brand {
+  font-family: var(--h-display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.hub-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+  font-size: 0.95rem;
+}
+.hub-nav a {
+  color: var(--h-muted);
+  transition: color 160ms linear;
+}
+.hub-nav a:hover {
+  color: var(--h-text);
+}
+.hub-theme {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--h-rule);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--h-text);
+  cursor: pointer;
+  transition: border-color 160ms linear;
+}
+.hub-theme:hover {
+  border-color: var(--h-muted);
+}
+
+.hub-wrap {
+  width: 100%;
+  max-width: 90rem;
+  margin: 0 auto;
+  padding: 0 var(--h-pad);
+}
+
+/* Hero */
+.hub-hero-inner {
+  padding-block: clamp(4rem, 14vh, 10rem) clamp(4rem, 12vh, 8rem);
+}
+.hub-name {
+  margin: 0;
+  font-family: var(--h-display);
+  font-weight: 800;
+  font-stretch: 90%;
+  font-size: clamp(2.75rem, 10vw, 6rem);
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  text-transform: lowercase;
+  text-wrap: balance;
+}
+.hub-statement {
+  max-width: 24ch;
+  margin: clamp(1.5rem, 4vh, 2.5rem) 0 0;
+  font-family: var(--h-serif);
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.hub-pick {
+  position: relative;
+  font-style: italic;
+  white-space: nowrap;
+}
+.hub-pick--dev {
+  color: var(--h-dev);
+}
+.hub-pick--vis {
+  color: var(--h-vis);
+}
+/* The one authored moment: each underline draws in from the left once, right
+   after load, pointing at the two ways into the portfolios. Transform only. */
+.hub-pick::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.02em;
+  height: 2px;
+  background: currentColor;
+  transform-origin: left center;
+  animation: hub-draw 700ms var(--h-ease) 350ms both;
+  transition: transform 200ms var(--h-ease);
+}
+.hub-pick--vis::after {
+  animation-delay: 550ms;
+}
+.hub-pick:hover::after,
+.hub-pick:focus-visible::after {
+  transform: scaleY(2.5);
+  transform-origin: left bottom;
+  animation: none;
+}
+@keyframes hub-draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+.hub-hint {
+  max-width: 44ch;
+  margin: 1.5rem 0 0;
+  color: var(--h-muted);
+}
+
+/* Section scaffolding */
+.hub-section {
+  padding-block: clamp(3.5rem, 9vw, 7rem);
+  border-top: 1px solid var(--h-rule);
+}
+.hub-h2 {
+  margin: 0 0 clamp(2rem, 5vw, 3.5rem);
+  font-family: var(--h-display);
+  font-weight: 800;
+  font-stretch: 90%;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-transform: lowercase;
+}
+
+/* About */
+.hub-about {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+@media (min-width: 60rem) {
+  .hub-about {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  }
+}
+.hub-portrait {
+  width: 100%;
+  max-width: 22rem;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 2px;
+  background: var(--h-rule);
+}
+.hub .hub-portrait {
+  height: auto;
+}
+.hub-prose {
+  max-width: 62ch;
+  font-family: var(--h-serif);
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  line-height: 1.5;
+}
+.hub-prose p {
+  margin: 0 0 1.1em;
+}
+.hub-h3 {
+  margin: clamp(2.5rem, 6vw, 4rem) 0 1rem;
+  font-family: var(--h-display);
+  font-weight: 800;
+  font-stretch: 90%;
+  font-size: 1.4rem;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+}
+.hub-timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-width: 44rem;
+}
+.hub-timeline li {
+  display: grid;
+  gap: 0.15rem 1.5rem;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--h-rule);
+}
+@media (min-width: 40rem) {
+  .hub-timeline li {
+    grid-template-columns: 11rem minmax(0, 1fr);
+  }
+}
+.hub-timeline .when {
+  color: var(--h-muted);
+  font-variant-numeric: tabular-nums;
+}
+.hub-timeline .where {
+  color: var(--h-muted);
+}
+
+/* Work: two plain rows, each one in its own portfolio's voice. */
+.hub-practice {
+  display: grid;
+  gap: 2rem;
+  padding-block: clamp(2rem, 5vw, 3rem);
+  border-top: 1px solid var(--h-rule);
+}
+.hub-practice:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+@media (min-width: 60rem) {
+  .hub-practice {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+}
+.hub-practice h3 {
+  margin: 0;
+  line-height: 1.1;
+}
+.hub-name--dev {
+  font-family: "Krona One", var(--h-sans);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  letter-spacing: -0.01em;
+}
+.hub-name--vis {
+  font-family: var(--h-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  letter-spacing: -0.01em;
+}
+.hub-blurb {
+  max-width: 40ch;
+  margin: 1rem 0 1.5rem;
+  color: var(--h-muted);
+}
+.hub-enter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-bottom: 0.15rem;
+  border-bottom: 2px solid currentColor;
+  font-weight: 600;
+  transition: gap 200ms var(--h-ease);
+}
+.hub-enter:hover {
+  gap: 0.7rem;
+}
+.hub-practice--dev .hub-enter {
+  color: var(--h-dev);
+}
+.hub-practice--vis .hub-enter {
+  color: var(--h-vis);
+}
+
+.hub-thumbs {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 62%;
+  gap: 1rem;
+  margin: 0;
+  padding: 0 0 0.5rem;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+.hub-thumbs li {
+  scroll-snap-align: start;
+}
+@media (min-width: 40rem) {
+  .hub-thumbs {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    overflow: visible;
+    padding: 0;
+  }
+}
+.hub-thumb {
+  display: block;
+}
+.hub-thumb-img {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--h-rule);
+}
+.hub .hub-thumb-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms var(--h-ease);
+}
+.hub-thumb:hover .hub-thumb-img img {
+  transform: scale(1.04);
+}
+.hub-thumb-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: 0.6rem;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+.hub-practice--dev .hub-thumb:hover .hub-thumb-title {
+  color: var(--h-dev);
+}
+.hub-practice--vis .hub-thumb:hover .hub-thumb-title {
+  color: var(--h-vis);
+}
+
+/* Contact: the other portfolio's ground, so the page ends on both. */
+.hub-contact {
+  background: var(--h-bg);
+  color: var(--h-text);
+  padding-block: clamp(4rem, 10vw, 8rem) 2rem;
+}
+.hub-lead {
+  max-width: 36ch;
+  margin: 0 0 1.5rem;
+  font-family: var(--h-serif);
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  line-height: 1.3;
+}
+.hub-email {
+  display: inline-block;
+  font-family: var(--h-display);
+  font-weight: 800;
+  font-stretch: 90%;
+  font-size: clamp(1.6rem, 5.5vw, 4rem);
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+  border-bottom: 3px solid currentColor;
+  transition: color 160ms linear;
+}
+.hub-email:hover {
+  color: var(--h-vis);
+}
+.hub-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.hub-socials a {
+  border-bottom: 1px solid var(--h-muted);
+  transition:
+    color 160ms linear,
+    border-color 160ms linear;
+}
+.hub-socials a:hover {
+  color: var(--h-vis);
+  border-color: currentColor;
+}
+.hub-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  margin-top: clamp(3rem, 8vw, 6rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--h-rule);
+  color: var(--h-muted);
+  font-size: 0.9rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hub-pick::after {
+    animation: none;
+  }
+  .hub *,
+  .hub *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Interactions. All run on the compositor (transform, opacity) or are one
+ * clip-path on one element; none needs JavaScript on scroll; every one is off
+ * or static under prefers-reduced-motion.
+ * ------------------------------------------------------------------ */
+
+/* Stops the full-width bands below from adding a sideways scrollbar. */
+.hub {
+  overflow-x: clip;
+}
+
+/* 1. The lens. Move over the introduction and a circle shows the other
+   portfolio's ground: paper on night, night on paper. The two meet under the
+   cursor. The copy underneath is a second, hidden-from-everyone copy (aria-hidden,
+   inert), so nothing is read or focused twice. */
+@property --r {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+.hub-hero {
+  --x: 50%;
+  --y: 40%;
+  position: relative;
+  overflow: hidden;
+  transition: --r 400ms var(--h-ease);
+}
+.hub-hero[data-lens="on"] {
+  --r: clamp(7rem, 15vw, 12rem);
+}
+.hub-alt {
+  position: absolute;
+  inset: 0;
+  background: var(--h-bg);
+  color: var(--h-text);
+  clip-path: circle(var(--r) at var(--x) var(--y));
+  pointer-events: none;
+}
+@media (hover: none) {
+  .hub-alt {
+    display: none;
+  }
+}
+
+/* 2. The ticker: the two disciplines interleaved, which is the point of the
+   site. CSS only; pauses on hover; a plain scrollable row without motion. */
+.hub-ticker {
+  overflow: hidden;
+  border-block: 1px solid var(--h-rule);
+  padding-block: 1.1rem;
+  white-space: nowrap;
+}
+.hub-ticker-track {
+  display: inline-flex;
+  animation: hub-ticker 48s linear infinite;
+  will-change: transform;
+}
+.hub-ticker:hover .hub-ticker-track {
+  animation-play-state: paused;
+}
+.hub-ticker-group {
+  display: inline-flex;
+  flex: none;
+}
+.hub-ticker-group span {
+  padding-right: 2.5rem;
+  font-family: var(--h-display);
+  font-weight: 800;
+  font-stretch: 90%;
+  font-size: clamp(1.4rem, 3vw, 2.25rem);
+  letter-spacing: -0.04em;
+  text-transform: lowercase;
+}
+.hub-ticker-group .dev {
+  color: var(--h-dev);
+}
+.hub-ticker-group .vis {
+  color: var(--h-vis);
+}
+@keyframes hub-ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* 3. The portrait "develops": blue monotone at rest, true colour on hover, the
+   way Visual's contact sheet does. On touch there is no hover, so it starts in
+   colour. */
+.hub-portrait-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 22rem;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.hub-portrait-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #0b2fb3;
+  mix-blend-mode: color;
+  opacity: 0.9;
+  transition: opacity 600ms var(--h-ease);
+  pointer-events: none;
+}
+.hub-portrait-wrap:hover::after {
+  opacity: 0;
+}
+@media (hover: none) {
+  .hub-portrait-wrap::after {
+    opacity: 0;
+  }
+}
+
+/* 4. Each portfolio row lights up in its own ground on hover or focus: Visual
+   to paper, Digital to night. It previews where the link goes. */
+.hub-practice {
+  position: relative;
+  isolation: isolate;
+  color: var(--h-text);
+}
+.hub-practice::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 350ms var(--h-ease);
+}
+.hub-practice--dev::before {
+  background: #07090d;
+}
+.hub-practice--vis::before {
+  background: #eee8d6;
+}
+.hub-practice--dev:is(:hover, :focus-within) {
+  --h-text: #f2f1ee;
+  --h-muted: #9aa0ab;
+  --h-dev: #a99ce4;
+}
+.hub-practice--vis:is(:hover, :focus-within) {
+  --h-text: #0a1030;
+  --h-muted: #4a4f66;
+  --h-vis: #0b2fb3;
+}
+.hub-practice:is(:hover, :focus-within)::before {
+  opacity: 1;
+}
+.hub-practice,
+.hub-practice p,
+.hub-practice a,
+.hub-practice h3 {
+  transition: color 350ms var(--h-ease);
+}
+
+/* 5 and 6 need scroll-driven animations (Chrome and Edge, Safari 26). Browsers
+   without them simply show the finished state. */
+@supports (animation-timeline: view()) {
+  /* A hairline under the header, lavender to blue, that grows as you read. */
+  .hub-bar::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--h-dev), var(--h-vis));
+    transform-origin: left center;
+    animation: hub-draw linear both;
+    animation-timeline: scroll(root block);
+  }
+
+  /* Timeline rules draw themselves in as each row arrives. */
+  .hub-timeline li {
+    position: relative;
+    border-top: 0;
+  }
+  .hub-timeline li::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--h-rule);
+    transform-origin: left center;
+    animation: hub-draw linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 90%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hub-ticker {
+    overflow-x: auto;
+  }
+  .hub-ticker-track {
+    animation: none;
+  }
+  .hub-hero {
+    transition: none;
+  }
+}

@@ -6,11 +6,13 @@ import { cn } from "../../utils/cn";
 import { SERVICE_BY_ID } from "../../data/services";
 
 const navLinks = [
-  { label: "Home", href: "/" },
+  // The Product homepage is /dev; / is the portfolio hub (ADR 0016), reached
+  // from the QL logo.
+  { label: "Home", href: "/dev" },
   { label: "Work", href: "/work" },
   { label: "Visual", href: "/visual" },
-  { label: "About", href: "/#about" },
-  { label: "Contact", href: "/#contact" },
+  { label: "About", href: "/dev#about" },
+  { label: "Contact", href: "/dev#contact" },
 ];
 
 export function Navigation() {
@@ -50,8 +52,8 @@ export function Navigation() {
   }, [location]);
 
   const handleNavClick = (href) => {
-    if (href.startsWith("/#") && location.pathname === "/") {
-      const element = document.querySelector(href.replace("/", ""));
+    if (href.startsWith("/dev#") && location.pathname === "/dev") {
+      const element = document.querySelector(href.replace("/dev", ""));
       element?.scrollIntoView({ behavior: "smooth" });
     }
   };

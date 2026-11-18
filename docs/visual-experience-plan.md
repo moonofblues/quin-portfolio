@@ -285,6 +285,20 @@ Changed in `src/pages/WorkPage.jsx` only.
 - Still on the homepage and not touched here: the hero pills and the Other
   Works tabs still list the Visual Focuses.
 
+## Step 8b — Portfolio hub — ✅ DONE (2026-11-19)
+
+Added after step 8 at Quin's request; decision in
+[ADR 0016](adr/0016-portfolio-hub.md). `/` is Quin's own one-page website
+(`src/hub/`) with its own About, Work and Contact, a night/light switch, and
+two entry points into the portfolios. The Product homepage moved to `/dev`.
+Old `/?focus=` links redirect there. Also: the Product hero shows only Product
+Focus pills, the step 7 "The other side" section was removed, "Visual" was
+added to the Product footer, and Visual's `ql` returns to the hub. A split hero
+and a two-panel hub were built first and dropped the same day.
+
+**For Quin:** update the résumé and LinkedIn links to `/dev`. Review the
+drafted bridging paragraph in the hub About.
+
 ## Step 9 — Docs and clean-up
 
 - Update `CLAUDE.md` (Conventions: the two Experiences and the import rule).
