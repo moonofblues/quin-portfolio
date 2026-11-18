@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useMatch } from "react-router-dom";
 import "./visual.css";
 
 // Visual's own typefaces. They are added here, when a Visual page opens, and
@@ -10,9 +10,15 @@ const FONTS_HREF =
   "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap";
 
 const PAPER = "#eee8d6";
+const NIGHT = "#050818";
 
 export function VisualLayout({ children }) {
   const { pathname, hash } = useLocation();
+  // Lights down: any work page (/visual/<slug>) dims the whole layout to
+  // blue-black so the work shows in true colour. The index, About and Contact
+  // stay on paper. The layout stays mounted between the two, so the colour
+  // change fades (see .v-root in visual.css) instead of cutting.
+  const dark = Boolean(useMatch("/visual/:slug"));
 
   useEffect(() => {
     if (document.getElementById(FONTS_ID)) return;
@@ -24,18 +30,22 @@ export function VisualLayout({ children }) {
   }, []);
 
   // The Product site paints the page background near-black. Overscroll and the
-  // gap behind short pages would show it, so paint it paper while Visual is
-  // open and hand it back on the way out.
+  // gap behind short pages would show it, so paint it paper (or night, on a
+  // work page) while Visual is open and hand it back on the way out.
   useEffect(() => {
     const html = document.documentElement;
     const prev = [html.style.backgroundColor, document.body.style.backgroundColor];
-    html.style.backgroundColor = PAPER;
-    document.body.style.backgroundColor = PAPER;
     return () => {
       html.style.backgroundColor = prev[0];
       document.body.style.backgroundColor = prev[1];
     };
   }, []);
+
+  useEffect(() => {
+    const colour = dark ? NIGHT : PAPER;
+    document.documentElement.style.backgroundColor = colour;
+    document.body.style.backgroundColor = colour;
+  }, [dark]);
 
   // Same job Layout.jsx does for Product: top of page on a new route, or the
   // element named by the #hash.
@@ -51,7 +61,7 @@ export function VisualLayout({ children }) {
   }, [pathname, hash]);
 
   return (
-    <div className="v-root">
+    <div className={dark ? "v-root v-dark" : "v-root"}>
       <header className="v-bar">
         <Link className="v-brand" to="/visual" aria-label="Quin Ledesma, visual work">
           ql / visual

@@ -1,22 +1,17 @@
 import { useCallback, useMemo, useState } from "react";
 import { ExternalLink } from "lucide-react";
-import { ImageLightbox } from "../../shared/image-viewer/ImageLightbox";
-import { ProjectEmbeds } from "../case-study/ProjectEmbeds";
+import { ImageLightbox } from "../../../shared/image-viewer/ImageLightbox";
+import { ProjectEmbeds } from "../../../shared/embeds/ProjectEmbeds";
 import { PhotoFrame } from "./PhotoFrame";
 import { layoutPhotos } from "./layoutPhotos";
 import { photoUrl } from "./photoUrl";
 
-const LABEL = "mb-5 text-xs uppercase tracking-widest text-text-muted";
-
 /** One block of rows, laid out by layoutPhotos(). */
 function Rows({ rows, total, onOpen }) {
   return (
-    <div className="flex flex-col gap-6 md:gap-10">
+    <div className="vp-rows">
       {rows.map((row) => (
-        <div
-          key={row.items[0].index}
-          className={row.kind === "pair" ? "grid items-start gap-6 md:grid-cols-2 md:gap-10" : undefined}
-        >
+        <div key={row.items[0].index} className={row.kind === "pair" ? "vp-pair" : undefined}>
           {row.items.map(({ photo, index }) => (
             <PhotoFrame
               key={index}
@@ -38,9 +33,9 @@ function Rows({ rows, total, onOpen }) {
  * that opens on click. `photos` must already have a url, width and height.
  *
  * Highlighted photos (the ones with `highlight`) come first, under a small
- * "Highlights" label, and are NOT repeated further down. The rest of the set
- * follows in its Studio order. With no highlights the page looks as it always
- * did: no labels, the first photo is the opener.
+ * "highlights" label, and are NOT repeated further down. The rest of the set
+ * follows in its Studio order. With no highlights the page has no labels and
+ * the first photo is the opener.
  *
  * `embeds` (optional) and `photoLink` (optional button) are shown between the
  * highlights and the rest of the set.
@@ -84,30 +79,25 @@ export function PhotoGallery({ photos, embeds, photoLink }) {
   const hasHighlights = highlightRows.length > 0;
 
   return (
-    <div className="flex flex-col gap-12 md:gap-16">
+    <div className="vp-gallery">
       {hasHighlights && (
         <div>
-          <h2 className={LABEL}>Highlights</h2>
+          <h2 className="vp-label">highlights</h2>
           <Rows rows={highlightRows} total={ordered.length} onOpen={setOpenAt} />
         </div>
       )}
       {embeds?.length > 0 && <ProjectEmbeds embeds={embeds} />}
       {photoLink?.url && (
-        <div className="flex justify-center">
-          <a
-            href={photoLink.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-bg-tertiary px-5 text-sm text-text-primary hover:text-accent transition-[color] duration-200"
-          >
+        <div className="vp-linkrow">
+          <a href={photoLink.url} target="_blank" rel="noopener noreferrer" className="vp-linkbtn">
             {photoLink.label || "View on Facebook"}
-            <ExternalLink size={16} />
+            <ExternalLink size={16} aria-hidden="true" />
           </a>
         </div>
       )}
       {restRows.length > 0 && (
         <div>
-          {hasHighlights && <h2 className={LABEL}>The full set</h2>}
+          {hasHighlights && <h2 className="vp-label">the full set</h2>}
           <Rows rows={restRows} total={ordered.length} onOpen={setOpenAt} />
         </div>
       )}

@@ -12,7 +12,8 @@ tab.
 - *Placeholder in [square brackets]* → fill in once you've uploaded the photo.
 
 **Preview while you work:** run `npm run dev`, then open
-`http://localhost:5173/work/<slug>` (the slug Studio creates from the title).
+`http://localhost:5173/visual/<slug>` (the slug Studio creates from the title).
+An old `/work/<slug>` link redirects there.
 
 ---
 

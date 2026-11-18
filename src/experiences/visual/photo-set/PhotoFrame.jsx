@@ -16,11 +16,13 @@ const SIZES = {
  * The wrapper reserves the photo's exact shape (aspect-ratio) and is painted
  * with the photo's dominant colour. So the page does not jump while the image
  * downloads, and the visitor sees a soft block of the right colour, not a hole.
+ * On a work page the lights are down, so the photo is always shown in true
+ * colour (never tinted).
  */
 export function PhotoFrame({ photo, index, total, kind, onOpen }) {
   const isOpener = kind === "opener";
   const sizes = SIZES[kind === "opener" ? "full" : kind] ?? SIZES.full;
-  // The badge only shows on highlighted photos that have recognition text.
+  // The stamp only shows on highlighted photos that have recognition text.
   const recognition = photo.highlight ? photo.recognition : undefined;
 
   // A solo portrait is limited to 85% of the screen height, so it fits on one
@@ -32,15 +34,15 @@ export function PhotoFrame({ photo, index, total, kind, onOpen }) {
       : undefined;
 
   return (
-    <figure className={kind === "solo" ? "mx-auto w-full" : "w-full"} style={soloStyle}>
+    <figure className={`vp-figure${kind === "solo" ? " vp-solo" : ""}`} style={soloStyle}>
       <button
         type="button"
         onClick={() => onOpen(index)}
         aria-label={`Open photo ${index + 1} of ${total}, ${photo.alt}${recognition ? `. ${recognition}` : ""}`}
-        className="group block w-full cursor-zoom-in rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+        className="vp-photo-btn"
       >
-        <div
-          className="relative overflow-hidden"
+        <span
+          className="vp-photo"
           style={{
             backgroundColor: photo.color,
             aspectRatio: `${photo.width} / ${photo.height}`,
@@ -53,7 +55,6 @@ export function PhotoFrame({ photo, index, total, kind, onOpen }) {
             alt={photo.alt}
             width={photo.width}
             height={photo.height}
-            className="block h-auto w-full transition-[opacity] duration-200 group-hover:opacity-90"
             decoding="async"
             // Only the opener is the page's largest visible image, so only it
             // loads right away; everything else waits until it is near.
@@ -61,20 +62,16 @@ export function PhotoFrame({ photo, index, total, kind, onOpen }) {
             fetchPriority={isOpener ? "high" : "low"}
           />
           {recognition && (
-            // A solid dark pill (no blur: blur is costly to draw and would be
-            // redrawn while scrolling) so the white text reads on any photo.
-            <span className="absolute left-3 top-3 inline-flex max-w-[calc(100%-1.5rem)] items-start gap-1.5 rounded-lg bg-black/75 px-3 py-1.5 text-left text-xs font-medium leading-snug text-white">
-              <Award size={14} className="mt-px shrink-0" aria-hidden="true" />
+            // A solid dark label (no blur: blur is costly to draw and would be
+            // redrawn while scrolling) so the text reads on any photo.
+            <span className="vp-stamp">
+              <Award size={14} aria-hidden="true" />
               {recognition}
             </span>
           )}
-        </div>
+        </span>
       </button>
-      {photo.caption && (
-        <figcaption className="mt-3 text-sm leading-relaxed text-text-muted">
-          {photo.caption}
-        </figcaption>
-      )}
+      {photo.caption && <figcaption className="vp-caption">{photo.caption}</figcaption>}
     </figure>
   );
 }

@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route, useParams } from "react-router-dom";
 import { ProjectsProvider, useProjects } from "./shared/context/ProjectsContext";
 import { Layout } from "./components/layout/Layout";
 import { HomePage } from "./pages/HomePage";
@@ -27,12 +27,6 @@ const CaseStudyPageV2 = lazy(() =>
   import("./pages/CaseStudyPageV2").then((m) => ({ default: m.CaseStudyPageV2 })),
 );
 
-// Photo sets (ADR 0013) have their own gallery page. Loaded lazily like the
-// others, so the homepage bundle does not grow.
-const PhotoSetPage = lazy(() =>
-  import("./pages/PhotoSetPage").then((m) => ({ default: m.PhotoSetPage })),
-);
-
 // The Visual experience (ADR 0014) is its own lazy chunk with its own layout
 // and stylesheet, so the homepage bundle does not grow.
 const VisualApp = lazy(() =>
@@ -49,8 +43,9 @@ function CaseStudyRoute() {
   // the case study page first.
   if (!card && loading) return <RouteFallback />;
 
-  // A photo set gets the gallery page.
-  if (card?.type === "photo-set") return <PhotoSetPage />;
+  // Photo sets live in the Visual experience (ADR 0014). Links that were shared
+  // as /work/<slug> keep working by redirecting to the new address.
+  if (card?.type === "photo-set") return <Navigate to={`/visual/${slug}`} replace />;
 
   // Showcase projects keep the old page; everything else gets v2.
   if (card?.type === "showcase") return <CaseStudyPage />;

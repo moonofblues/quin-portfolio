@@ -68,6 +68,16 @@ and Showcase.
   relies on. They also make the reading order unclear and need more JavaScript
   to measure and rearrange.
 
+## Addendum (2026-11-18): the page moved into the Visual experience
+
+[ADR 0014](0014-visual-experience.md) put photo sets in the Visual experience.
+The page now lives at `/visual/<slug>` and is `VisualPhotoSet.jsx` in
+`src/experiences/visual/photo-set/`, restyled for the "lights down" look (a
+blue-black page, photos always in true colour). The layout rules, highlights,
+recognition stamp, embed and link button described here are unchanged. An old
+`/work/<slug>` link to a photo set redirects to `/visual/<slug>`. The embeds
+component moved to `src/shared/embeds/` because case studies use it too.
+
 ## Addendum (2026-11-17): highlighted photos and recognition
 
 Quin wants a few photos in a set to stand out, for example shots that were

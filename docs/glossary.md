@@ -88,7 +88,8 @@ section of `docs/redesign-plan.md`.
 
 - **Photo set** — a `project` document with `type: "photo-set"`: a finished
   series of photographs (portraits, street moments), shown on its own
-  gallery-style page (`PhotoSetPage.jsx`) where the photos lead and the text is
+  gallery-style page (`VisualPhotoSet.jsx`, at `/visual/<slug>` since ADR 0014)
+  where the photos lead and the text is
   quiet. It is a *Type* (how the project is presented), not a Focus: a photo
   set is usually tagged with a Photography Category, which is what places it
   under the Photography Focus ([ADR 0012](adr/0012-photography-as-a-seventh-focus.md)).

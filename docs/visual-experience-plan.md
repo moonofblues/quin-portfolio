@@ -5,10 +5,10 @@ Working plan for [ADR 0014](adr/0014-visual-experience.md), written
 overall structure. Read the ADR first: it holds the decisions, and this file
 holds the order of work.
 
-**Status (2026-11-18):** Steps 0, 1 and 2 are done. The design direction is
+**Status (2026-11-18):** Steps 0 to 4 are done. The design direction is
 agreed and written up in [`visual-design-direction.md`](visual-design-direction.md),
 with a browser prototype in `reference/visual-direction/prototype.html`.
-Step 3 is unblocked.
+Next: step 5 (the Visual index for graphic design) and step 6 (video).
 
 ## Summary
 
@@ -111,7 +111,7 @@ Choices made on the way, easy to change:
 - **The tint is a live CSS blend for now.** The design doc says to bake it into
   the image files; that is a follow-up once real photos exist.
 - **Frames link to `/work/<slug>`** for now. `projectPath()` in `helpers.js` is
-  the one place to change when step 4 moves photo sets to `/visual/<slug>`.
+  the one place to change. (Photo sets moved to `/visual/<slug>` in step 4.)
 - Today only graphic design appears. The photo set has no photos and there is
   no film yet.
 
@@ -137,7 +137,33 @@ result.
 **Check:** build. The homepage critical set must not grow. The Visual chunk
 should load only on `/visual`.
 
-## Step 4 — Move photo sets into Visual
+## Step 4 — Move photo sets into Visual — ✅ DONE (2026-11-18)
+
+Photo sets are now `VisualPhotoSet` at `/visual/<slug>`, with their files
+under `src/experiences/visual/photo-set/` (`PhotoGallery`, `PhotoFrame`,
+`layoutPhotos.js`, `photoUrl.js`). The page and gallery no longer import any
+Product code: their classes are Visual's own (`vp-*` in `visual.css`).
+`PhotoSetFooter` was replaced by a short footer in the page itself.
+
+- **Lights down.** `VisualLayout` adds `v-dark` on any `/visual/<slug>` route,
+  so the whole layout (top bar, page, overscroll) fades to blue-black in about
+  0.4s and the photos show in true colour. The index stays on paper.
+- **Redirects.** `/work/<slug>` for a photo set redirects to `/visual/<slug>`
+  (`replace`, so Back doesn't bounce). `/visual/<slug>` for anything that is
+  not a photo set redirects to `/work/<slug>` until steps 5 and 6.
+- **`ProjectEmbeds` moved to `src/shared/embeds/`**, since case studies and
+  photo sets both use it. It still uses the Product's Tailwind colours (dark
+  grey cards, a lavender fallback link); they sit fine on the dark page but
+  are not Visual's blue.
+- **Index links** to photo sets use `projectPath()` and now point at
+  `/visual/<slug>`.
+- Checked in a browser with real data (the Fujifilm set) and a test gallery
+  made from real Sanity images (highlights, stamp, portrait pair, solo
+  portrait, link button, viewer, Escape to close), at desktop and 390px. No
+  sideways overflow. The test page was deleted before committing.
+- **Not shown in the index yet:** a set appears on `/visual` only when it has a
+  card thumbnail. The Fujifilm set has none, so set its Thumbnail in Studio
+  (Card & meta tab).
 
 - Photo set pages render at `/visual/<slug>` inside the Visual Layout.
 - `PhotoSetPage` stops importing from the case-study code (`PAGE_WIDTH`,

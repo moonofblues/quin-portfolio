@@ -28,11 +28,13 @@ export function groupOf(project) {
 }
 
 /**
- * Where a project's own page lives. Still the Work route for now; plan step 4
- * moves photo sets to /visual/<slug> and this is the one place to change.
+ * Where a project's own page lives. Photo sets are Visual pages (plan step 4).
+ * Everything else is still on the Work route until steps 5 and 6.
  */
 export function projectPath(project) {
-  return `/work/${project.slug}`;
+  return project.type === "photo-set"
+    ? `/visual/${project.slug}`
+    : `/work/${project.slug}`;
 }
 
 /** Featured first, otherwise keep Studio's order. */

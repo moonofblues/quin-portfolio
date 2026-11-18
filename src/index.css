@@ -91,7 +91,7 @@ html {
 body {
   font-family: var(--font-body);
   line-height: 1.6;
-  /* Full-bleed sections (see FullBleed in ProjectEmbeds.jsx) are 100vw wide,
+  /* Full-bleed sections (see FullBleed in shared/embeds/ProjectEmbeds.jsx) are 100vw wide,
      and 100vw counts the scrollbar — ~15px more than the visible page, which
      would otherwise add a sideways scrollbar. `clip` trims the overhang
      without making body a scroll container, so sticky positioning and Lenis

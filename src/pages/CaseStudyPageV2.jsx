@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { motion, MotionConfig } from "framer-motion";
 import { Button } from "../components/ui/Button";
 import { HeroCollage } from "../components/case-study/HeroCollage";
-import { ProjectEmbeds } from "../components/case-study/ProjectEmbeds";
+import { ProjectEmbeds } from "../shared/embeds/ProjectEmbeds";
 import { CaseStudyHero } from "../components/case-study/v2/CaseStudyHero";
 import { ChapterNav } from "../components/case-study/v2/ChapterNav";
 import { SolutionGlance } from "../components/case-study/v2/SolutionGlance";

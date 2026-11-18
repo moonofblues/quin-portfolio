@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { VisualLayout } from "./VisualLayout";
 import { VisualHome } from "./VisualHome";
-
+import { VisualWork } from "./VisualWork";
 /**
  * The Visual experience (ADR 0014), mounted at /visual/* by App.jsx.
  *
@@ -13,7 +13,7 @@ export function VisualApp() {
     <VisualLayout>
       <Routes>
         <Route index element={<VisualHome />} />
-        {/* Photo set and film pages arrive in plan steps 4 and 6. */}
+        <Route path=":slug" element={<VisualWork />} />
         <Route path="*" element={<Navigate to="/visual" replace />} />
       </Routes>
     </VisualLayout>

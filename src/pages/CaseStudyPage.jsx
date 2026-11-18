@@ -7,7 +7,7 @@ import { Button } from "../components/ui/Button";
 import { Star } from "../components/decorative/Stars";
 import { ProjectCard } from "../components/ProjectCard";
 import { HeroCollage } from "../components/case-study/HeroCollage";
-import { ProjectEmbeds } from "../components/case-study/ProjectEmbeds";
+import { ProjectEmbeds } from "../shared/embeds/ProjectEmbeds";
 import { StatRing } from "../components/case-study/StatRing";
 import { ProcessTimeline } from "../components/case-study/ProcessTimeline";
 import { useProjects } from "../shared/context/ProjectsContext";
