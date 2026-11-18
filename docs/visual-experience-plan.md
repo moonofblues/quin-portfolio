@@ -112,8 +112,17 @@ works. The image viewer still opens.
 - Remove the Focus chooser (`FocusChooser.jsx` and its use in
   `HomePage.jsx`). `?focus=` links keep working, and so do the What I Do
   pills.
-- Reshape the existing `Introduction` section to be person-first: one short
-  line about who Quin is, before the work. This needs new copy from Quin.
+- Keep the existing `Introduction` section. It is already person-first
+  (checked 2026-11-18), so it is not rewritten. Add one line under its
+  ZCMC and Ateneo line that points into Visual, in Quin's voice (draft,
+  wording to confirm): "Away from the screen, I'm usually behind a camera
+  — portraits, street moments, and the occasional video edit. See the
+  visual work →". The link needs `/visual` to exist, so this waits for
+  Step 3.
+- In `About`, add photography to the last paragraph ("When I'm not designing
+  or coding, you might find me teaching the next generation of developers,
+  behind a camera, exploring motion graphics, or occasionally hitting the
+  dance floor.").
 - Add one homepage section inviting visitors into Visual.
 
 **Check:** build. The homepage critical set should shrink slightly, since the
@@ -139,7 +148,8 @@ chooser was in the entry chunk.
 1. **Visual's design direction:** mood, references, colours, fonts. This is
    needed before Step 3's styling. It could be worked out with a design
    session (for example the `frontend-design` or `impeccable` skill).
-2. **Introduction copy:** the one-line person-first intro for Step 7.
+2. **Confirm the Visual line** for the Introduction (Step 7). The draft says
+   "the occasional video edit", which may undersell the film work.
 3. **Video work:** which pieces, and where the files live (YouTube, Vimeo,
    Sanity). Needed for Step 6.
 4. **Which graphic design pieces** should also appear on the Product Work
