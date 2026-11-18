@@ -3,6 +3,32 @@
 Domain terms used across this codebase's docs (ADRs, code comments) that
 aren't self-evident from the code alone.
 
+## Experiences (site structure)
+
+Introduced by [ADR 0014](adr/0014-visual-experience.md); build plan in
+`docs/visual-experience-plan.md`.
+
+- **Experience** — one of the two parts of the site, each with its own
+  layout, fonts, colours and atmosphere. Every Focus belongs to exactly one
+  Experience. A project can still appear in both, depending on its Focuses.
+
+- **Product experience** — the hiring-manager side: UI/UX, Front-End, Web
+  Dev and Low-Code work, at `/` and `/work`. Uses the night-sky design
+  (fireflies, cursor, lavender and mint). The homepage is its front door.
+
+- **Visual experience** — the cinematic, image-first side: Video,
+  Photography and Graphic Design work, at `/visual`. Its code lives in
+  `src/experiences/visual/` and never imports from the Product code.
+
+- **Shared layer** — `src/shared/`: the code both Experiences use (Sanity
+  client and queries, project data, the image viewer, the name lockup, the
+  cross-link). Kept small on purpose: anything only one Experience needs
+  stays in that Experience.
+
+- **Main page** (of a project) — the one address a project lives at, picked
+  from its Type: case studies on Product (`/work/<slug>`), photo sets and
+  Visual-only Showcases on Visual (`/visual/<slug>`).
+
 ## Focus (homepage entry experience)
 
 Introduced in Phase 6 of the redesign; see
@@ -22,7 +48,9 @@ section of `docs/redesign-plan.md`.
   state is remembered in `localStorage`; a URL that already names a Focus
   skips it. Not a blocking gate — Skip (or Esc) dismisses it to the Default
   view. See ADR 0008 for why a dismissible pop-up was chosen over both a hard
-  gate and a non-blocking on-page section.
+  gate and a non-blocking on-page section. *Being removed:*
+  [ADR 0014](adr/0014-visual-experience.md) drops the pop-up because it is a
+  selection screen before any work is shown. `?focus=` links stay.
 
 - **Focused view** — the homepage while a Focus is active. Only the **hero**
   (headline, description, tags) and **Featured Work** change; What I Do,

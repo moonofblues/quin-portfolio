@@ -1,5 +1,13 @@
 # 2026-09 Dark Redesign — Plan
 
+> **Old plan (kept for history), as of 2026-11-18.** The site's overall
+> structure is now planned in
+> [`docs/visual-experience-plan.md`](visual-experience-plan.md) and decided in
+> [ADR 0014](adr/0014-visual-experience.md): one site with a Product and a
+> Visual Experience. The night-sky design described here is still the
+> Product experience's look. Phase 6's Focus chooser pop-up is being removed
+> (ADR 0014). Don't start new work from this file.
+
 Working plan from the `/grill-with-docs` session of 2026-09-07.
 **Phases 1-4 are implemented; Phase 5 (real content) is not.** See the per-phase
 entries under "Implementation sequence" for what actually landed and what the
