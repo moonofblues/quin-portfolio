@@ -5,8 +5,8 @@ import { Button } from "../components/ui/Button";
 import { PhotoGallery } from "../components/photo-set/PhotoGallery";
 import { PhotoSetFooter } from "../components/photo-set/PhotoSetFooter";
 import { PAGE_WIDTH } from "../components/case-study/v2/shared";
-import { useProjects } from "../context/ProjectsContext";
-import { useProjectDetail } from "../context/useProjectDetail";
+import { useProjects } from "../shared/context/ProjectsContext";
+import { useProjectDetail } from "../shared/context/useProjectDetail";
 
 // No framer-motion here on purpose: the page has no animations to configure.
 /**

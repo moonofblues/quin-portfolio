@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { ExternalLink } from "lucide-react";
-import { ImageLightbox } from "../case-study/v2/blocks/ImageLightbox";
+import { ImageLightbox } from "../../shared/image-viewer/ImageLightbox";
 import { ProjectEmbeds } from "../case-study/ProjectEmbeds";
 import { PhotoFrame } from "./PhotoFrame";
 import { layoutPhotos } from "./layoutPhotos";

@@ -10,8 +10,8 @@ import { HeroCollage } from "../components/case-study/HeroCollage";
 import { ProjectEmbeds } from "../components/case-study/ProjectEmbeds";
 import { StatRing } from "../components/case-study/StatRing";
 import { ProcessTimeline } from "../components/case-study/ProcessTimeline";
-import { useProjects } from "../context/ProjectsContext";
-import { useProjectDetail } from "../context/useProjectDetail";
+import { useProjects } from "../shared/context/ProjectsContext";
+import { useProjectDetail } from "../shared/context/useProjectDetail";
 import { cn } from "../utils/cn";
 import { SERVICE_BY_ID } from "../data/services";
 

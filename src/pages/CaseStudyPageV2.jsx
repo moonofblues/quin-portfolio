@@ -22,8 +22,8 @@ import {
   SECTION_GAP,
   getBehanceUrl,
 } from "../components/case-study/v2/shared";
-import { useProjects } from "../context/ProjectsContext";
-import { useProjectDetail } from "../context/useProjectDetail";
+import { useProjects } from "../shared/context/ProjectsContext";
+import { useProjectDetail } from "../shared/context/useProjectDetail";
 import { CaseStudyPage } from "./CaseStudyPage";
 
 const RESERVED_IDS = new Set(["overview", "outcome"]);

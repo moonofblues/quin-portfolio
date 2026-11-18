@@ -6,8 +6,8 @@ import { ProjectCard } from "../components/ProjectCard";
 import { Star } from "../components/decorative/Stars";
 import { Button } from "../components/ui/Button";
 import { SERVICES } from "../data/services";
-import { fetchCategories } from "../sanity/queries";
-import { useProjects } from "../context/ProjectsContext";
+import { fetchCategories } from "../shared/sanity/queries";
+import { useProjects } from "../shared/context/ProjectsContext";
 import { cn } from "../utils/cn";
 
 const ALL_FOCUS = { id: "all", label: "All Work", description: "Browse all projects across disciplines" };

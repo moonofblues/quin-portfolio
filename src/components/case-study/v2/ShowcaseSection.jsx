@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronUp, ExternalLink, Expand } from "lucide-react";
 import { cn } from "../../../utils/cn";
 import { Button } from "../../ui/Button";
-import { LightboxShell } from "./blocks/LightboxShell";
+import { LightboxShell } from "../../../shared/image-viewer/LightboxShell";
 import { H2, HEADER_GAP, PAGE_WIDTH, SECTION_GAP } from "./shared";
 
 /** Full-screen stack of every frame, opened at the frame that was clicked. */

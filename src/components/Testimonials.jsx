@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
 import { SectionTitle } from "./ui/SectionTitle";
-import { fetchTestimonials } from "../sanity/queries";
+import { fetchTestimonials } from "../shared/sanity/queries";
 
 /** Initials fallback for a testimonial with no photo — same idea as About's
  *  monogram placeholder, sized for a small avatar circle. */

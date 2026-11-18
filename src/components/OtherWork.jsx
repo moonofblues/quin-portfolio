@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionTitle } from "./ui/SectionTitle";
 import { cn } from "../utils/cn";
-import { useProjects } from "../context/ProjectsContext";
+import { useProjects } from "../shared/context/ProjectsContext";
 import { SERVICES, SERVICE_BY_ID } from "../data/services";
 
 const ALL_TAB = { id: "all", label: "All" };

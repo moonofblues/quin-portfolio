@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { motion } from "framer-motion";
-import { ImageLightbox } from "./blocks/ImageLightbox";
+import { ImageLightbox } from "../../../shared/image-viewer/ImageLightbox";
 import { ArrowRight } from "lucide-react";
 import { fadeUp, H2, H3_CAPS, HEADER_GAP, PAGE_WIDTH, SCROLL_OFFSET, SECTION_GAP } from "./shared";
 

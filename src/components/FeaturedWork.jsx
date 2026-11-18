@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { SectionTitle } from "./ui/SectionTitle";
 import { ProjectCard } from "./ProjectCard";
 import { Button } from "./ui/Button";
-import { useProjects } from "../context/ProjectsContext";
+import { useProjects } from "../shared/context/ProjectsContext";
 import { SERVICE_BY_ID } from "../data/services";
 
 export function FeaturedWork() {

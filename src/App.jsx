@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
-import { ProjectsProvider, useProjects } from "./context/ProjectsContext";
+import { ProjectsProvider, useProjects } from "./shared/context/ProjectsContext";
 import { Layout } from "./components/layout/Layout";
 import { HomePage } from "./pages/HomePage";
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { SectionTitle } from "./ui/SectionTitle";
 import { RevealLines } from "./ui/RevealLines";
-import { fetchNow } from "../sanity/queries";
+import { fetchNow } from "../shared/sanity/queries";
 
 /**
  * "Now" (redesign plan Q1, glossary "Now") — what Quin is doing right now, at

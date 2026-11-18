@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { EyeOff, Expand } from "lucide-react";
 import { cn } from "../../../../utils/cn";
-import { ImageLightbox } from "./ImageLightbox";
+import { ImageLightbox } from "../../../../shared/image-viewer/ImageLightbox";
 
 function Frame({ image, onExpand }) {
   const img = (
