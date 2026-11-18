@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Quin Ledesma — Visual (design prototype)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+/* ───────────────────────── tokens ─────────────────────────
+   One ink (cyanotype blue) on warm paper. When a work is opened the
+   "lights go down": paper becomes blue-black and the work shows in true
+   colour. Photos are never tinted on the detail view. */
+:root{
+  --paper:#EEE8D6;          /* warm cream, so warm photos sit well on it */
+  --paper-2:#E4DDC7;
+  --ink:#0B2FB3;            /* ultramarine / cyanotype */
+  --ink-deep:#071E78;
+  --text:#0A1030;           /* near-black with a blue cast */
+  --night:#050818;          /* lights-down ground */
+  --night-2:#0B1030;
+  --ink-light:#8EA2FF;      /* the ink, lifted for dark grounds */
+  --cream-on-night:#EEE8D6;
+  --display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+  --serif:"Instrument Serif",Georgia,serif;
+  --mono:"DM Mono",ui-monospace,Menlo,monospace;
+  --pad:clamp(1rem,3vw,2.5rem);
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--text);font-family:var(--display);font-size:1.0625rem;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:clip}
+/* paper grain: a static layer, painted once. In production this is baked
+   into the background image, not a live filter. */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.09;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+a{color:inherit}
+.mono{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+/* ───────────────────────── header ───────────────────────── */
+.bar{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.9rem var(--pad);color:var(--ink);background:var(--paper);border-bottom:1px solid rgba(11,47,179,.25)}
+.bar a{text-decoration:none}
+.bar .brand{font-weight:800;font-size:1.15rem;letter-spacing:-.04em;text-transform:lowercase}
+.bar nav{display:flex;gap:clamp(.9rem,2.4vw,2rem);align-items:center}
+.bar nav a{font-weight:700;letter-spacing:-.02em;text-transform:lowercase;font-size:1rem}
+.bar nav a:hover{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.bar .xlink{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;border:1px solid currentColor;padding:.35rem .65rem;border-radius:99px}
+@media (max-width:640px){.bar .xlink{display:none}}
+
+/* ───────────────────────── contact-sheet frame ─────────────────────────
+   Duotone: grayscale picture screened over ink, then multiplied by paper.
+   On hover the true-colour print "develops" on top (opacity only). */
+.frame{position:relative;overflow:hidden;background:var(--ink);isolation:isolate;display:block;width:100%;border:0;padding:0;cursor:pointer;text-align:left}
+.frame .pic,.frame .col{position:absolute;inset:0;background-image:var(--bg);background-size:cover;background-position:center}
+.frame .pic{filter:grayscale(1) contrast(1.3) brightness(1.05);mix-blend-mode:screen}
+.frame::after{content:"";position:absolute;inset:0;background:var(--paper);mix-blend-mode:multiply;transition:opacity .5s var(--ease)}
+/* halftone dots: the printed-texture layer. Baked into the image in production. */
+.frame::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;mix-blend-mode:multiply;transition:opacity .5s var(--ease);
+  background:radial-gradient(circle at 50% 50%,rgba(5,8,40,.55) 0 .9px,transparent 1.1px) 0 0/4px 4px}
+.frame:hover::before,.frame:focus-visible::before{opacity:0}
+.frame .col{z-index:2;opacity:0;transition:opacity .5s var(--ease)}
+.frame:hover .col,.frame:focus-visible .col,.frame.is-on .col{opacity:1}
+.frame:hover::after,.frame:focus-visible::after{opacity:0}
+.frame .no{position:absolute;z-index:3;left:.5rem;top:.45rem;font-family:var(--mono);font-size:.72rem;color:var(--paper);mix-blend-mode:normal;text-shadow:0 0 6px rgba(5,8,24,.6)}
+.cap{display:flex;justify-content:space-between;gap:1rem;margin-top:.5rem;color:var(--ink)}
+.cap b{font-weight:700;text-transform:lowercase;letter-spacing:-.02em;font-size:.98rem}
+.cap span{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;opacity:.8;white-space:nowrap}
+.item{position:relative}
+.item.static .frame{cursor:default}
+
+/* warm, saturated stand-ins for the real film and photo frames */
+.p1{--bg:radial-gradient(60% 50% at 72% 28%,#ffc15a 0,transparent 62%),linear-gradient(160deg,#ff5e3a 0%,#c2185b 48%,#2b1055 100%)}
+.p2{--bg:radial-gradient(38% 55% at 50% 46%,#ffd886 0,#ee8a1f 46%,#4a1a08 100%)}
+.p3{--bg:linear-gradient(180deg,transparent 45%,#1b0c0a 100%),linear-gradient(90deg,#e63946 0 25%,#f4a300 25% 50%,#2a9d8f 50% 75%,#ff7b00 75%)}
+.p4{--bg:linear-gradient(180deg,#ffd36e 0,#ff8a4c 32%,#16a0a8 33%,#0b3c5d 100%)}
+.p5{--bg:radial-gradient(35% 42% at 28% 62%,#ff5fae,transparent 70%),radial-gradient(40% 40% at 76% 34%,#ffd060,transparent 70%),linear-gradient(135deg,#7a3aa8,#1a0b2e)}
+.p6{--bg:linear-gradient(118deg,#d90429 0 44%,#ffbe0b 44% 70%,#3a0ca3 70%)}
+.p7{--bg:radial-gradient(50% 60% at 40% 40%,#ffe29a 0,#ff9248 40%,#8f2d56 80%,#2a0a2e 100%)}
+.p8{--bg:linear-gradient(200deg,#f9c74f 0,#f3722c 40%,#9d0208 100%)}
+
+/* ───────────────────────── hero ───────────────────────── */
+.hero{position:relative;min-height:100svh;padding:5.5rem var(--pad) 3rem;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+.hero .f{position:absolute}
+.hero .f1{top:11%;right:5%;width:clamp(11rem,34vw,34rem);aspect-ratio:16/9}
+.hero .f2{top:30%;right:31%;width:clamp(5.5rem,13vw,13rem);aspect-ratio:2/3}
+.hero .f3{top:13%;left:41%;width:clamp(6rem,14vw,14rem);aspect-ratio:1/1}
+.hero .f4{top:44%;right:9%;width:clamp(7rem,17vw,17rem);aspect-ratio:3/2}
+.hero .f .frame{height:100%}
+.hero .lede{position:relative;z-index:4;max-width:34rem;margin-bottom:1.25rem;color:var(--ink)}
+.hero .lede p{font-family:var(--serif);font-style:italic;font-size:clamp(1.4rem,2.6vw,2.2rem);line-height:1.1}
+.hero .lede .mono{margin-top:.8rem;display:block}
+.name{position:relative;z-index:3;font-weight:800;color:var(--ink);font-stretch:90%;
+  font-size:clamp(4.4rem,21vw,23rem);line-height:.82;letter-spacing:-.04em;text-transform:lowercase;margin-left:-.04em}
+.name span{display:block}
+.name span:last-child{margin-left:.35em}
+@media (max-width:640px){
+  .hero .f2,.hero .f4{display:none}
+  .hero .f1{top:9%;width:62vw}
+  .hero .f3{top:24%;left:auto;right:6%;width:30vw}
+  .name{font-size:clamp(4rem,31vw,9rem)}
+  .name span:last-child{margin-left:.1em}
+}
+
+/* ───────────────────────── ticker band (also the nav between sections) ───────────────────────── */
+.ticker{background:var(--ink);color:var(--paper);overflow:hidden;border-block:2px solid var(--ink-deep)}
+.ticker .track{display:flex;width:max-content;animation:tick 38s linear infinite;will-change:transform}
+.ticker a{display:block;white-space:nowrap;padding:.7rem 1.6rem;text-decoration:none;font-weight:800;text-transform:lowercase;letter-spacing:-.03em;font-size:clamp(1.1rem,2.4vw,1.7rem)}
+.ticker a i{font-style:normal;opacity:.55;margin-left:3.2rem}
+.ticker:hover .track{animation-play-state:paused}
+@keyframes tick{to{transform:translate3d(-50%,0,0)}}
+
+/* ───────────────────────── work index ───────────────────────── */
+section{padding:clamp(3.5rem,9vw,8rem) var(--pad)}
+.group{margin-bottom:clamp(4rem,9vw,8rem)}
+.group:last-child{margin-bottom:0}
+.ghead{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;border-top:2px solid var(--ink);padding-top:.8rem;margin-bottom:1.6rem;color:var(--ink)}
+.ghead h2{font-weight:800;font-stretch:90%;text-transform:lowercase;font-size:clamp(3rem,10vw,9rem);line-height:.85;letter-spacing:-.04em}
+.ghead .mono{white-space:nowrap}
+.gnote{max-width:38rem;margin:-.6rem 0 1.8rem;font-family:var(--serif);font-style:italic;font-size:1.35rem;line-height:1.15;color:var(--ink)}
+.film{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(.9rem,1.8vw,1.6rem)}
+.film .item{grid-column:span 6}
+.film .item:nth-child(1){grid-column:span 8}
+.film .item:nth-child(2){grid-column:span 4;align-self:end}
+.film .frame{aspect-ratio:16/9}
+.film .item:nth-child(2) .frame{aspect-ratio:4/5}
+.cols{column-count:3;column-gap:clamp(.9rem,1.8vw,1.6rem)}
+.cols .item{break-inside:avoid;margin-bottom:clamp(.9rem,1.8vw,1.6rem)}
+@media (max-width:900px){.cols{column-count:2}.film .item,.film .item:nth-child(n){grid-column:span 12}.film .item:nth-child(2) .frame{aspect-ratio:16/9}}
+@media (max-width:520px){.cols{column-count:1}}
+
+/* ───────────────────────── about: the slate ───────────────────────── */
+.about{background:var(--paper-2)}
+.slate{max-width:76rem;margin:0 auto;border:3px solid var(--ink);color:var(--ink);background:var(--paper)}
+.clap{height:2.6rem;border-bottom:3px solid var(--ink);background:repeating-linear-gradient(-58deg,var(--ink) 0 1.4rem,var(--paper) 1.4rem 2.8rem)}
+.slate-grid{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:3px solid var(--ink)}
+.slate-grid div{padding:.6rem .9rem;border-right:3px solid var(--ink)}
+.slate-grid div:last-child{border-right:0}
+.slate-grid .mono{display:block;opacity:.7}
+.slate-grid b{font-weight:800;font-size:1.5rem;letter-spacing:-.04em;text-transform:lowercase}
+.slate-body{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.4fr);gap:clamp(1.2rem,3vw,3rem);padding:clamp(1rem,3vw,2.5rem)}
+.slate-body .frame{aspect-ratio:4/5;cursor:default}
+.slate-body .frame .pic{filter:grayscale(1) contrast(1.35) brightness(1.1)}
+.slate-body h3{font-weight:800;font-stretch:90%;text-transform:lowercase;letter-spacing:-.04em;line-height:.9;font-size:clamp(2.4rem,6vw,5.2rem);margin-bottom:1.2rem}
+.slate-body p{font-family:var(--serif);font-size:clamp(1.25rem,2vw,1.65rem);line-height:1.25;margin-bottom:1rem;max-width:36rem;color:var(--text)}
+.slate-body p em{color:var(--ink)}
+@media (max-width:760px){.slate-body{grid-template-columns:1fr}.slate-grid{grid-template-columns:1fr 1fr}.slate-grid div:nth-child(2){border-right:0}.slate-grid div:nth-child(3){border-top:3px solid var(--ink);grid-column:span 2}}
+
+/* ───────────────────────── contact: end credits ───────────────────────── */
+.credits{background:var(--ink);color:var(--paper);padding-block:clamp(4rem,10vw,9rem)}
+.credits h2{font-weight:800;font-stretch:90%;text-transform:lowercase;letter-spacing:-.04em;line-height:.84;font-size:clamp(3.6rem,17vw,19rem);margin-bottom:clamp(2rem,5vw,4rem)}
+.roll{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:1.5rem 3rem;border-top:2px solid var(--paper);padding-top:1.2rem;max-width:70rem}
+.roll dt{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;opacity:.75;margin-bottom:.25rem}
+.roll dd{font-weight:700;font-size:clamp(1.2rem,2.2vw,1.7rem);letter-spacing:-.03em}
+.roll a{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-top:clamp(3rem,7vw,6rem);font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em}
+.foot a{border:1px solid var(--paper);border-radius:99px;padding:.45rem .9rem;text-decoration:none}
+
+/* ───────────────────────── lights down (one signature transition) ───────────────────────── */
+.theatre{position:fixed;inset:0;z-index:100;background:var(--night);color:var(--cream-on-night);overflow-y:auto;opacity:0;visibility:hidden;transition:opacity .38s var(--ease),visibility 0s .38s}
+.theatre.open{opacity:1;visibility:visible;transition:opacity .38s var(--ease)}
+.theatre .in{max-width:84rem;margin:0 auto;padding:4.5rem var(--pad) 5rem}
+.theatre .back{position:fixed;top:1rem;left:var(--pad);z-index:2;background:none;border:1px solid var(--ink-light);color:var(--ink-light);font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:.5rem .9rem;border-radius:99px;cursor:pointer}
+.theatre .back:hover{background:var(--ink-light);color:var(--night)}
+.theatre h3{font-weight:800;font-stretch:90%;text-transform:lowercase;letter-spacing:-.04em;line-height:.9;font-size:clamp(2.8rem,9vw,8rem);margin-bottom:1rem}
+.theatre .meta{display:flex;flex-wrap:wrap;gap:.4rem 2rem;color:var(--ink-light);margin-bottom:1.8rem}
+.screen{position:relative;aspect-ratio:16/9;border-radius:.5rem;overflow:hidden;background-image:var(--bg);background-size:cover;background-position:center;box-shadow:0 0 0 1px rgba(142,162,255,.18),0 30px 80px -30px rgba(0,0,0,.8)}
+.play{position:absolute;inset:0;display:grid;place-items:center;background:none;border:0;cursor:pointer}
+.play span{display:grid;place-items:center;width:clamp(4rem,9vw,6.5rem);aspect-ratio:1;border-radius:50%;background:rgba(5,8,24,.55);border:1.5px solid var(--cream-on-night);transition:transform .3s var(--ease),background-color .3s}
+.play:hover span{transform:scale(1.07);background:rgba(5,8,24,.8)}
+.play svg{width:34%;margin-left:8%;fill:var(--cream-on-night)}
+.stills{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-top:.7rem}
+.stills div{aspect-ratio:16/9;border-radius:.4rem;background-image:var(--bg);background-size:cover;background-position:center}
+.photos{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem}
+.photos .wide{grid-column:span 2;aspect-ratio:3/2}
+.photos div{border-radius:.3rem;background-image:var(--bg);background-size:cover;background-position:center;aspect-ratio:2/3}
+.stamp{position:absolute;right:1rem;top:1rem;background:var(--night);color:var(--cream-on-night);font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:.5rem .7rem;border-radius:.3rem}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:1rem 2rem;margin-top:2rem;border-top:1px solid rgba(142,162,255,.3);padding-top:1.2rem}
+.facts dt{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-light)}
+.facts dd{font-size:1.05rem}
+.next{margin-top:3rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.next button{background:none;border:0;color:var(--cream-on-night);font-weight:800;font-stretch:90%;font-size:clamp(1.6rem,4vw,3rem);letter-spacing:-.035em;text-transform:lowercase;cursor:pointer}
+.next button:hover{color:var(--ink-light)}
+@media (max-width:640px){.stills{grid-template-columns:repeat(2,1fr)}}
+
+.note{position:fixed;left:.7rem;bottom:.7rem;z-index:120;max-width:19rem;background:var(--night);color:var(--cream-on-night);font-family:var(--mono);font-size:.75rem;line-height:1.5;letter-spacing:.03em;padding:.6rem .75rem;border-radius:.4rem;opacity:.92}
+.note button{all:unset;cursor:pointer;float:right;margin-left:.6rem;color:var(--ink-light)}
+
+@media (prefers-reduced-motion:reduce){
+  .ticker .track{animation:none}
+  .ticker{overflow-x:auto}
+  *,*::before,*::after{transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <a class="brand" href="#top" aria-label="Quin Ledesma, visual, top of page">ql / visual</a>
+  <nav aria-label="Primary">
+    <a href="#work">work</a>
+    <a href="#about">about</a>
+    <a href="#contact">contact</a>
+    <a class="xlink" href="#" title="Leads to the Product experience (the current site)">design &amp; dev ↗</a>
+  </nav>
+</header>
+
+<main id="top">
+  <!-- HERO: the name is the headline; a contact sheet sits behind it. -->
+  <div class="hero">
+    <div class="f f1"><button class="frame p1" data-open="film:0" aria-label="Open film 01"><span class="pic"></span><span class="col"></span><span class="no">001</span></button></div>
+    <div class="f f2"><button class="frame p2" data-open="photo:0" aria-label="Open photo set 01"><span class="pic"></span><span class="col"></span><span class="no">014</span></button></div>
+    <div class="f f3"><button class="frame p5" data-open="film:1" aria-label="Open film 02"><span class="pic"></span><span class="col"></span><span class="no">007</span></button></div>
+    <div class="f f4"><button class="frame p4" data-open="photo:1" aria-label="Open photo set 02"><span class="pic"></span><span class="col"></span><span class="no">021</span></button></div>
+
+    <div class="lede">
+      <p>film, photographs and graphic design. things I look at twice.</p>
+      <span class="mono">zamboanga city · hover a frame to develop it</span>
+    </div>
+    <h1 class="name"><span>quin</span><span>ledesma</span></h1>
+  </div>
+
+  <!-- TICKER: doubles as navigation between the three kinds of work -->
+  <nav class="ticker" aria-label="Kinds of work">
+    <div class="track">
+      <a href="#film">film<i>/</i></a><a href="#photography">photography<i>/</i></a><a href="#graphic">graphic design<i>/</i></a>
+      <a href="#film">film<i>/</i></a><a href="#photography">photography<i>/</i></a><a href="#graphic">graphic design<i>/</i></a>
+      <a href="#film">film<i>/</i></a><a href="#photography">photography<i>/</i></a><a href="#graphic">graphic design<i>/</i></a>
+      <a href="#film">film<i>/</i></a><a href="#photography">photography<i>/</i></a><a href="#graphic">graphic design<i>/</i></a>
+    </div>
+  </nav>
+
+  <!-- WORK INDEX: a contact sheet, one frame per project -->
+  <section id="work" aria-label="Work">
+    <div class="group" id="film">
+      <div class="ghead"><h2>film</h2><span class="mono">a — 4 films</span></div>
+      <div class="film">
+        <div class="item"><button class="frame p1" data-open="film:0"><span class="pic"></span><span class="col"></span><span class="no">001</span></button><div class="cap"><b>untitled film one</b><span>2026 · 3:12</span></div></div>
+        <div class="item"><button class="frame p5" data-open="film:1"><span class="pic"></span><span class="col"></span><span class="no">002</span></button><div class="cap"><b>untitled film two</b><span>2026 · 1:40</span></div></div>
+        <div class="item"><button class="frame p6" data-open="film:2"><span class="pic"></span><span class="col"></span><span class="no">003</span></button><div class="cap"><b>untitled film three</b><span>2025 · 2:05</span></div></div>
+        <div class="item"><button class="frame p7" data-open="film:3"><span class="pic"></span><span class="col"></span><span class="no">004</span></button><div class="cap"><b>untitled film four</b><span>2025 · 0:58</span></div></div>
+      </div>
+    </div>
+
+    <div class="group" id="photography">
+      <div class="ghead"><h2>photography</h2><span class="mono">b — 2 sets</span></div>
+      <p class="gnote">portraits of friends, moments on the street. each set is one story, in order.</p>
+      <div class="cols">
+        <div class="item"><button class="frame p2" style="aspect-ratio:2/3" data-open="photo:0"><span class="pic"></span><span class="col"></span><span class="no">014</span></button><div class="cap"><b>fujifilm photo walk 2026</b><span>top 20 · mindanao</span></div></div>
+        <div class="item"><button class="frame p4" style="aspect-ratio:3/2" data-open="photo:1"><span class="pic"></span><span class="col"></span><span class="no">021</span></button><div class="cap"><b>street set</b><span>2026</span></div></div>
+        <div class="item"><button class="frame p8" style="aspect-ratio:4/5" data-open="photo:0"><span class="pic"></span><span class="col"></span><span class="no">022</span></button><div class="cap"><b>portraits</b><span>2025</span></div></div>
+        <div class="item"><button class="frame p3" style="aspect-ratio:3/2" data-open="photo:1"><span class="pic"></span><span class="col"></span><span class="no">023</span></button><div class="cap"><b>market, early</b><span>2026</span></div></div>
+        <div class="item"><button class="frame p7" style="aspect-ratio:2/3" data-open="photo:0"><span class="pic"></span><span class="col"></span><span class="no">024</span></button><div class="cap"><b>golden hour</b><span>2025</span></div></div>
+      </div>
+    </div>
+
+    <div class="group" id="graphic">
+      <div class="ghead"><h2>graphic design</h2><span class="mono">c — real pieces</span></div>
+      <p class="gnote">print stays on paper. these are the actual pieces from your Sanity, tinted here only until you hover.</p>
+      <div class="cols">
+        <div class="item static"><span class="frame" style="aspect-ratio:1600/2992;--bg:url('https://cdn.sanity.io/images/qn718nua/production/a23bfe1a2a73e970f54bd35e1c903840979e2ae5-1600x2992.webp?w=700&auto=format')"><span class="pic"></span><span class="col"></span><span class="no">031</span></span><div class="cap"><b>converse all star concept</b><span>2023</span></div></div>
+        <div class="item static"><span class="frame" style="aspect-ratio:1/1;--bg:url('https://cdn.sanity.io/images/qn718nua/production/98c995c3a2ef1f510f9b54261d2eca13ec3793ff-1080x1080.webp?w=700&auto=format')"><span class="pic"></span><span class="col"></span><span class="no">032</span></span><div class="cap"><b>it news series</b><span>2024</span></div></div>
+        <div class="item static"><span class="frame" style="aspect-ratio:726/480;--bg:url('https://cdn.sanity.io/images/qn718nua/production/31ed8626e06532087ec8e15d2929948247e109da-726x480.webp?w=700&auto=format')"><span class="pic"></span><span class="col"></span><span class="no">033</span></span><div class="cap"><b>fuzzy fleur launch</b><span>2026</span></div></div>
+        <div class="item static"><span class="frame" style="aspect-ratio:745/737;--bg:url('https://cdn.sanity.io/images/qn718nua/production/6843c71b3685e7e24e7ce3aef636097db7be00a3-745x737.webp?w=700&auto=format')"><span class="pic"></span><span class="col"></span><span class="no">034</span></span><div class="cap"><b>social media hygiene</b><span>2026</span></div></div>
+        <div class="item static"><span class="frame" style="aspect-ratio:1/1;--bg:url('https://cdn.sanity.io/images/qn718nua/production/2d6c15297adcfd95356527af495851a5c7cf3822-1400x1400.webp?w=700&auto=format')"><span class="pic"></span><span class="col"></span><span class="no">035</span></span><div class="cap"><b>corentaso pop-up poster</b><span>2026</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT: a film slate, not a generic "about me" block -->
+  <section class="about" id="about" aria-label="About">
+    <div class="slate">
+      <div class="clap" aria-hidden="true"></div>
+      <div class="slate-grid">
+        <div><span class="mono">roll</span><b>01</b></div>
+        <div><span class="mono">scene</span><b>about</b></div>
+        <div><span class="mono">shot in</span><b>zamboanga city</b></div>
+      </div>
+      <div class="slate-body">
+        <span class="frame" style="--bg:url('../../../src/assets/quin-portrait.webp')"><span class="pic"></span><span class="no">take 1</span></span>
+        <div>
+          <h3>a designer who codes, with a camera.</h3>
+          <p>My journey started with creating graphics in high school, went through an Information Technology degree, and now shows up in systems that help people.</p>
+          <p>Away from the screen I'm usually <em>behind a camera</em>: portraits of friends, moments on the street, and the occasional video.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT: end credits -->
+  <section class="credits" id="contact" aria-label="Contact">
+    <h2>thanks<br>for watching.</h2>
+    <dl class="roll">
+      <div><dt>say hello</dt><dd><a href="#">[email goes here]</a></dd></div>
+      <div><dt>find me</dt><dd>[instagram / youtube]</dd></div>
+      <div><dt>based in</dt><dd>zamboanga city, ph</dd></div>
+      <div><dt>open to</dt><dd>film &amp; photo commissions</dd></div>
+    </dl>
+    <div class="foot">
+      <span>© 2026 quin ledesma</span>
+      <a href="#" title="Leads to the Product experience (the current site)">also by quin: design &amp; development ↗</a>
+    </div>
+  </section>
+</main>
+
+<!-- LIGHTS DOWN: opening a work dims the paper to blue-black; the work is in true colour -->
+<div class="theatre" id="theatre" role="dialog" aria-modal="true" aria-labelledby="t-title" aria-hidden="true">
+  <button class="back" id="back">← lights up</button>
+  <div class="in" id="t-in"></div>
+</div>
+
+<div class="note" id="note"><button onclick="document.getElementById('note').remove()" aria-label="Dismiss note">×</button>design prototype, not the real site. film &amp; photo frames are placeholders. graphic pieces and the portrait are real. click any film or photo frame to put the lights down.</div>
+
+<script>
+const BG = {
+  film:  ['p1','p5','p6','p7'],
+  photo: ['p2','p4']
+};
+const GRAD = {p1:'radial-gradient(60% 50% at 72% 28%,#ffc15a 0,transparent 62%),linear-gradient(160deg,#ff5e3a 0%,#c2185b 48%,#2b1055 100%)',
+ p2:'radial-gradient(38% 55% at 50% 46%,#ffd886 0,#ee8a1f 46%,#4a1a08 100%)',
+ p3:'linear-gradient(180deg,transparent 45%,#1b0c0a 100%),linear-gradient(90deg,#e63946 0 25%,#f4a300 25% 50%,#2a9d8f 50% 75%,#ff7b00 75%)',
+ p4:'linear-gradient(180deg,#ffd36e 0,#ff8a4c 32%,#16a0a8 33%,#0b3c5d 100%)',
+ p5:'radial-gradient(35% 42% at 28% 62%,#ff5fae,transparent 70%),radial-gradient(40% 40% at 76% 34%,#ffd060,transparent 70%),linear-gradient(135deg,#7a3aa8,#1a0b2e)',
+ p6:'linear-gradient(118deg,#d90429 0 44%,#ffbe0b 44% 70%,#3a0ca3 70%)',
+ p7:'radial-gradient(50% 60% at 40% 40%,#ffe29a 0,#ff9248 40%,#8f2d56 80%,#2a0a2e 100%)',
+ p8:'linear-gradient(200deg,#f9c74f 0,#f3722c 40%,#9d0208 100%)'};
+const TITLES = {film:['untitled film one','untitled film two','untitled film three','untitled film four'],photo:['fujifilm photo walk 2026','street set']};
+const th = document.getElementById('theatre'), tin = document.getElementById('t-in'), back = document.getElementById('back');
+let last = null, cur = null;
+
+function render(kind, i){
+  cur = [kind,i];
+  const g = k => `style="--bg:${GRAD[k]}"`;
+  const order = ['p1','p5','p6','p7','p2','p4','p3','p8'];
+  if(kind==='film'){
+    const k = BG.film[i];
+    tin.innerHTML = `<h3 id="t-title">${TITLES.film[i]}</h3>
+      <div class="meta mono"><span>film</span><span>2026</span><span>runtime 3:12</span><span>director · editor</span></div>
+      <div class="screen" ${g(k)}><button class="play" aria-label="Play film"><span><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></span></button></div>
+      <div class="stills">${['p3','p4','p8','p2','p6','p7'].map(s=>`<div ${g(s)}></div>`).join('')}</div>
+      <dl class="facts"><div><dt>role</dt><dd>direction, camera, edit</dd></div><div><dt>camera</dt><dd>[camera body]</dd></div><div><dt>shot</dt><dd>[place], [month year]</dd></div><div><dt>watch</dt><dd>youtube, loads on click</dd></div></dl>
+      <div class="next"><span class="mono" style="color:var(--ink-light)">next film</span><button data-next="film:${(i+1)%4}">${TITLES.film[(i+1)%4]} →</button></div>`;
+  } else {
+    const k = BG.photo[i];
+    tin.innerHTML = `<h3 id="t-title">${TITLES.photo[i]}</h3>
+      <div class="meta mono"><span>photography</span><span>2026</span><span>12 photographs</span><span>zamboanga city</span></div>
+      <div class="photos">
+        <div class="wide" ${g(k)} style="--bg:${GRAD[k]};position:relative"><span class="stamp">top 20 finalist · mindanao</span></div>
+        <div ${g('p8')}></div><div ${g('p7')}></div>
+        <div class="wide" ${g('p3')}></div>
+      </div>
+      <dl class="facts"><div><dt>camera</dt><dd>[camera body]</dd></div><div><dt>place</dt><dd>[location]</dd></div><div><dt>order</dt><dd>the story, in sequence</dd></div></dl>
+      <div class="next"><span class="mono" style="color:var(--ink-light)">next set</span><button data-next="photo:${(i+1)%2}">${TITLES.photo[(i+1)%2]} →</button></div>`;
+  }
+  th.scrollTop = 0;
+}
+function openWork(spec, from){
+  const [kind,i] = spec.split(':');
+  last = from || null;
+  render(kind, +i);
+  th.classList.add('open'); th.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+  back.focus();
+}
+function closeWork(){
+  th.classList.remove('open'); th.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+  last && last.focus();
+}
+document.addEventListener('click',e=>{
+  const o = e.target.closest('[data-open]');
+  if(o){openWork(o.dataset.open,o);return}
+  const n = e.target.closest('[data-next]');
+  if(n){const [k,i]=n.dataset.next.split(':');render(k,+i)}
+});
+back.addEventListener('click',closeWork);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&th.classList.contains('open'))closeWork()});
+</script>
+</body>
+</html>

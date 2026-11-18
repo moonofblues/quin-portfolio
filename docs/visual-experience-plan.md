@@ -5,8 +5,10 @@ Working plan for [ADR 0014](adr/0014-visual-experience.md), written
 overall structure. Read the ADR first: it holds the decisions, and this file
 holds the order of work.
 
-**Status (2026-11-18):** Steps 0, 1 and 2 are done. Step 3 is waiting on
-Visual's design direction (see "Inputs needed").
+**Status (2026-11-18):** Steps 0, 1 and 2 are done. The design direction is
+agreed and written up in [`visual-design-direction.md`](visual-design-direction.md),
+with a browser prototype in `reference/visual-direction/prototype.html`.
+Step 3 is unblocked.
 
 ## Summary
 
@@ -95,9 +97,11 @@ No visible change yet.
 - Cross-links: "Visual" in the Product nav, a link back in the Visual nav and
   footer, and the same name lockup on both.
 
-**Before this step: Visual needs a design direction** (see "Inputs needed"
-below). The shell can be built with placeholder styles, but it shouldn't be
-designed by guesswork.
+**Design direction: agreed** (2026-11-18). Build the shell from
+[`visual-design-direction.md`](visual-design-direction.md): paper and
+cyanotype-ink tokens, the three type families, the slim top bar, the ticker
+band, and the "lights down" detail layer. The prototype shows the intended
+result.
 
 **Check:** build. The homepage critical set must not grow. The Visual chunk
 should load only on `/visual`.
@@ -171,9 +175,9 @@ chooser was in the entry chunk.
 
 ## Inputs needed from Quin
 
-1. **Visual's design direction:** mood, references, colours, fonts. This is
-   needed before Step 3's styling. It could be worked out with a design
-   session (for example the `frontend-design` or `impeccable` skill).
+1. ✅ **Visual's design direction:** done, see
+   `visual-design-direction.md`. Its "Open items" list what is still needed
+   (real photos, a first film, touch behaviour, contact details).
 2. **Confirm the Visual line** for the Introduction (Step 7). The draft says
    "the occasional video edit", which may undersell the film work.
 3. **Video work:** which pieces, and where the files live (YouTube, Vimeo,
