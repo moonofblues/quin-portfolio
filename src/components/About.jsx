@@ -113,8 +113,8 @@ export function About() {
               </p>
               <p className="text-lg leading-relaxed text-text-secondary">
                 When I'm not designing or coding, you might find me teaching the
-                next generation of developers, exploring motion graphics, or
-                occasionally hitting the dance floor.
+                next generation of developers, behind a camera, exploring
+                motion graphics, or occasionally hitting the dance floor.
               </p>
             </div>
 

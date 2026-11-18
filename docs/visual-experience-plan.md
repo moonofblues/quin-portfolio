@@ -129,7 +129,13 @@ works. The image viewer still opens.
 
 ## Step 7 — Homepage changes (Product)
 
-- Remove the Focus chooser (`FocusChooser.jsx` and its use in
+Partly done early (2026-11-18), since these parts don't depend on Visual's
+design: the Focus chooser is removed (file deleted, `HomePage.jsx` and two
+comments updated) and About now mentions the camera. Still waiting: the
+Introduction line and the homepage invitation section, which need `/visual`
+to exist.
+
+- ✅ Remove the Focus chooser (`FocusChooser.jsx` and its use in
   `HomePage.jsx`). `?focus=` links keep working, and so do the What I Do
   pills.
 - Keep the existing `Introduction` section. It is already person-first
@@ -139,7 +145,7 @@ works. The image viewer still opens.
   — portraits, street moments, and the occasional video edit. See the
   visual work →". The link needs `/visual` to exist, so this waits for
   Step 3.
-- In `About`, add photography to the last paragraph ("When I'm not designing
+- ✅ In `About`, add photography to the last paragraph ("When I'm not designing
   or coding, you might find me teaching the next generation of developers,
   behind a camera, exploring motion graphics, or occasionally hitting the
   dance floor.").

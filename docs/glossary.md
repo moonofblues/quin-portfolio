@@ -43,10 +43,11 @@ section of `docs/redesign-plan.md`.
   `?focus=<id>` (e.g. `?focus=video`), which makes it shareable and lets a
   link skip the Focus chooser.
 
-- **Focus chooser** — the dismissible pop-up (a modal dialog) shown once to a
-  first-time visitor, offering all seven Focuses plus a prominent **Skip**. Seen
-  state is remembered in `localStorage`; a URL that already names a Focus
-  skips it. Not a blocking gate — Skip (or Esc) dismisses it to the Default
+- **Focus chooser** — *removed 2026-11-18 (ADR 0014).* It was a dismissible
+  pop-up (a modal dialog) shown to a first-time visitor, offering all seven
+  Focuses plus a prominent **Skip**. (Its "seen" flag was an in-memory
+  variable, not `localStorage` as first written.) A visitor now picks a Focus
+  through the What I Do pills or a `?focus=` link. Not a blocking gate — Skip (or Esc) dismisses it to the Default
   view. See ADR 0008 for why a dismissible pop-up was chosen over both a hard
   gate and a non-blocking on-page section. *Being removed:*
   [ADR 0014](adr/0014-visual-experience.md) drops the pop-up because it is a
@@ -57,8 +58,8 @@ section of `docs/redesign-plan.md`.
   About, and Contact are unaffected. Featured Work shows that Focus's featured
   projects first, topped up with its most recent projects to fill the grid.
 
-- **Default view** — the homepage with no Focus active (a first paint before
-  choosing, after Skip, or any link without a `?focus=` param): the original
+- **Default view** — the homepage with no Focus active (any link without a
+  `?focus=` param): the original
   generic hero and the unfiltered featured set.
 
 - **Service** — the canonical top-level taxonomy of what Quin does (seven

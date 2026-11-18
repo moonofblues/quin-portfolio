@@ -19,7 +19,7 @@ const DEFAULT_HEADLINE = [
 const DEFAULT_DESCRIPTION =
   "From pixel to production — I bridge design and development to create interfaces that are as functional as they are beautiful.";
 // The pills in the default view. Each one is a button that switches the page to
-// that Focus (the same ?focus=<id> the Focus chooser sets). The labels are
+// that Focus (the ?focus=<id> in the URL). The labels are
 // shorter than the official Focus names on purpose, so they fit on one line.
 const DEFAULT_PILLS = [
   { label: "UI/UX Design", id: "ui-ux" },

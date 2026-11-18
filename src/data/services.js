@@ -1,7 +1,8 @@
 import { Palette, Code, Smartphone, Layers, Video, Wand2, Camera } from "lucide-react";
 
 // Single source of truth for the Service taxonomy (Phase 6, ADR 0008).
-// Drives: Focus chooser, Focused hero, work filter, and What I Do pills.
+// Drives: Focused hero, work filter, and What I Do pills. (The Focus chooser
+// pop-up was removed in ADR 0014.)
 // heroHeadline / heroDescription / heroTags are populated in Phase 6 step 3
 // once Quin supplies the per-Focus copy — leave null until then.
 export const SERVICES = [
