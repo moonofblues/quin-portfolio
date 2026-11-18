@@ -11,6 +11,12 @@
         ],
         "createdAt": "2026-11-18T08:29:31.547Z",
         "reason": "Claude: false positive. Line 185 is the thin column divider between cells of the film-slate grid (roll / scene / shot in), a table rule, not an accent stripe on a card. Quin has not reviewed this."
+      },
+      {
+        "rule": "overused-font",
+        "value": "instrument serif",
+        "createdAt": "2026-11-18T18:10:43.753Z",
+        "reason": "Visual portfolio's committed voice face (docs/visual-design-direction.md section 4); the hub reuses it for continuity per Quin's brief to combine both portfolios' typography. Decided by the agent from that evidence, not separately confirmed by the user."
       }
     ]
   }
