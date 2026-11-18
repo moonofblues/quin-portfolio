@@ -263,13 +263,27 @@ The Focus chooser was removed and About mentions the camera (2026-11-18). On
 **Check:** build. The homepage critical set should shrink slightly, since the
 chooser was in the entry chunk.
 
-## Step 8 — Work page becomes Product's work list
+## Step 8 — Work page becomes Product's work list — ✅ DONE (2026-11-19)
 
-- The Work page tabs show Product Focuses.
-- Visual work is reached through `/visual`, with a clear link from the Work
-  page.
-- A graphic design piece tagged with a Product Focus as well still shows
-  here.
+Changed in `src/pages/WorkPage.jsx` only.
+
+- The tabs show the four Product Focuses plus "All Work". "All Work" lists
+  projects whose main page is a Product one (`mainExperienceOf`), so a graphic
+  design piece also tagged with a Product Focus still shows; photo sets, films
+  and Visual-only pieces do not. The tab counts match.
+- A line under the page description links to `/visual` ("Looking for
+  photography, film or graphic design? See the visual work →").
+- **Old links:** `/work?focus=video`, `?focus=photography` and
+  `?focus=graphic-design` redirect (with `replace`) to `/visual#film`,
+  `/visual#photography` and `/visual#graphic`. If a group has no work yet (no
+  film today), the anchor does not exist and the page opens at the top.
+- Checked in a browser: tabs and counts, the link, and the redirects to the
+  film and graphic anchors (graphic scrolls to its group). Lint count on the
+  file is unchanged (1 error, 1 warning, both there before). Not checked: phone
+  width, and the pill colours in that test browser tab (it rendered about one
+  frame per second, so colour changes stalled; the classes are unchanged).
+- Still on the homepage and not touched here: the hero pills and the Other
+  Works tabs still list the Visual Focuses.
 
 ## Step 9 — Docs and clean-up
 

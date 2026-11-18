@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, Navigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { ProjectCard } from "../components/ProjectCard";
@@ -8,10 +8,29 @@ import { Button } from "../components/ui/Button";
 import { SERVICES } from "../data/services";
 import { fetchCategories } from "../shared/sanity/queries";
 import { useProjects } from "../shared/context/ProjectsContext";
+import {
+  FOCUS_EXPERIENCE,
+  PRODUCT,
+  VISUAL,
+  mainExperienceOf,
+} from "../shared/experiences";
 import { cn } from "../utils/cn";
 
+// The Work page is the Product experience's work list (ADR 0014, plan step 8).
+// Only Product Focuses get a tab here; Visual work lives at /visual.
 const ALL_FOCUS = { id: "all", label: "All Work", description: "Browse all projects across disciplines" };
-const FOCUS_FILTERS = [ALL_FOCUS, ...SERVICES];
+const PRODUCT_SERVICES = SERVICES.filter(
+  (s) => FOCUS_EXPERIENCE[s.id] === PRODUCT,
+);
+const FOCUS_FILTERS = [ALL_FOCUS, ...PRODUCT_SERVICES];
+
+// An old link like /work?focus=video now lands on the matching group of the
+// Visual index. Group ids come from groupOf() in the Visual experience.
+const VISUAL_ANCHOR = {
+  video: "film",
+  photography: "photography",
+  "graphic-design": "graphic",
+};
 
 export function WorkPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -31,10 +50,18 @@ export function WorkPage() {
     [allCategories, activeFocus],
   );
 
+  // "All Work" is every project whose main page is a Product one. A graphic
+  // design piece that is also tagged with a Product Focus still counts.
+  const productProjects = useMemo(
+    () => projects.filter((p) => mainExperienceOf(p) === PRODUCT),
+    [projects],
+  );
+
   // Level 1: filter by focus.
   const focusProjects = useMemo(
-    () => getProjectsByFocus(activeFocus),
-    [activeFocus, projects],
+    () =>
+      activeFocus === "all" ? productProjects : getProjectsByFocus(activeFocus),
+    [activeFocus, projects, productProjects],
   );
 
   // Level 2: narrow by category slug if one is selected.
@@ -61,6 +88,14 @@ export function WorkPage() {
       setSearchParams({ focus: activeFocus, category: catSlug });
     }
   };
+
+  // Old links to a Visual Focus (?focus=video and so on) go to Visual. `replace`
+  // keeps the Back button from bouncing the visitor straight back here.
+  if (FOCUS_EXPERIENCE[activeFocus] === VISUAL) {
+    return (
+      <Navigate to={`/visual#${VISUAL_ANCHOR[activeFocus] ?? ""}`} replace />
+    );
+  }
 
   if (loading) {
     return (
@@ -97,6 +132,16 @@ export function WorkPage() {
           <p className="text-lg max-w-2xl text-text-secondary">
             {activeFocusInfo?.description ?? "Browse all my projects across different disciplines"}
           </p>
+
+          <p className="mt-3 text-base text-text-muted">
+            Looking for photography, film or graphic design?{" "}
+            <Link
+              to="/visual"
+              className="whitespace-nowrap text-accent underline underline-offset-4 hover:text-accent-hover transition-colors"
+            >
+              See the visual work →
+            </Link>
+          </p>
         </motion.div>
 
         {/* Level 1 — Focus tabs */}
@@ -119,7 +164,7 @@ export function WorkPage() {
             >
               {focus.label}
               <span className="ml-2 opacity-60">
-                ({focus.id === "all" ? projects.length : getProjectsByFocus(focus.id).length})
+                ({focus.id === "all" ? productProjects.length : getProjectsByFocus(focus.id).length})
               </span>
             </button>
           ))}
