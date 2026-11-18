@@ -5,7 +5,8 @@ Working plan for [ADR 0014](adr/0014-visual-experience.md), written
 overall structure. Read the ADR first: it holds the decisions, and this file
 holds the order of work.
 
-**Status:** planned, nothing built yet.
+**Status (2026-11-18):** Steps 0, 1 and 2 are done. Step 3 is waiting on
+Visual's design direction (see "Inputs needed").
 
 ## Summary
 
@@ -20,14 +21,24 @@ The site becomes one app with two Experiences:
 Each step below is small, can be checked on its own, and can be undone
 without touching the others. No step starts without Quin's go-ahead.
 
-## Step 0 — Settle the in-progress photo-set work
+## Step 0 — Settle the in-progress photo-set work — ✅ DONE (2026-11-18)
+
+Committed as "Add embed and link button to photo sets" plus the Fujifilm
+paste sheet. The build passed; the feature itself has not been checked in a
+browser or Studio.
 
 The uncommitted changes in `PhotoGallery.jsx`, `PhotoSetPage.jsx`,
 `queries.js` and `project.js` sit exactly where Steps 1 and 4 will work.
 Finish and commit them (or park them on a branch) first, so the
 restructuring doesn't get mixed up with unfinished features.
 
-## Step 1 — Create `src/shared/` (no visible change)
+## Step 1 — Create `src/shared/` (no visible change) — ✅ DONE (2026-11-18)
+
+Moved with `git mv` (history kept): `src/shared/sanity/` (client, queries),
+`src/shared/context/` (ProjectsContext, useProjectDetail) and
+`src/shared/image-viewer/` (LightboxShell, ImageLightbox). 13 imports updated.
+The build output is identical: every chunk has the same size and hash, so the
+homepage critical set is unchanged (about 731 KB raw / 232 KB gzipped).
 
 Move the code both Experiences will need into one shared folder. The site
 must look and behave exactly as before.
@@ -44,13 +55,22 @@ must look and behave exactly as before.
 (about 730 KB raw / 232 KB gzipped). Click through the homepage, Work page,
 a case study and a photo set.
 
-## Step 2 — Record which Experience each Focus belongs to
+## Step 2 — Record which Experience each Focus belongs to — ✅ DONE (2026-11-18)
 
-- Add an `experience` value (`"product"` or `"visual"`) to each Focus in
-  `src/data/services.js`.
-- Add a small helper (in `shared`) that answers "which Experiences does this
-  project belong to?" from its Focuses, and "which page is its main one?"
-  from its Type.
+Built as `src/shared/experiences.js`. Changed from the first draft of this
+plan: the Focus-to-Experience map lives in `shared`, not inside
+`src/data/services.js`. That file is Product's data (hero copy, icons), and a
+shared helper reading from it would make `shared` depend on Product, which
+breaks the import rule. Adding a new Focus now means adding it in both
+`services.js` and `experiences.js`.
+
+- A map of every Focus to `"product"` or `"visual"`.
+- Helpers: `focusIdsOf(project)`, `experiencesOf(project)` (which
+  Experiences it belongs to) and `mainExperienceOf(project)` (which page is
+  its main one, by Type).
+- Checked with a throwaway Node script against seven cases (photo set, case
+  study, Showcase with only Visual Focuses, with both, with none, and so on).
+  The script was deleted afterwards; there is no test suite in the project.
 
 Rule for the main page:
 
