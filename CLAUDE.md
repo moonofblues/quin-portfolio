@@ -48,6 +48,14 @@ information, is a real cost. When building or reviewing any section:
 > instead of a narrow `max-w-4xl` block under it. The table below still
 > describes the original (v1) page.
 
+> **Vertical rhythm (v2 case study):** spacing comes in tiers by how closely
+> things relate, defined once in `v2/shared.js`: `BLOCK_GAP` (between blocks
+> inside a section), `HEADER_GAP` (heading to content), `SECTION_GAP` (between
+> sections, 144px on desktop) and `CHAPTER_START` (extra 64px above a section
+> that opens a chapter, so chapter breaks read as the biggest pause). Use these
+> instead of hard-coding `mb-*` on a new section. Prose is capped at `68ch`
+> (`RichText`) for comfortable line length.
+
 Widths had drifted across the case-study page (3xl through 7xl with no
 rule), which both wasted margin space and cramped grid content. Stick to
 this scale — don't invent intermediate widths:
