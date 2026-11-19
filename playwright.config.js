@@ -2,11 +2,19 @@ import { defineConfig, devices } from "@playwright/test";
 
 // End-to-end tests drive the real site in a browser. They read live content
 // from Sanity, so they need the same .env.local the dev server uses.
+//
+// Results: the console list, a JSON file kept in test-reports/ (committed), and
+// an HTML report in playwright-report/ (not committed).
 export default defineConfig({
   testDir: "./tests/e2e",
   timeout: 45_000,
+  expect: { timeout: 10_000 },
   fullyParallel: true,
-  reporter: [["list"]],
+  reporter: [
+    ["list"],
+    ["json", { outputFile: "test-reports/latest.json" }],
+    ["html", { outputFolder: "playwright-report", open: "never" }],
+  ],
   use: {
     baseURL: "http://localhost:5173",
     trace: "retain-on-failure",
