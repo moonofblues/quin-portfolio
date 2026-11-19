@@ -68,6 +68,7 @@ export function Services() {
               <motion.div
                 key={capability.id}
                 role="button"
+                aria-pressed={isActive}
                 tabIndex={0}
                 onClick={() => handlePillClick(capability.id)}
                 onKeyDown={(e) => {
@@ -77,7 +78,7 @@ export function Services() {
                   }
                 }}
                 className={cn(
-                  "inline-flex items-center gap-3 pl-4 pr-6 py-4 rounded-full cursor-pointer",
+                  "relative inline-flex items-center gap-3 pl-4 pr-6 py-4 rounded-full cursor-pointer",
                   "bg-bg-secondary border",
                   // Named properties only — transition-all animates layout-
                   // affecting properties and triggers backdrop-filter on every
@@ -99,6 +100,12 @@ export function Services() {
                 <span className="text-base md:text-lg font-medium text-text-primary">
                   {capability.label}
                 </span>
+                {/* Taped while this focus is the one the page is showing. */}
+                {isActive && (
+                  <span className="tape -top-2 right-4" aria-hidden="true">
+                    viewing
+                  </span>
+                )}
               </motion.div>
             );
           })}
