@@ -13,8 +13,10 @@ Introduced by [ADR 0014](adr/0014-visual-experience.md); build plan in
   Experience. A project can still appear in both, depending on its Focuses.
 
 - **Product experience** — the hiring-manager side: UI/UX, Front-End, Web
-  Dev and Low-Code work, at `/` and `/work`. Uses the night-sky design
-  (fireflies, cursor, lavender and mint). The homepage is its front door.
+  Dev and Low-Code work, at `/dev` and `/work`. Uses the night-sky design
+  (fireflies, cursor). Planned colour: brand blue and paper cream, replacing
+  lavender and mint ([ADR 0019](adr/0019-one-brand-blue.md)). The homepage is
+  its front door.
 
 - **Visual experience** — the cinematic, image-first side: Video,
   Photography and Graphic Design work, at `/visual`. Its code lives in
@@ -260,8 +262,10 @@ Introduced by [ADR 0018](adr/0018-contact-sheet-concept-and-edge-layer.md).
   each a project. Not to be confused with the photo set **Contact sheet** above,
   which shows every frame from one shoot.
 
-- **Marker** — the one hot accent: a highlighter yellow-green used for marker
-  blocks, tape and crop brackets. `.marker`, `.tape`, `.crop` in `index.css`.
+- **Marker** — the highlighter block that picks out the one phrase that matters
+  in a section, in the brand blue. Replaces the earlier yellow-green (dropped
+  2026-11-19, [ADR 0019](adr/0019-one-brand-blue.md)). `.marker`, `.tape`,
+  `.crop` in `index.css`.
 
 - **Tape** — a tilted label stuck on a frame: "pick", a screenshot's name, or a
   project's real status.
@@ -270,3 +274,13 @@ Introduced by [ADR 0018](adr/0018-contact-sheet-concept-and-edge-layer.md).
 
 - **Readout** — the monospace line on the sheet hero that shows the frame under
   the pointer, or the real counts when nothing is hovered.
+
+- **Brand blue** — the one colour shared by the whole site: `#6384ff` on dark
+  grounds, `#0B2FB3` on paper. It is the ink of a cyanotype (a print made in
+  blue on paper). Replaces Product's lavender and mint and the yellow-green
+  marker. See [ADR 0019](adr/0019-one-brand-blue.md).
+
+- **Edge layer** — the set of marks that gives the site its attitude: marker
+  block, tape, crop brackets, frame numbers and the readout. Each mark has one
+  job and appears only where that job exists, on Product, Visual and the hub.
+  Visual uses its own version (blue ink blocks, masking tape, printer's marks).
