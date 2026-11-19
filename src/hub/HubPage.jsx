@@ -7,6 +7,7 @@ import { TIMELINE } from "../shared/timeline";
 import { EMAIL, LOCATION_LINE, SOCIAL_LINKS } from "../shared/contact";
 import { Colophon } from "../shared/Colophon";
 import { DeskPhoto } from "./DeskPhoto";
+import { SheetHero } from "./SheetHero";
 import quinPortrait from "../assets/quin-portrait.webp";
 import "./hub.css";
 
@@ -60,7 +61,8 @@ function pickSelected(projects, experience) {
     .slice(0, 3);
 }
 
-export function HubPage() {
+// `variant="sheet"` swaps the hero for the contact sheet prototype (/sheet).
+export function HubPage({ variant }) {
   const { search } = useLocation();
 
   // Tailored links shared before the hub existed (/?focus=ui-ux) still go to
@@ -68,10 +70,10 @@ export function HubPage() {
   if (new URLSearchParams(search).has("focus")) {
     return <Navigate to={`/dev${search}`} replace />;
   }
-  return <HubSite />;
+  return <HubSite variant={variant} />;
 }
 
-function HubSite() {
+function HubSite({ variant }) {
   const { hash } = useLocation();
   const { projects, loading } = useProjects();
   const [theme, setTheme] = useState(readTheme);
@@ -195,6 +197,9 @@ function HubSite() {
       </header>
 
       <main id="top">
+        {variant === "sheet" ? (
+          <SheetHero projects={projects} loading={loading} />
+        ) : (
         <section className="hub-hero" ref={heroRef} aria-labelledby="hub-name">
           <div className="hub-wrap hub-hero-inner">
             <h1 className="hub-name" id="hub-name">
@@ -236,6 +241,7 @@ function HubSite() {
             </div>
           </div>
         </section>
+        )}
 
         {/* Both disciplines, interleaved. Decorative: the Work section below says
             the same thing in words. */}

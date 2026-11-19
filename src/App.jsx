@@ -90,6 +90,15 @@ function App() {
               </ProjectsProvider>
             }
           />
+          {/* Contact sheet hero prototype. Not linked from anywhere. */}
+          <Route
+            path="/sheet"
+            element={
+              <ProjectsProvider>
+                <HubPage variant="sheet" />
+              </ProjectsProvider>
+            }
+          />
           {/* Visual has its own layout, so it sits outside the Product Layout. */}
           <Route
             path="/visual/*"
