@@ -114,7 +114,9 @@ section of `docs/redesign-plan.md`.
 
 - **Lights down** — a work page that shows photos or film in true colour asks
   the Visual layout (with `useNight()`) to fade to blue-black. The index, About,
-  Contact and graphic design pages stay on paper.
+  Contact and graphic design pages stay on paper. Planned: the fade becomes
+  scroll-driven, dimming as the work reaches the screen and coming back up at the
+  end ([ADR 0020](adr/0020-scroll-driven-motion.md)).
 
 ## Case study page
 
@@ -284,3 +286,14 @@ Introduced by [ADR 0018](adr/0018-contact-sheet-concept-and-edge-layer.md).
   block, tape, crop brackets, frame numbers and the readout. Each mark has one
   job and appears only where that job exists, on Product, Visual and the hub.
   Visual uses its own version (blue ink blocks, masking tape, printer's marks).
+
+- **Develop** — the site's shared motion rule: things arrive the way a print
+  does, coming up from flat blue to full colour, not by sliding or bouncing.
+  The hub's version plays once on arrival, in about two seconds, and its readout
+  counts to the real totals. Under reduced motion only the finished state shows.
+  See [ADR 0020](adr/0020-scroll-driven-motion.md).
+
+- **Inspector sweep** — Product's arrival scene: crop brackets snap onto a
+  screenshot, its name tape sticks, then an outline sweeps a few real parts of the
+  page and shows their live measurements once. It reuses **Inspect mode**'s code
+  and falls back to tape and brackets on a phone.

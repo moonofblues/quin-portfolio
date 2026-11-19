@@ -16,6 +16,7 @@ says so, one at a time.
 | Dark/light | One site-wide switch, remembered, dark by default. Film and photo pages keep lights-down. Product gets a light version |
 | Marks | Spread by job, never decoration |
 | `/sheet` | Its hero replaces `/`. `/sheet` redirects to `/` |
+| Motion | One signature scene per portfolio plus a shared "develop into view" rule, as phase 5. CSS only, no added scroll depth ([ADR 0020](adr/0020-scroll-driven-motion.md)) |
 | Copy voice | First person, plain, a little dry, one human line per section |
 | Delivery | Phases, each its own commit, each approved before the next |
 
@@ -35,14 +36,20 @@ says so, one at a time.
    the brand blue and paper cream. Lavender also lives in the moon, stars and
    card borders (`src/index.css`), not only the accent token. Hub tokens are in
    `src/hub/hub.css`.
-2. **Hub (built, awaiting review and tests).** Make the sheet hero the hub hero, remove the old hero and the
+2. **Hub (done).** Make the sheet hero the hub hero, remove the old hero and the
    `variant` prop, redirect `/sheet` to `/`.
 3. **Edge by job.** Add marks to Product and hub sections (list below).
 4. **Visual edge.** Marker as blue ink block, masking tape, frame numbers, crop
    brackets, extending the existing printer's marks in `visual.css`.
-5. **Copy pass.** Draft first-person copy for approval. Real details come from
+5. **Motion** ([ADR 0020](adr/0020-scroll-driven-motion.md)). One signature
+   scene per portfolio and one shared rule:
+   - Hub: develop on arrival (about 2 seconds, no extra scrolling).
+   - Product: inspector sweep on arrival (tape and brackets only on phones).
+   - Visual: scroll-driven lights down on photo and film pages.
+   - Everywhere else: things develop into view.
+6. **Copy pass.** Draft first-person copy for approval. Real details come from
    Quin. No em dashes, no buzzwords, no invented claims.
-6. **Site-wide light/dark and a light /dev.** Biggest job, so last. Needs its own
+7. **Site-wide light/dark and a light /dev.** Biggest job, so last. Needs its own
    design pass first: the fireflies, moon and night sky need a light treatment.
 
 ## Per-section marks (draft, to confirm)
@@ -67,13 +74,15 @@ and the hub sheet hero carry marks.
 
 - Confirm the per-section list above.
 - Copy that lives in Sanity cannot be changed from code. List the fields for
-  Quin to rewrite before phase 5.
+  Quin to rewrite before phase 6.
 - Design the light-mode night sky (for example blue ink specks on paper) before
-  phase 6.
+  phase 7.
+- Decide how Product's inspector sweep reuses Inspect mode's code, and what the
+  phone fallback shows.
 - Testimonials must be real, or the section stays out.
 - Check which look Quin sees today: dark/light is stored in the browser as
   `hub-theme` (`src/hub/HubPage.jsx`). Dark is the default.
-- Phase 6 changes ADR 0005 (dark-only Product). Update that ADR's status when
+- Phase 7 changes ADR 0005 (dark-only Product). Update that ADR's status when
   it ships.
 
 ## Rules for every phase
