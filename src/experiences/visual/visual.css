@@ -191,6 +191,31 @@
 .v-slate-body h3 { margin: 0 0 1.2rem; font-weight: 800; font-stretch: 90%; text-transform: lowercase; letter-spacing: -0.04em; line-height: 0.9; font-size: clamp(2.4rem, 6vw, 5.2rem); }
 .v-slate-body p { font-family: var(--v-serif); font-size: clamp(1.25rem, 2vw, 1.65rem); line-height: 1.25; margin: 0 0 1rem; max-width: 36rem; color: var(--text); }
 .v-slate-body em { color: var(--ink); }
+
+/* Edge (ADR 0019), in Visual's own hand: masking tape on the picks, a blue ink
+   block on the one phrase that matters, crop brackets around a print, and a
+   readout that states the real counts. Each mark carries a fact. */
+.v-item { position: relative; }
+.v-tape {
+  position: absolute; z-index: 4; left: 0.9rem; top: -0.55rem; padding: 0.18rem 0.85rem;
+  background: rgba(228, 221, 199, 0.94); color: var(--ink);
+  font-family: var(--v-mono); font-size: 0.7rem; line-height: 1.4; letter-spacing: 0.04em;
+  transform: rotate(-4deg); pointer-events: none;
+  /* A torn strip: the short edges are ragged, like masking tape pulled off a roll. */
+  clip-path: polygon(2% 0, 98% 0, 100% 20%, 98% 40%, 100% 60%, 98% 80%, 100% 100%, 2% 100%, 0 80%, 2% 60%, 0 40%, 2% 20%);
+}
+.v-mark {
+  background: var(--ink); color: var(--paper); padding: 0.02em 0.14em 0.06em;
+  box-decoration-break: clone; -webkit-box-decoration-break: clone;
+}
+.v-lede .v-readout { margin-top: 0.3rem; }
+.v-print { position: relative; display: block; }
+.v-crop { position: absolute; width: 1.4rem; height: 1.4rem; pointer-events: none; border: 0 solid var(--ink); }
+.v-crop--tl { top: -0.6rem; left: -0.6rem; border-top-width: 2px; border-left-width: 2px; }
+.v-crop--tr { top: -0.6rem; right: -0.6rem; border-top-width: 2px; border-right-width: 2px; }
+.v-crop--bl { bottom: -0.6rem; left: -0.6rem; border-bottom-width: 2px; border-left-width: 2px; }
+.v-crop--br { bottom: -0.6rem; right: -0.6rem; border-bottom-width: 2px; border-right-width: 2px; }
+@media print { .v-tape, .v-crop { display: none; } .v-mark { background: none; color: inherit; } }
 @media (max-width: 760px) {
   .v-slate-body { grid-template-columns: 1fr; }
   .v-slate-grid { grid-template-columns: 1fr 1fr; }

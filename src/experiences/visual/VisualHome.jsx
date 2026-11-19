@@ -30,6 +30,12 @@ const pad = (n) => String(n).padStart(3, "0");
 function Item({ project, number, natural = true, eager = false }) {
   return (
     <div className="v-item">
+      {/* Picks are taped, as on the hub and the Work cards. */}
+      {project.featured && (
+        <span className="v-tape" aria-hidden="true">
+          pick
+        </span>
+      )}
       <Link className="v-link" to={projectPath(project)}>
         <Frame project={project} number={pad(number)} natural={natural} eager={eager} />
         <span className="v-cap">
@@ -82,6 +88,10 @@ export function VisualHome() {
     return { numbers, shownIn };
   }, [grouped]);
 
+  // The readout states the real counts: frames on the index and how many are picks.
+  const frameCount = numbers.size;
+  const pickCount = visual.filter((p) => p.featured && numbers.has(p.id)).length;
+
   return (
     <>
       <title>Quin Ledesma | Visual</title>
@@ -110,8 +120,18 @@ export function VisualHome() {
         ))}
 
         <div className="v-lede">
-          <p>film, photographs and graphic design. things I look at twice.</p>
+          <p>
+            film, photographs and graphic design.{" "}
+            <span className="v-mark">things I look at twice.</span>
+          </p>
           <span className="v-mono">zamboanga city</span>
+          {frameCount > 0 && (
+            <span className="v-mono v-readout">
+              {pad(frameCount)} frames
+              {pickCount > 0 &&
+                ` · ${pickCount} ${pickCount === 1 ? "pick" : "picks"}`}
+            </span>
+          )}
         </div>
         <h1 className="v-name" aria-label="Quin Ledesma">
           <span aria-hidden="true">quin</span>
@@ -194,17 +214,24 @@ export function VisualHome() {
             </div>
           </div>
           <div className="v-slate-body">
-            <span className="v-frame">
-              <img
-                className="v-pic"
-                src={quinPortrait}
-                alt="Quin Ledesma"
-                width={3025}
-                height={3025}
-                loading="lazy"
-                decoding="async"
-                fetchPriority="low"
-              />
+            {/* Crop brackets sit just outside the print, on the paper. */}
+            <span className="v-print">
+              <span className="v-frame">
+                <img
+                  className="v-pic"
+                  src={quinPortrait}
+                  alt="Quin Ledesma"
+                  width={3025}
+                  height={3025}
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
+                />
+              </span>
+              <span className="v-crop v-crop--tl" aria-hidden="true" />
+              <span className="v-crop v-crop--tr" aria-hidden="true" />
+              <span className="v-crop v-crop--bl" aria-hidden="true" />
+              <span className="v-crop v-crop--br" aria-hidden="true" />
             </span>
             <div>
               <h3>a designer who codes, with a camera.</h3>
