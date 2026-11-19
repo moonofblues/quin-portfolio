@@ -917,7 +917,7 @@ html:has(.hub) {
   }
 }
 /* ------------------------------------------------------------------ *
- * Edge (sheet variant only). One hot accent, the marker, used the way a
+ * Edge. One hot accent, the marker, used the way a
  * photographer marks a proof: highlighter blocks, tape on the picks, crop
  * brackets at the corners, a readout line that follows the pointer. Each mark
  * carries information (a pick, a frame number, a count). The marker is the
@@ -1056,17 +1056,17 @@ html:has(.hub) {
 }
 
 /* Rest of the page, in the same hand. */
-.hub[data-variant="sheet"] main {
+.hub main {
   counter-reset: frame 0;
 }
-.hub[data-variant="sheet"] .hub-h2 {
+.hub .hub-h2 {
   display: inline-block;
   padding: 0 0.22em 0.06em;
   background: var(--h-mark);
   color: var(--h-on-mark);
   transform: rotate(-1.2deg);
 }
-.hub[data-variant="sheet"] .hub-h2::before {
+.hub .hub-h2::before {
   counter-increment: frame;
   content: counter(frame, decimal-leading-zero);
   margin-right: 0.5em;
@@ -1075,23 +1075,23 @@ html:has(.hub) {
   letter-spacing: 0.04em;
   opacity: 0.7;
 }
-.hub[data-variant="sheet"] .hub-nav {
+.hub .hub-nav {
   counter-reset: nav;
 }
-.hub[data-variant="sheet"] .hub-nav a::before {
+.hub .hub-nav a::before {
   counter-increment: nav;
   content: counter(nav, decimal-leading-zero);
   margin-right: 0.4em;
   color: var(--h-mark);
   font: 500 0.68rem/1 var(--h-mono);
 }
-.hub[data-variant="sheet"] .hub-ticker {
+.hub .hub-ticker {
   margin-block: 1.75rem;
   border: 0;
   background: var(--h-mark);
   transform: rotate(-1deg) scale(1.03);
 }
-.hub[data-variant="sheet"] .hub-ticker span {
+.hub .hub-ticker span {
   color: var(--h-on-mark);
 }
 
