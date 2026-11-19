@@ -41,7 +41,7 @@ says so, one at a time.
 3. **Edge by job (built, awaiting tests).** Add marks to Product and hub sections (list below).
 4. **Visual edge (done).** Marker as blue ink block, masking tape, frame numbers, crop
    brackets, extending the existing printer's marks in `visual.css`.
-5. **Motion (in progress: hub develop built)** ([ADR 0020](adr/0020-scroll-driven-motion.md)). One signature
+5. **Motion (in progress: hub develop and Product sweep built)** ([ADR 0020](adr/0020-scroll-driven-motion.md)). One signature
    scene per portfolio and one shared rule:
    - Hub: develop on arrival (about 2 seconds, no extra scrolling).
    - Product: inspector sweep on arrival (tape and brackets only on phones).

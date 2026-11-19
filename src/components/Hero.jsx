@@ -7,6 +7,7 @@ import { Tag } from "./ui/Tag";
 import { Moon } from "./decorative/Moon";
 import { Star } from "./decorative/Stars";
 import { RevealLines } from "./ui/RevealLines";
+import { HeroSweep } from "./inspect/HeroSweep";
 import { SERVICE_BY_ID, parseHeadline } from "../data/services";
 import zcmcWebsiteDark from "../assets/zcmc-website-hero-dark.webp";
 import adzuPortal from "../assets/adzu-portal-home.webp";
@@ -89,9 +90,14 @@ export function Hero() {
     >
       <div className="absolute inset-0 bg-gradient-radial" />
 
-      {/* Crop brackets: the corner marks of a trimmed print. Below the fixed nav. */}
+      {/* Arrival scene (ADR 0020): on desktop the page inspects itself once.
+          Renders nothing; loads on demand. */}
+      <HeroSweep />
+
+      {/* Crop brackets: the corner marks of a trimmed print. Below the fixed nav.
+          They snap on at arrival, and so do the screenshot tapes below. */}
       <div
-        className="pointer-events-none absolute inset-x-4 bottom-4 top-24 z-10 hidden sm:block"
+        className="hero-snap pointer-events-none absolute inset-x-4 bottom-4 top-24 z-10 hidden sm:block"
         aria-hidden="true"
       >
         <span className="crop crop--tl" />
@@ -200,9 +206,11 @@ export function Hero() {
           <div className="flex flex-wrap justify-center max-w-2xl gap-2">
             {service
               ? service.heroTags.map((tag) => <Tag key={tag}>{tag}</Tag>)
-              : DEFAULT_PILLS.map((pill) => (
+              : DEFAULT_PILLS.map((pill, index) => (
                   <button
                     key={pill.id}
+                    // The arrival sweep visits the first pill.
+                    data-sweep={index === 0 ? "" : undefined}
                     type="button"
                     onClick={() => chooseFocus(pill.id)}
                     className="inline-flex items-center px-3 py-2 rounded-full text-sm font-medium bg-accent/15 text-accent cursor-pointer transition-[background-color,color] duration-200 hover:bg-accent/30 hover:text-text-primary active:bg-accent/40"
@@ -235,7 +243,11 @@ export function Hero() {
           transition={{ duration: 0.55, delay: 0.2, ease: EASE_OUT }}
           style={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.4)" }}
         >
-          <span className="tape left-3 top-3" aria-hidden="true">
+          <span
+            className="tape hero-stick left-3 top-3"
+            style={{ "--stick-delay": "0.85s" }}
+            aria-hidden="true"
+          >
             adzu portal
           </span>
           <div className="aspect-video">
@@ -259,7 +271,11 @@ export function Hero() {
           transition={{ duration: 0.55, delay: 0.1, ease: EASE_OUT }}
           style={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)" }}
         >
-          <span className="tape left-3 top-3" aria-hidden="true">
+          <span
+            className="tape hero-stick left-3 top-3"
+            style={{ "--stick-delay": "0.75s" }}
+            aria-hidden="true"
+          >
             zcmc website
           </span>
           <div className="aspect-video">
@@ -281,7 +297,11 @@ export function Hero() {
           transition={{ duration: 0.55, delay: 0.25, ease: EASE_OUT }}
           style={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.4)" }}
         >
-          <span className="tape left-3 top-3" aria-hidden="true">
+          <span
+            className="tape hero-stick left-3 top-3"
+            style={{ "--stick-delay": "0.95s" }}
+            aria-hidden="true"
+          >
             erp dashboard
           </span>
           <div className="aspect-video">
