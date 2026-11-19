@@ -43,7 +43,9 @@ test.describe("contact sheet hub (/)", () => {
 
   test("has four crop brackets and numbered section headings", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator(".sheet-crop")).toHaveCount(4);
+    // The hero has four. The About portrait has its own set, counted below.
+    await expect(page.locator(".sheet-hero .sheet-crop")).toHaveCount(4);
+    await expect(page.locator(".hub-portrait-wrap .sheet-crop")).toHaveCount(4);
     // The browser reports a counter as its rule, not the number it draws, so
     // check the rules: the count starts at zero and each heading adds one.
     const rules = await page.locator(".hub-h2").first().evaluate((el) => ({
@@ -93,6 +95,8 @@ test.describe("Work page and case study", () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/work/zcmc-erp-system");
     await expect(page.locator("h1").first()).toBeVisible();
-    await expect(page.locator("section .crop")).toHaveCount(4);
+    // The opening (the section with the h1) has four. Screenshots further down
+    // carry their own brackets, so count only the opening's.
+    await expect(page.locator("section:has(h1) .crop")).toHaveCount(4);
   });
 });
