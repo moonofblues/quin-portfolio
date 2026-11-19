@@ -122,7 +122,7 @@ export function ProjectsProvider({ children }) {
         <p className="text-text-secondary">Could not load projects. Check your connection.</p>
         <button
           onClick={load}
-          className="px-4 py-2 rounded-full text-sm font-medium bg-accent text-on-accent hover:bg-accent-hover transition-colors"
+          className="px-4 py-2 rounded-full text-sm font-medium bg-mark text-on-mark hover:bg-mark-hover transition-colors"
         >
           Retry
         </button>

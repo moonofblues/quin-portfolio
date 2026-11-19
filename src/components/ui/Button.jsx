@@ -25,7 +25,7 @@ export function Button({
     'hover:scale-[1.02] active:scale-[0.98] motion-reduce:transform-none';
 
   const variants = {
-    primary: 'bg-accent text-on-accent hover:bg-accent-hover',
+    primary: 'bg-mark text-on-mark hover:bg-mark-hover',
     secondary: 'bg-transparent border-2 border-accent text-accent hover:bg-accent/10',
     ghost: 'bg-transparent text-text-secondary hover:text-accent',
   };

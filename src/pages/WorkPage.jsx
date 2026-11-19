@@ -158,7 +158,7 @@ export function WorkPage() {
               className={cn(
                 "px-4 py-2 rounded-full text-sm font-medium transition-[background-color,color] duration-200",
                 activeFocus === focus.id
-                  ? "bg-accent text-on-accent"
+                  ? "bg-mark text-on-mark"
                   : "bg-bg-tertiary text-text-secondary hover:bg-bg-hover",
               )}
             >

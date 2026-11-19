@@ -76,7 +76,7 @@ export function ChapterNav({ chapters }) {
               className={cn(
                 "block rounded-full px-4 py-1.5 font-display text-xs uppercase tracking-wider transition-[color,background-color] duration-200",
                 i === activeIndex
-                  ? "bg-accent text-on-accent"
+                  ? "bg-mark text-on-mark"
                   : "text-text-secondary hover:text-text-primary hover:bg-bg-hover",
               )}
             >

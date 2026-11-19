@@ -81,7 +81,7 @@ export function ProcessTimeline({ steps }) {
                 <div className="w-12 h-12 rounded-full flex items-center justify-center bg-bg-elevated border-2 border-accent shadow-card">
                   <Icon size={20} className="text-accent" />
                 </div>
-                <span className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center font-display text-[10px] bg-accent text-on-accent">
+                <span className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center font-display text-[10px] bg-mark text-on-mark">
                   {String(index + 1).padStart(2, "0")}
                 </span>
               </div>

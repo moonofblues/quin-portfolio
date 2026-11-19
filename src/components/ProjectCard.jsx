@@ -47,7 +47,7 @@ export function ProjectCard({ project, index = 0 }) {
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center bg-bg-primary/80">
             {/* CSS hover instead of whileHover — this renders once per card in
                 a grid, so per-instance JS pointer listeners add up. */}
-            <div className="flex items-center gap-2 px-6 py-3 rounded-full font-medium bg-accent text-on-accent transition-transform duration-200 hover:scale-105 motion-reduce:transform-none">
+            <div className="flex items-center gap-2 px-6 py-3 rounded-full font-medium bg-mark text-on-mark transition-transform duration-200 hover:scale-105 motion-reduce:transform-none">
               {project.type === "case-study"
                 ? "View Case Study"
                 : project.type === "photo-set"

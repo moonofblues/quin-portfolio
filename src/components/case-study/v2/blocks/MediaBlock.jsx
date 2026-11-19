@@ -82,7 +82,7 @@ function Frame({ image, onExpand, pins, legend, active, onActivate }) {
               // Tailwind's layers and would otherwise hide the pin.
               "absolute flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2! border-solid! font-display text-xs transition-[background-color,color,transform] duration-200 motion-reduce:transform-none",
               active === i
-                ? "scale-110 border-white! bg-accent! text-on-accent"
+                ? "scale-110 border-white! bg-mark! text-on-mark"
                 : "border-accent! bg-black/70! text-white",
             )}
             style={{ left: `${pin.x}%`, top: `${pin.y}%` }}

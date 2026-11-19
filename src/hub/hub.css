@@ -17,6 +17,13 @@
   --h-dev: #6384ff;
   --h-vis: #6384ff;
   --h-sel: rgba(99, 132, 255, 0.35);
+  /* ADR 0021: shapes use one brand blue in both modes, with cream labels.
+     Small blue text keeps a value per ground (--h-mark-text), because no single
+     blue passes 4.5:1 on both paper and night. The name is cream on night. */
+  --h-mark: #3355e6;
+  --h-on-mark: #eee8d6;
+  --h-mark-text: #6384ff;
+  --h-name: var(--h-text);
   --h-pad: clamp(1.25rem, 4vw, 3rem);
   --h-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
   --h-serif: "Instrument Serif", Georgia, serif;
@@ -38,9 +45,12 @@
   --h-text: #0a1030;
   --h-muted: #4a4f66;
   --h-rule: rgba(10, 16, 48, 0.18);
-  --h-dev: #0b2fb3;
-  --h-vis: #0b2fb3;
-  --h-sel: rgba(11, 47, 179, 0.25);
+  --h-dev: #1a3ed6;
+  --h-vis: #1a3ed6;
+  --h-sel: rgba(26, 62, 214, 0.25);
+  --h-mark: #1a3ed6;
+  --h-mark-text: #1a3ed6;
+  --h-name: #1a3ed6;
   color-scheme: light;
 }
 
@@ -52,9 +62,12 @@
   --h-text: #0a1030;
   --h-muted: #4a4f66;
   --h-rule: rgba(10, 16, 48, 0.18);
-  --h-dev: #0b2fb3;
-  --h-vis: #0b2fb3;
-  --h-sel: rgba(11, 47, 179, 0.25);
+  --h-dev: #1a3ed6;
+  --h-vis: #1a3ed6;
+  --h-sel: rgba(26, 62, 214, 0.25);
+  --h-mark: #1a3ed6;
+  --h-mark-text: #1a3ed6;
+  --h-name: #1a3ed6;
 }
 .hub[data-theme="light"] .hub-flip {
   --h-bg: #07090d;
@@ -64,6 +77,9 @@
   --h-dev: #6384ff;
   --h-vis: #6384ff;
   --h-sel: rgba(99, 132, 255, 0.35);
+  --h-mark: #3355e6;
+  --h-mark-text: #6384ff;
+  --h-name: #f2f1ee;
 }
 
 /* Anchor jumps glide, and stop gliding for people who ask for less motion. */
@@ -167,6 +183,7 @@ html:has(.hub) {
   line-height: 0.95;
   text-transform: lowercase;
   text-wrap: balance;
+  color: var(--h-name);
 }
 .hub-statement {
   max-width: 24ch;
@@ -556,7 +573,7 @@ html:has(.hub) {
   content: "";
   position: absolute;
   inset: 0;
-  background: #0b2fb3;
+  background: #3355e6;
   mix-blend-mode: color;
   opacity: 0.9;
   transition: opacity 600ms var(--h-ease);
@@ -604,7 +621,7 @@ html:has(.hub) {
 .hub-practice--vis:is(:hover, :focus-within) {
   --h-text: #0a1030;
   --h-muted: #4a4f66;
-  --h-vis: #0b2fb3;
+  --h-vis: #1a3ed6;
 }
 .hub-practice:is(:hover, :focus-within)::before {
   opacity: 1;
@@ -922,25 +939,12 @@ html:has(.hub) {
  * photographer marks a proof: highlighter blocks, tape on the picks, crop
  * brackets at the corners, a readout line that follows the pointer. Each mark
  * carries information (a pick, a frame number, a count). The marker is the
- * brand blue (ADR 0019): text on it is night on a dark ground, cream on paper.
+ * brand blue (ADR 0019, ADR 0021): one value in both modes, with cream text on
+ * it. The colour tokens (--h-mark, --h-on-mark, --h-mark-text) live at the top
+ * of this file with the rest of the theme.
  * ------------------------------------------------------------------ */
 .hub {
-  --h-mark: #6384ff;
-  --h-on-mark: #07090d;
   --h-mono: "DM Mono", ui-monospace, monospace;
-}
-.hub[data-theme="light"] {
-  --h-mark: #0b2fb3;
-  --h-on-mark: #eee8d6;
-}
-.hub[data-theme="night"] .hub-flip,
-.hub:not([data-theme]) .hub-flip {
-  --h-mark: #0b2fb3;
-  --h-on-mark: #eee8d6;
-}
-.hub[data-theme="light"] .hub-flip {
-  --h-mark: #6384ff;
-  --h-on-mark: #07090d;
 }
 
 /* Readout: follows the frame under the pointer. */
@@ -1123,18 +1127,14 @@ html:has(.hub) {
   display: none;
 }
 .sheet-text .hub-pick--dev {
-  background: var(--h-dev);
-  color: #07090d;
+  background: var(--h-mark);
+  color: var(--h-on-mark);
   transform: rotate(-1.4deg);
 }
 .sheet-text .hub-pick--vis {
-  background: var(--h-vis);
-  color: #07090d;
+  background: var(--h-mark);
+  color: var(--h-on-mark);
   transform: rotate(1.1deg);
-}
-.hub[data-theme="light"] .sheet-text .hub-pick--dev,
-.hub[data-theme="light"] .sheet-text .hub-pick--vis {
-  color: #fff;
 }
 .sheet-text .hub-pick:hover,
 .sheet-text .hub-pick:focus-visible {
@@ -1201,7 +1201,7 @@ html:has(.hub) {
   counter-increment: nav;
   content: counter(nav, decimal-leading-zero);
   margin-right: 0.4em;
-  color: var(--h-mark);
+  color: var(--h-mark-text);
   font: 500 0.68rem/1 var(--h-mono);
 }
 .hub .hub-ticker {

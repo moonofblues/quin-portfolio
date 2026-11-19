@@ -52,7 +52,7 @@ export function Contact() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-full flex items-center justify-center bg-bg-tertiary text-text-secondary hover:bg-accent hover:text-on-accent transition duration-200 hover:-translate-y-0.5 hover:scale-110 active:scale-95 motion-reduce:transform-none"
+                  className="w-12 h-12 rounded-full flex items-center justify-center bg-bg-tertiary text-text-secondary hover:bg-mark hover:text-on-mark transition duration-200 hover:-translate-y-0.5 hover:scale-110 active:scale-95 motion-reduce:transform-none"
                   aria-label={link.label}
                 >
                   <Icon size={20} />

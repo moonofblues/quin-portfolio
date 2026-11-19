@@ -35,10 +35,14 @@
   --color-star: #8ea2ff;
 
   /* The marker, used like a highlighter on a proof: marker blocks, tape on
-     picks, crop brackets. Same brand blue as the primary accent (ADR 0019);
-     the text on a marker stays night, since white on this blue is under 4.5:1. */
-  --color-mark: #6384ff;
-  --color-on-mark: #07090d;
+     picks, crop brackets, filled buttons. The brand blue for shapes on night
+     (ADR 0021), with cream text (4.79:1). Product is dark only for now; its
+     light mode (phase 7) will use #1a3ed6. Blue *text* on night stays
+     --color-accent (#6384ff, 5.95:1), because this deeper blue is only 3.4:1
+     on night, enough for shapes but not for small text. */
+  --color-mark: #3355e6;
+  --color-on-mark: #eee8d6;
+  --color-mark-hover: #2a46d6; /* darker on hover, so cream text stays above 4.5:1 */
 
   --color-border: rgba(99, 132, 255, 0.15);
   --color-border-hover: rgba(99, 132, 255, 0.3);
@@ -546,8 +550,8 @@ img {
   min-width: 84px;
   height: 30px;
   padding: 0 12px;
-  background: var(--color-accent);
-  border-color: var(--color-accent);
+  background: var(--color-mark);
+  border-color: var(--color-mark);
 }
 
 .cursor-label {
@@ -555,7 +559,7 @@ img {
   font-size: 11px;
   line-height: 1;
   white-space: nowrap;
-  color: var(--color-on-accent);
+  color: var(--color-on-mark);
 }
 
 /* ── Marquee (Phase 3 primitive) ──

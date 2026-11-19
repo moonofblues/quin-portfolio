@@ -175,7 +175,8 @@ Product (one setting, not one per portfolio). Dark is the default. Distinct from
 **Lights Down**, which is a page forcing darkness regardless of the Theme.
 
 ## Brand Blue
-The site's single blue, shared by every portfolio (ADR 0019, ADR 0021). Used for
-shapes (tapes, marker blocks, crop brackets, buttons) and for large type on
+The site's blue, shared by every portfolio (ADR 0019, ADR 0021). A deeper value
+on paper and a brighter one on night, so it reads as one blue in both modes. Used
+for shapes (tapes, marker blocks, crop brackets, buttons) and for large type on
 paper. Small blue **text** on dark grounds uses a lighter blue of its own,
 because no single blue passes contrast for small text on both paper and night.

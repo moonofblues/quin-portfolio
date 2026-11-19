@@ -34,14 +34,20 @@ for shapes, large type and the label text printed on them.
    hide the toggle, because they do not follow it.
 2. **Photo sets follow the theme.** Films keep going dark on their own (lights
    down, ADR 0014). Graphic design pages and the Visual index already followed it.
-3. **The brand blue for shapes is one value, about `#3355e6`,** in both modes:
-   tapes, marker blocks, crop brackets, frame marks, filled buttons and the hub
-   contact band. Label text on those shapes is cream in both modes (4.79:1).
+3. **The brand blue for shapes has one value per ground, chosen by Quin from a
+   side-by-side comparison.** On paper it is `#1a3ed6` (6.34:1 against cream). On
+   night it is `#3355e6` (4.79:1 against cream, 3.4:1 against the ground). Both
+   are used for tapes, marker blocks, crop brackets, frame marks, filled buttons
+   and the hub contact band. Label text on those shapes is cream in both modes.
+   Quin first asked for `#1a3ed6` everywhere, but on night it is only 2.57:1
+   against the ground, under the 3:1 WCAG asks of shapes, so night keeps the
+   brighter blue.
 4. **The name is cream in dark mode and the brand blue in light mode,** on the hub
    and on Visual.
 5. **Small blue text keeps its own value per ground.** On dark grounds it stays
    `#6384ff` (5.95:1), and is lightened only where a spot fails. On paper it uses
-   the brand blue (4.79:1). A single blue cannot serve small text on both grounds.
+   the paper brand blue `#1a3ed6`. A single blue cannot serve small text on both
+   grounds.
 6. **Hub portfolio rows** show the blue marker block behind the portfolio name on
    hover and keyboard focus in both modes, and keep the ground preview where it is
    visible.
@@ -79,7 +85,9 @@ for shapes, large type and the label text printed on them.
   on that glow (the sky, fireflies, moon) needs a visual check.
 - Tape and marker labels flip from night text to cream text in dark mode.
 - Visual's `--ink` token, used for large type and small text on paper, changes from
-  `#0B2FB3` to the brand blue. Small text on paper drops from 8.28:1 to 4.79:1,
-  which still passes.
+  `#0B2FB3` to `#1a3ed6`. Small text on paper drops from 8.28:1 to 6.34:1, which
+  still passes.
+- The dark-mode blue and the light-mode blue are two values, so a shape that
+  changes mode changes shade slightly. Accepted by Quin after comparing both.
 - Visual loses part of ADR 0019's wording ("film and photo pages keep
   lights-down"): only films keep it.
