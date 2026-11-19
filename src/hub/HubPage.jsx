@@ -352,7 +352,7 @@ function Practice({ tone, name, blurb, to, enter, items, numbers, pathFor }) {
     >
       <div>
         <h3 className={`hub-name--${tone}`} id={headingId}>
-          {name}
+          <span className="hub-name-mark">{name}</span>
         </h3>
         <p className="hub-blurb">{blurb}</p>
         <Link className="hub-enter" to={to}>

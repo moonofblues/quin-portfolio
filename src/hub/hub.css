@@ -352,6 +352,33 @@ html:has(.hub) {
   font-size: clamp(2.2rem, 4vw, 3.2rem);
   letter-spacing: -0.01em;
 }
+/* Hover or focus on a row: the blue marker grows in behind the name, in both
+   modes, so the row always reacts even when its ground does not change (ADR
+   0021). Transform only, so it stays on the compositor. */
+.hub-name-mark {
+  position: relative;
+  isolation: isolate;
+  display: inline-block;
+  padding: 0 0.18em;
+  margin-left: -0.18em;
+  transition: color 250ms var(--h-ease);
+}
+.hub-name-mark::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: var(--h-mark);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 300ms var(--h-ease);
+}
+.hub-practice:is(:hover, :focus-within) .hub-name-mark {
+  color: var(--h-on-mark);
+}
+.hub-practice:is(:hover, :focus-within) .hub-name-mark::before {
+  transform: scaleX(1);
+}
 .hub-blurb {
   max-width: 40ch;
   margin: 1rem 0 1.5rem;
@@ -617,11 +644,13 @@ html:has(.hub) {
   --h-text: #f2f1ee;
   --h-muted: #9aa0ab;
   --h-dev: #6384ff;
+  --h-mark: #3355e6; /* the row turns night, so the marker is night's blue */
 }
 .hub-practice--vis:is(:hover, :focus-within) {
   --h-text: #0a1030;
   --h-muted: #4a4f66;
   --h-vis: #1a3ed6;
+  --h-mark: #1a3ed6; /* the row turns paper, so the marker is paper's blue */
 }
 .hub-practice:is(:hover, :focus-within)::before {
   opacity: 1;
