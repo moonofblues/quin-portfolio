@@ -1,7 +1,10 @@
 # 0019: One brand blue
 
 Date: 2026-11-19
-Status: Accepted. Not built yet; see `docs/blue-redesign-plan.md`.
+Status: Accepted and built, see `docs/blue-redesign-plan.md`. The two blue values
+and the "film and photo pages keep lights-down" rule were changed by
+[ADR 0021](0021-shared-theme-and-brand-blue-values.md): films alone keep
+lights-down now.
 Supersedes the colour rules of [ADR 0014](0014-visual-experience.md) (each
 Experience keeps its own colours), [ADR 0016](0016-portfolio-hub.md) (lavender
 marks Digital, blue marks Visual) and [ADR 0018](0018-contact-sheet-concept-and-edge-layer.md)

@@ -1,7 +1,8 @@
 # 0021: One shared theme, and the brand blue gets a single value for shapes
 
 Date: 2026-11-19
-Status: Accepted. Not built yet.
+Status: Accepted. Built on the `dev` branch on 2026-11-19 (not merged to `main`)
+for everything except the light Product and its toggle, which are phase 7.
 Changes [ADR 0019](0019-one-brand-blue.md): its two blue values (`#6384ff` on
 dark, `#0B2FB3` on paper) and its rule that photo pages keep lights-down. The rest
 of 0019 stands.
