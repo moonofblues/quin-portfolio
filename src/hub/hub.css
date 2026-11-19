@@ -1066,9 +1066,12 @@ html:has(.hub) {
   pointer-events: none;
 }
 .darkroom-card {
-  width: min(30rem, 100%);
+  width: min(44rem, 100%);
+  /* A size container, so the filename below can size its type from the card's
+     own width and always fit on one line. */
+  container-type: inline-size;
   font-family: var(--h-mono);
-  font-size: 0.78rem;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
   letter-spacing: 0.02em;
 }
 .darkroom-row {
@@ -1078,11 +1081,16 @@ html:has(.hub) {
   color: var(--h-muted);
 }
 .darkroom-file {
-  min-height: 2.6em;
+  /* One line (ADR 0021). The type scales with the card so the longest project
+     name (about 34 characters of monospace) still fits, from a phone up. The
+     ellipsis is only a safety net for a name longer than that. */
+  min-height: 1.6em;
   margin: 1rem 0 1.1rem;
-  font-size: clamp(1.15rem, 3.4vw, 1.7rem);
-  line-height: 1.3;
-  overflow-wrap: anywhere;
+  font-size: clamp(0.8rem, 4.2cqw, 1.6rem);
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .darkroom-file b {
   padding: 0.08em 0.45em;
@@ -1093,7 +1101,7 @@ html:has(.hub) {
   -webkit-box-decoration-break: clone;
 }
 .darkroom-bar {
-  height: 6px;
+  height: 8px;
   background: var(--h-rule);
 }
 .darkroom-bar span {
