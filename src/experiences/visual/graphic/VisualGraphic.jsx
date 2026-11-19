@@ -7,8 +7,8 @@ import { ProjectEmbeds } from "../../../shared/embeds/ProjectEmbeds";
 import { sizeFromUrl, sizedUrl } from "../helpers";
 
 /**
- * A graphic design piece inside the Visual experience (plan step 5). Print
- * stays on paper, so this page does not ask for the lights to go down. The
+ * A graphic design piece inside the Visual experience (plan step 5). It
+ * follows the visitor's light/dark choice (ADR 0021), and each piece sits on its own cream print mount. The
  * pieces show at their own proportions (never cropped), large, and open in the
  * full-screen viewer. The Product site keeps its own page for the same piece at
  * /work/<slug>.
@@ -45,12 +45,12 @@ export function VisualGraphic() {
   );
 
   if (!card && (listLoading || detailLoading)) {
-    return <div className="vp-page vp-paper" aria-busy="true" />;
+    return <div className="vp-page" aria-busy="true" />;
   }
 
   if (!card || detail === null) {
     return (
-      <div className="vp-page vp-paper">
+      <div className="vp-page">
         <h1 className="vp-title">not found.</h1>
         <p className="vp-intro">Nothing at this address. It may have moved, or it was never published.</p>
         <Link className="vp-back" to="/visual#work">
@@ -65,7 +65,7 @@ export function VisualGraphic() {
   const meta = [card.year, detail?.client, detail?.role, tools].filter(Boolean);
 
   return (
-    <article className="vp-page vp-paper">
+    <article className="vp-page">
       <title>{`${card.title} | Quin Ledesma`}</title>
       {description && <meta name="description" content={description} />}
       <meta property="og:title" content={`${card.title} | Quin Ledesma`} />
