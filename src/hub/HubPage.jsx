@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { ArrowUpRight, Moon, Sun } from "lucide-react";
 import { useProjects } from "../shared/context/ProjectsContext";
@@ -8,6 +8,8 @@ import { EMAIL, LOCATION_LINE, SOCIAL_LINKS } from "../shared/contact";
 import { Colophon } from "../shared/Colophon";
 import { DeskPhoto } from "./DeskPhoto";
 import { SheetHero } from "./SheetHero";
+import { DarkroomLoader } from "./DarkroomLoader";
+import { shouldScan } from "./darkroom";
 import { frameNumbers } from "./frames";
 import quinPortrait from "../assets/quin-portrait.webp";
 import "./hub.css";
@@ -77,6 +79,11 @@ function HubSite() {
   const { hash } = useLocation();
   const { projects, loading } = useProjects();
   const [theme, setTheme] = useState(readTheme);
+  // The darkroom loader opens the first visit of a session (ADR 0020). `ready`
+  // is false while it is up, and the contact sheet starts developing when it
+  // fades. Everyone else is ready at once.
+  const [ready, setReady] = useState(() => !shouldScan(hash));
+  const finishScan = useCallback(() => setReady(true), []);
 
   // Fonts, title and the page colour behind the app (so an overscroll in light
   // mode does not flash the Product site's dark ground). All undone on leaving.
@@ -134,6 +141,13 @@ function HubSite() {
 
   return (
     <div className="hub" data-theme={theme}>
+      {!ready && (
+        <DarkroomLoader
+          projects={projects}
+          loading={loading}
+          onDone={finishScan}
+        />
+      )}
       <header className="hub-bar">
         <a
           className="hub-brand"
@@ -166,7 +180,7 @@ function HubSite() {
       </header>
 
       <main id="top">
-        <SheetHero projects={projects} loading={loading} />
+        <SheetHero projects={projects} loading={loading} ready={ready} />
 
         {/* Both disciplines, interleaved. Decorative: the Work section below says
             the same thing in words. */}

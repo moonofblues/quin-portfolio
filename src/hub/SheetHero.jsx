@@ -17,7 +17,7 @@ const pathFor = ({ project, side }) =>
  * links in the statement take clicks. The readout line at the top follows the
  * frame under the pointer, like a timecode.
  */
-export function SheetHero({ projects, loading }) {
+export function SheetHero({ projects, loading, ready = true }) {
   const [active, setActive] = useState(null);
   const frames = loading ? [] : pickFrames(projects);
   const picks = frames.filter((f) => f.project.featured).length;
@@ -30,7 +30,8 @@ export function SheetHero({ projects, loading }) {
   const total = frames.length;
   const [developed, setDeveloped] = useState(0);
   useEffect(() => {
-    if (total === 0) return undefined;
+    // Wait for the darkroom loader to fade, if there is one.
+    if (total === 0 || !ready) return undefined;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
       const id = setTimeout(() => setDeveloped(total), 0);
@@ -43,10 +44,14 @@ export function SheetHero({ projects, loading }) {
       if (n >= total) clearInterval(id);
     }, 70);
     return () => clearInterval(id);
-  }, [total]);
+  }, [total, ready]);
 
   return (
-    <section className="sheet-hero" aria-labelledby="hub-name">
+    <section
+      className="sheet-hero"
+      data-ready={ready ? "true" : "false"}
+      aria-labelledby="hub-name"
+    >
       <ul className="sheet-grid" aria-label="Frames from my work">
         {frames.map((frame, i) => (
           <li

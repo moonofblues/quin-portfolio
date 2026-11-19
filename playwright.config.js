@@ -18,6 +18,10 @@ export default defineConfig({
   use: {
     baseURL: "http://localhost:5173",
     trace: "retain-on-failure",
+    // The site opens with a loader and plays arrival animations (ADR 0020). The
+    // tests check the finished page, which is exactly what reduced motion shows.
+    // A test about the motion itself turns it back on with page.emulateMedia.
+    reducedMotion: "reduce",
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   // Reuses a dev server that is already running; starts one otherwise.

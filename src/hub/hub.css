@@ -1005,6 +1005,80 @@ html:has(.hub) {
   }
 }
 
+/* While the loader is up, the frames wait flat blue and the tapes wait unstuck.
+   Both start the moment it fades. */
+.sheet-hero[data-ready="false"] .sheet-cell::after {
+  animation: none;
+  opacity: 1;
+}
+.sheet-hero[data-ready="false"] .sheet-tape {
+  animation: none;
+  opacity: 0;
+}
+
+/* The darkroom loader (ADR 0020): a scan of the real frames, once per visit. */
+.darkroom {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: var(--h-pad);
+  background: var(--h-bg);
+  color: var(--h-text);
+  transition: opacity 320ms var(--h-ease);
+}
+.darkroom[data-leaving="true"] {
+  opacity: 0;
+  pointer-events: none;
+}
+.darkroom-card {
+  width: min(30rem, 100%);
+  font-family: var(--h-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+}
+.darkroom-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  color: var(--h-muted);
+}
+.darkroom-file {
+  min-height: 2.6em;
+  margin: 1rem 0 1.1rem;
+  font-size: clamp(1.15rem, 3.4vw, 1.7rem);
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.darkroom-file b {
+  padding: 0.08em 0.45em;
+  background: var(--h-mark);
+  color: var(--h-on-mark);
+  font-weight: 500;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.darkroom-bar {
+  height: 6px;
+  background: var(--h-rule);
+}
+.darkroom-bar span {
+  display: block;
+  height: 100%;
+  background: var(--h-mark);
+  transform-origin: left center;
+  transition: transform 90ms linear;
+}
+.darkroom-foot {
+  margin-top: 0.9rem;
+}
+@media print {
+  .darkroom {
+    display: none;
+  }
+}
+
 /* Crop brackets: the corner marks of a trimmed print. */
 .sheet-crop {
   position: absolute;
