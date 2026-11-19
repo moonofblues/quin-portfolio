@@ -162,3 +162,20 @@ manually-set "as of" date. Deliberately pitched at **activity** level, not
 **role** level: the About timeline already lists current job titles, so "Now"
 describes work in progress ("Building X at ZCMC") and never restates a title.
 A "Now" that has gone stale is worse than none — keep it current or remove it.
+
+## Lights Down
+A Visual page state where the ground goes dark so the work shows in true colour.
+It applies to **film pages only**. Photo sets, graphic design pages and the
+index follow the visitor's chosen theme instead (ADR 0021). A film page ignores
+the theme switch, so the switch is not shown there.
+
+## Theme
+The visitor's remembered choice of light or dark, shared by the hub, Visual and
+Product (one setting, not one per portfolio). Dark is the default. Distinct from
+**Lights Down**, which is a page forcing darkness regardless of the Theme.
+
+## Brand Blue
+The site's single blue, shared by every portfolio (ADR 0019, ADR 0021). Used for
+shapes (tapes, marker blocks, crop brackets, buttons) and for large type on
+paper. Small blue **text** on dark grounds uses a lighter blue of its own,
+because no single blue passes contrast for small text on both paper and night.
