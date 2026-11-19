@@ -17,7 +17,7 @@ const DEFAULT_HEADLINE = [
   <span className="text-gradient">Actually Work</span>,
 ];
 const DEFAULT_DESCRIPTION =
-  "From pixel to production — I bridge design and development to create interfaces that are as functional as they are beautiful.";
+  "I'm a designer who codes. In healthcare tech I design interfaces that cut friction and prevent errors, then build them.";
 // The pills in the default view. Each one is a button that switches the page to
 // that Focus (the ?focus=<id> in the URL). The labels are
 // shorter than the official Focus names on purpose, so they fit on one line.
@@ -90,16 +90,19 @@ export function Hero() {
       <div className="absolute inset-0 bg-gradient-radial" />
 
       <Moon
-        className="absolute top-22 sm:top-48 left-8 md:left-16 lg:left-24 z-0"
+        // Dimmed so white text stays readable wherever the moon sits behind it.
+        className="absolute top-22 sm:top-48 left-8 md:left-16 lg:left-24 z-0 opacity-35"
         size={250}
       />
+      {/* Hidden on phones, where the headline fills the width and the stars
+          would sit on top of its letters. */}
       <Star
-        className="absolute top-32 right-12 md:right-24"
+        className="absolute top-32 right-12 md:right-24 hidden sm:block"
         size={28}
         delay={0}
       />
       <Star
-        className="absolute top-48 right-8 md:right-16"
+        className="absolute top-48 right-8 md:right-16 hidden sm:block"
         size={16}
         delay={0.5}
       />
@@ -110,19 +113,6 @@ export function Hero() {
       />
 
       <div className="container relative z-10 text-center flex flex-col items-center justify-center grow">
-        <motion.div
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs md:text-sm bg-bg-tertiary text-text-secondary mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.05, ease: EASE_OUT }}
-        >
-          <span className="relative flex h-2 w-2" aria-hidden="true">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
-          </span>
-          Portfolio in progress — more of my works are still being added
-        </motion.div>
-
         {/* Tells screen-reader users the view changed (sighted users see the
             headline change and the "Viewing" pill below). Always in the page so
             the change is announced when it appears. */}
@@ -146,28 +136,6 @@ export function Hero() {
             </button>
           </div>
         )}
-
-        <motion.div
-          className="flex flex-wrap justify-center max-w-2xl gap-2 mb-8"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1, ease: EASE_OUT }}
-        >
-          {service
-            ? service.heroTags.map((tag) => <Tag key={tag}>{tag}</Tag>)
-            : DEFAULT_PILLS.map((pill) => (
-                // Real buttons, not labels: clicking one opens that Focus.
-                // Hover is CSS only (project performance rules).
-                <button
-                  key={pill.id}
-                  type="button"
-                  onClick={() => chooseFocus(pill.id)}
-                  className="inline-flex items-center px-3 py-2 rounded-full text-sm font-medium bg-accent/15 text-accent cursor-pointer transition-[background-color,color] duration-200 hover:bg-accent/30 hover:text-text-primary active:bg-accent/40"
-                >
-                  {pill.label}
-                </button>
-              ))}
-        </motion.div>
 
         {/* Q4 (Hero): re-skin + motion, no restructure — the collage and LCP
             timing below are untouched. RevealLines wipes each line up from
@@ -206,8 +174,36 @@ export function Hero() {
           </Button>
         </motion.div>
 
+        {/* The focus pills sit under the buttons so the headline comes first.
+            Real buttons, not labels: clicking one opens that Focus. Hover is
+            CSS only (project performance rules). */}
         <motion.div
-          className="absolute top-105 lg:top-120 left-1/2 -translate-x-1/2"
+          className="mt-10 flex flex-col items-center gap-3"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.3, ease: EASE_OUT }}
+        >
+          {!service && (
+            <p className="text-sm text-text-muted">Or browse by focus</p>
+          )}
+          <div className="flex flex-wrap justify-center max-w-2xl gap-2">
+            {service
+              ? service.heroTags.map((tag) => <Tag key={tag}>{tag}</Tag>)
+              : DEFAULT_PILLS.map((pill) => (
+                  <button
+                    key={pill.id}
+                    type="button"
+                    onClick={() => chooseFocus(pill.id)}
+                    className="inline-flex items-center px-3 py-2 rounded-full text-sm font-medium bg-accent/15 text-accent cursor-pointer transition-[background-color,color] duration-200 hover:bg-accent/30 hover:text-text-primary active:bg-accent/40"
+                  >
+                    {pill.label}
+                  </button>
+                ))}
+          </div>
+        </motion.div>
+
+        <motion.div
+          className="mt-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.5 }}

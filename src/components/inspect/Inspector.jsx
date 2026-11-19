@@ -192,7 +192,13 @@ export function Inspector({ onClose }) {
             ))}
           </>
         ) : (
-          <dt className="inspect-name">Point at anything on the page. Esc to close.</dt>
+          <>
+            <dt className="inspect-name">Inspect mode is on</dt>
+            <dd>
+              Point at anything on this page to see its real font, colours and
+              spacing, read live from the code. Esc to close.
+            </dd>
+          </>
         )}
       </dl>
     </>,

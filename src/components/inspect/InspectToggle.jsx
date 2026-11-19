@@ -18,12 +18,17 @@ export function InspectToggle() {
         type="button"
         aria-pressed={on}
         onClick={() => setOn((value) => !value)}
+        title="See this page's real fonts, colours and spacing"
         className={cn(
-          "text-sm font-medium transition-colors duration-200 hover:text-accent",
-          on ? "text-accent" : "text-text-secondary",
+          // Outlined, unlike the plain nav links, so it reads as a tool and not
+          // another page.
+          "rounded-full border px-3 py-1 text-xs font-medium transition-[color,background-color,border-color] duration-200",
+          on
+            ? "border-accent bg-accent/15 text-accent"
+            : "border-border-hover text-text-secondary hover:border-accent hover:text-accent",
         )}
       >
-        inspect
+        Inspect design
       </button>
       {on && (
         <Suspense fallback={null}>

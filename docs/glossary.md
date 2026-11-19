@@ -225,3 +225,29 @@ full design in `docs/case-study-v2-plan.md`.
 - **Adapter** — `toSections(project)`, temporary code that builds sections
   from legacy fields for projects whose `sections` list is still empty.
   Removed once every case study has been migrated by hand.
+
+## Show-the-skill features
+
+Introduced by [ADR 0017](adr/0017-show-the-skill-features-and-e2e-tests.md).
+
+- **Inspect mode** — a nav button on the Product site that outlines whatever
+  the pointer or keyboard focus is on and shows its real font, colours,
+  spacing and radius, read live from the page. Colours matching a theme token
+  show the token's name. Desktop only.
+
+- **Pin** — a numbered dot on an annotated case study image, placed by
+  clicking in Studio. Pin 1 matches legend line 1. Stored as x and y
+  percentages.
+
+- **Shot details** — an optional line on a photo ("X-S20 · Meike 33mm f/1.8 ·
+  1/250"), typed by hand, shown under the photo and in the viewer.
+
+- **Rejects** — frames from a shoot that did not make the set. Together with
+  the picks (the set's own photos) they form the contact sheet.
+
+- **Contact sheet** — a section at the bottom of a photo set showing every
+  frame in shoot order: picks ringed, rejects dimmed with a one-line reason.
+  Appears only when the set has at least one reject.
+
+- **Printer's marks** — the crop marks and tint strip around a graphic design
+  piece on the Visual page.

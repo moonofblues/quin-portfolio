@@ -155,14 +155,14 @@ html:has(.hub) {
 
 /* Hero */
 .hub-hero-inner {
-  padding-block: clamp(4rem, 14vh, 10rem) clamp(4rem, 12vh, 8rem);
+  padding-block: clamp(2.5rem, 10vh, 10rem) clamp(4rem, 12vh, 8rem);
 }
 .hub-name {
   margin: 0;
   font-family: var(--h-display);
   font-weight: 800;
   font-stretch: 90%;
-  font-size: clamp(2.75rem, 10vw, 6rem);
+  font-size: clamp(3rem, 13vw, 11rem);
   letter-spacing: -0.04em;
   line-height: 0.95;
   text-transform: lowercase;
@@ -733,5 +733,53 @@ html:has(.hub) {
   }
   .hub-timeline li::before {
     animation: none;
+  }
+}
+
+/* The desk photo: tappable objects, each opening a note under the picture. */
+.hub-desk {
+  margin-top: clamp(3rem, 7vw, 5rem);
+}
+.hub-desk-stage {
+  position: relative;
+  max-width: 60rem;
+}
+.hub-desk-stage img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+}
+.hub-desk-dot {
+  position: absolute;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: rgba(7, 9, 13, 0.55);
+  cursor: pointer;
+  transition:
+    background-color 160ms linear,
+    border-color 160ms linear;
+}
+.hub-desk-dot:hover,
+.hub-desk-dot[aria-pressed="true"] {
+  border-color: var(--h-vis);
+  background: var(--h-vis);
+}
+.hub-desk-note {
+  max-width: 40rem;
+  min-height: 3rem;
+  margin: 1rem 0 0;
+  color: var(--h-muted);
+}
+.hub-desk-note b {
+  color: var(--h-text);
+}
+@media print {
+  .hub-desk {
+    display: none;
   }
 }

@@ -112,23 +112,24 @@ function CompareSlider({ before, after }) {
     stageRef.current?.style.setProperty("--pos", `${event.currentTarget.value}%`);
 
   return (
-    <div
-      ref={stageRef}
-      className="relative overflow-hidden rounded-xl border border-border shadow-xl bg-white select-none has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-accent"
-      style={{ "--pos": "50%", aspectRatio: `${before.width} / ${before.height}` }}
-    >
+    <div>
+      {/* Above the picture, not on it, so the labels never cover content. */}
+      <div className="mb-3 flex justify-between font-display text-xs uppercase tracking-widest text-text-secondary">
+        <span>{before.label || "Before"}</span>
+        <span>{after.label || "After"}</span>
+      </div>
+      <div
+        ref={stageRef}
+        className="relative overflow-hidden rounded-xl border border-border shadow-xl bg-white select-none has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-accent"
+        style={{ "--pos": "50%", aspectRatio: `${before.width} / ${before.height}` }}
+      >
       <CompareImage image={after} />
       <CompareImage image={before} style={{ clipPath: "inset(0 calc(100% - var(--pos)) 0 0)" }} />
 
-      <p className="absolute left-3 top-3 rounded-full bg-black/70 px-3 py-1 text-xs text-white">
-        {before.label || "Before"}
-      </p>
-      <p className="absolute right-3 top-3 rounded-full bg-black/70 px-3 py-1 text-xs text-white">
-        {after.label || "After"}
-      </p>
-
       <div
-        className="pointer-events-none absolute inset-y-0 w-0.5 -translate-x-1/2 bg-white"
+        // A dark edge and soft shadow keep the split visible on both pale and
+        // dark screenshots.
+        className="pointer-events-none absolute inset-y-0 w-[3px] -translate-x-1/2 bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.45),0_0_14px_rgba(0,0,0,0.5)]"
         style={{ left: "var(--pos)" }}
         aria-hidden="true"
       >
@@ -148,6 +149,7 @@ function CompareSlider({ before, after }) {
         className="absolute inset-0 h-full w-full cursor-ew-resize opacity-0"
         style={{ touchAction: "pan-y" }}
       />
+      </div>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { mainExperienceOf, PRODUCT, VISUAL } from "../shared/experiences";
 import { TIMELINE } from "../shared/timeline";
 import { EMAIL, LOCATION_LINE, SOCIAL_LINKS } from "../shared/contact";
 import { Colophon } from "../shared/Colophon";
+import { DeskPhoto } from "./DeskPhoto";
 import quinPortrait from "../assets/quin-portrait.webp";
 import "./hub.css";
 
@@ -318,6 +319,7 @@ function HubSite() {
                 </ul>
               </div>
             </div>
+            <DeskPhoto />
           </div>
         </section>
 

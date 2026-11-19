@@ -189,6 +189,11 @@ chunk Rollup derives from `App.jsx`.
 
 ## Notes
 
-- `npm run lint` has ~13 pre-existing errors (unused `motion` imports,
-  react-hooks warnings) unrelated to any given change — check that your
+- `npm run lint` has 26 errors and 2 warnings that predate any given change
+  (unused imports, react-hooks rules, the migration script) — check that your
   change doesn't _add_ to the count rather than expecting a clean run.
+- `npm run test:e2e` runs the Playwright tests in `tests/e2e/` against the dev
+  server (it starts one if none is running). They read live Sanity content, so
+  a failure can mean unpublished or changed content, not only a code bug.
+- The `button` reset in `index.css` lives in `@layer base`. Unlayered, it beat
+  every Tailwind `bg-*` and `border-*` class on buttons; keep it layered.
