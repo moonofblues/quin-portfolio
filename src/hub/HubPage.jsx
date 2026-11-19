@@ -8,6 +8,7 @@ import { EMAIL, LOCATION_LINE, SOCIAL_LINKS } from "../shared/contact";
 import { Colophon } from "../shared/Colophon";
 import { DeskPhoto } from "./DeskPhoto";
 import { SheetHero } from "./SheetHero";
+import { frameNumbers } from "./frames";
 import quinPortrait from "../assets/quin-portrait.webp";
 import "./hub.css";
 
@@ -128,6 +129,8 @@ function HubSite() {
 
   const digital = loading ? [] : pickSelected(projects, PRODUCT);
   const visual = loading ? [] : pickSelected(projects, VISUAL);
+  // A project's number here is the one it has on the contact sheet above.
+  const numbers = loading ? new Map() : frameNumbers(projects);
 
   return (
     <div className="hub" data-theme={theme}>
@@ -198,6 +201,11 @@ function HubSite() {
                   decoding="async"
                   fetchPriority="low"
                 />
+                {/* Crop brackets frame the print. */}
+                <span className="sheet-crop sheet-crop--tl" aria-hidden="true" />
+                <span className="sheet-crop sheet-crop--tr" aria-hidden="true" />
+                <span className="sheet-crop sheet-crop--bl" aria-hidden="true" />
+                <span className="sheet-crop sheet-crop--br" aria-hidden="true" />
               </div>
               <div>
                 <div className="hub-prose">
@@ -264,6 +272,7 @@ function HubSite() {
               to="/dev"
               enter="Open the digital portfolio"
               items={digital}
+              numbers={numbers}
               pathFor={(p) => `/work/${p.slug}`}
             />
             <Practice
@@ -273,6 +282,7 @@ function HubSite() {
               to="/visual"
               enter="Open the visual portfolio"
               items={visual}
+              numbers={numbers}
               pathFor={(p) => `/visual/${p.slug}`}
             />
           </div>
@@ -319,7 +329,7 @@ function HubSite() {
 }
 
 /** One of the two portfolios: its name in its own voice, a line, a way in. */
-function Practice({ tone, name, blurb, to, enter, items, pathFor }) {
+function Practice({ tone, name, blurb, to, enter, items, numbers, pathFor }) {
   const headingId = `practice-${tone}`;
   return (
     <article
@@ -352,6 +362,14 @@ function Practice({ tone, name, blurb, to, enter, items, pathFor }) {
                     decoding="async"
                     fetchPriority="low"
                   />
+                  {numbers.has(project.id) && (
+                    <span
+                      className="frame-no bottom-1.5 left-1.5"
+                      aria-hidden="true"
+                    >
+                      {numbers.get(project.id)}
+                    </span>
+                  )}
                 </span>
                 <span className="hub-thumb-title">{project.title}</span>
               </Link>

@@ -1,35 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { mainExperienceOf, PRODUCT, VISUAL } from "../shared/experiences";
+import { pad, pickFrames } from "./frames";
 
 // A contact sheet is every frame from a roll on one page. Here each frame is a
 // project, Product and Visual interleaved so neither leads, and the featured
-// ones are ringed and taped as the picks. Prototype of the contact sheet concept.
+// ones are ringed and taped as the picks. The picking rule is in ./frames.js.
 
-const FRAME_LIMIT = 18;
 const FRAME_WIDTH = 480;
-
-const featuredFirst = (a, b) => Number(!!b.featured) - Number(!!a.featured);
-const pad = (n) => String(n).padStart(3, "0");
-
-function pickFrames(projects) {
-  const withPicture = projects.filter((p) => p.thumbnail);
-  const product = withPicture
-    .filter((p) => mainExperienceOf(p) === PRODUCT)
-    .sort(featuredFirst);
-  const visual = withPicture
-    .filter((p) => mainExperienceOf(p) === VISUAL)
-    .sort(featuredFirst);
-
-  const frames = [];
-  for (let i = 0; frames.length < FRAME_LIMIT && (product[i] || visual[i]); i++) {
-    if (product[i]) frames.push({ project: product[i], side: "product" });
-    if (visual[i] && frames.length < FRAME_LIMIT) {
-      frames.push({ project: visual[i], side: "visual" });
-    }
-  }
-  return frames;
-}
 
 const pathFor = ({ project, side }) =>
   side === "product" ? `/work/${project.slug}` : `/visual/${project.slug}`;

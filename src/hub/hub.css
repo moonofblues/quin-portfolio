@@ -386,6 +386,7 @@ html:has(.hub) {
   display: block;
 }
 .hub-thumb-img {
+  position: relative;
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: 2px;
