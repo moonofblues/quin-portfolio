@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
 
-// The contact sheet hero prototype at /sheet.
+// The contact sheet hero, which is the hub's hero at / (ADR 0019).
 test.describe("contact sheet hero", () => {
   test("shows numbered frames that link to real projects", async ({ page }) => {
-    await page.goto("/sheet");
+    await page.goto("/");
     const frames = page.locator("a.sheet-frame");
     await expect(frames.first()).toBeAttached();
     expect(await frames.count()).toBeGreaterThanOrEqual(6);
@@ -15,7 +15,7 @@ test.describe("contact sheet hero", () => {
   });
 
   test("mixes both portfolios, so neither leads", async ({ page }) => {
-    await page.goto("/sheet");
+    await page.goto("/");
     await expect(page.locator("a.sheet-frame").first()).toBeAttached();
     const sides = await page.locator(".sheet-cell").evaluateAll((els) => els.map((el) => el.dataset.side));
     expect(sides).toContain("product");
@@ -25,7 +25,7 @@ test.describe("contact sheet hero", () => {
   });
 
   test("the name does not block the frames under it", async ({ page }) => {
-    await page.goto("/sheet");
+    await page.goto("/");
     const pointer = await page.locator(".sheet-text").evaluate((el) => getComputedStyle(el).pointerEvents);
     expect(pointer).toBe("none");
     const linkPointer = await page.locator("a.hub-pick--vis").evaluate((el) => getComputedStyle(el).pointerEvents);
@@ -34,7 +34,7 @@ test.describe("contact sheet hero", () => {
 
   test("hovering a frame pulls it forward and its title appears", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/sheet");
+    await page.goto("/");
     const frame = page.locator("a.sheet-frame").nth(5);
     await frame.scrollIntoViewIfNeeded();
     await frame.hover();
@@ -46,28 +46,29 @@ test.describe("contact sheet hero", () => {
   });
 
   test("a frame opens its project", async ({ page }) => {
-    await page.goto("/sheet");
+    await page.goto("/");
     await page.locator("a.sheet-frame").first().click();
     await expect(page).toHaveURL(/\/(work|visual)\/[a-z0-9-]+$/);
   });
 
   test("the two doors in the statement still work", async ({ page }) => {
-    await page.goto("/sheet");
+    await page.goto("/");
     await page.locator("a.hub-pick--vis").click();
     await expect(page).toHaveURL(/\/visual$/);
   });
 
   test("nothing spills sideways on a phone", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto("/sheet");
+    await page.goto("/");
     await expect(page.locator("a.sheet-frame").first()).toBeAttached();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(0);
   });
 
-  test("the live hub at / is unchanged", async ({ page }) => {
-    await page.goto("/");
+  test("the old /sheet link redirects to the hub", async ({ page }) => {
+    await page.goto("/sheet");
+    await expect(page).toHaveURL(/\/$/);
     await expect(page.locator("h1.hub-name")).toBeVisible();
-    await expect(page.locator(".sheet-hero")).toHaveCount(0);
+    await expect(page.locator(".sheet-hero")).toHaveCount(1);
   });
 });

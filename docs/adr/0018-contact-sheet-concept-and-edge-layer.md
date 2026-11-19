@@ -1,7 +1,9 @@
 # 0018: The contact sheet concept and the edge layer
 
 Date: 2026-11-19
-Status: Prototype on branch `redesign/contact-sheet`. Not merged.
+Status: Prototype on branch `redesign/contact-sheet`. Not merged. The sheet hero
+became the hub's hero at `/` in phase 2 of `docs/blue-redesign-plan.md`, and
+`/sheet` now redirects to `/` ([ADR 0019](0019-one-brand-blue.md)).
 Follows [ADR 0010](0010-differentiate-through-concept-not-more-motion.md) and
 [ADR 0017](0017-show-the-skill-features-and-e2e-tests.md).
 

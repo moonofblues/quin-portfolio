@@ -90,15 +90,9 @@ function App() {
               </ProjectsProvider>
             }
           />
-          {/* Contact sheet hero prototype. Not linked from anywhere. */}
-          <Route
-            path="/sheet"
-            element={
-              <ProjectsProvider>
-                <HubPage variant="sheet" />
-              </ProjectsProvider>
-            }
-          />
+          {/* The contact sheet hero used to live here while it was a prototype.
+              It is the hub's hero now, so old /sheet links go to the hub. */}
+          <Route path="/sheet" element={<Navigate to="/" replace />} />
           {/* Visual has its own layout, so it sits outside the Product Layout. */}
           <Route
             path="/visual/*"

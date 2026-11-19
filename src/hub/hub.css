@@ -500,39 +500,6 @@ html:has(.hub) {
   overflow-x: clip;
 }
 
-/* 1. The lens. Move over the introduction and a circle shows the other
-   portfolio's ground: paper on night, night on paper. The two meet under the
-   cursor. The copy underneath is a second, hidden-from-everyone copy (aria-hidden,
-   inert), so nothing is read or focused twice. */
-@property --r {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 0px;
-}
-.hub-hero {
-  --x: 50%;
-  --y: 40%;
-  position: relative;
-  overflow: hidden;
-  transition: --r 400ms var(--h-ease);
-}
-.hub-hero[data-lens="on"] {
-  --r: clamp(7rem, 15vw, 12rem);
-}
-.hub-alt {
-  position: absolute;
-  inset: 0;
-  background: var(--h-bg);
-  color: var(--h-text);
-  clip-path: circle(var(--r) at var(--x) var(--y));
-  pointer-events: none;
-}
-@media (hover: none) {
-  .hub-alt {
-    display: none;
-  }
-}
-
 /* 2. The ticker: the two disciplines interleaved, which is the point of the
    site. CSS only; pauses on hover; a plain scrollable row without motion. */
 .hub-ticker {
@@ -692,9 +659,6 @@ html:has(.hub) {
   .hub-ticker-track {
     animation: none;
   }
-  .hub-hero {
-    transition: none;
-  }
 }
 
 /* Print: the name, About, work history and contact on white, without the
@@ -714,7 +678,6 @@ html:has(.hub) {
     min-height: 0;
   }
   .hub-bar,
-  .hub-alt,
   .hub-ticker,
   .hub-portrait-wrap,
   .hub-thumbs,

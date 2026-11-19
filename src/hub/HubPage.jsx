@@ -61,8 +61,7 @@ function pickSelected(projects, experience) {
     .slice(0, 3);
 }
 
-// `variant="sheet"` swaps the hero for the contact sheet prototype (/sheet).
-export function HubPage({ variant }) {
+export function HubPage() {
   const { search } = useLocation();
 
   // Tailored links shared before the hub existed (/?focus=ui-ux) still go to
@@ -70,46 +69,13 @@ export function HubPage({ variant }) {
   if (new URLSearchParams(search).has("focus")) {
     return <Navigate to={`/dev${search}`} replace />;
   }
-  return <HubSite variant={variant} />;
+  return <HubSite />;
 }
 
-function HubSite({ variant }) {
+function HubSite() {
   const { hash } = useLocation();
   const { projects, loading } = useProjects();
   const [theme, setTheme] = useState(readTheme);
-  const heroRef = useRef(null);
-
-  // The lens follows a mouse or pen over the hero. The listener is passive and
-  // writes at most once per frame, so it never holds up scrolling. Touch has no
-  // hover, so there the lens is simply not shown (see hub.css).
-  useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
-    let frame = 0;
-    let pointer = { x: 0, y: 0 };
-    const paint = () => {
-      frame = 0;
-      const box = hero.getBoundingClientRect();
-      hero.style.setProperty("--x", `${pointer.x - box.left}px`);
-      hero.style.setProperty("--y", `${pointer.y - box.top}px`);
-    };
-    const move = (event) => {
-      if (event.pointerType === "touch") return;
-      pointer = { x: event.clientX, y: event.clientY };
-      hero.dataset.lens = "on";
-      if (!frame) frame = requestAnimationFrame(paint);
-    };
-    const leave = () => {
-      delete hero.dataset.lens;
-    };
-    hero.addEventListener("pointermove", move, { passive: true });
-    hero.addEventListener("pointerleave", leave);
-    return () => {
-      hero.removeEventListener("pointermove", move);
-      hero.removeEventListener("pointerleave", leave);
-      if (frame) cancelAnimationFrame(frame);
-    };
-  }, []);
 
   // Fonts, title and the page colour behind the app (so an overscroll in light
   // mode does not flash the Product site's dark ground). All undone on leaving.
@@ -164,7 +130,7 @@ function HubSite({ variant }) {
   const visual = loading ? [] : pickSelected(projects, VISUAL);
 
   return (
-    <div className="hub" data-theme={theme} data-variant={variant}>
+    <div className="hub" data-theme={theme}>
       <header className="hub-bar">
         <a
           className="hub-brand"
@@ -197,51 +163,7 @@ function HubSite({ variant }) {
       </header>
 
       <main id="top">
-        {variant === "sheet" ? (
-          <SheetHero projects={projects} loading={loading} />
-        ) : (
-        <section className="hub-hero" ref={heroRef} aria-labelledby="hub-name">
-          <div className="hub-wrap hub-hero-inner">
-            <h1 className="hub-name" id="hub-name">
-              quin ledesma
-            </h1>
-            <p className="hub-statement">
-              I design and build{" "}
-              <Link className="hub-pick hub-pick--dev" to="/dev">
-                digital products
-              </Link>
-              , and I make{" "}
-              <Link className="hub-pick hub-pick--vis" to="/visual">
-                pictures
-              </Link>
-              .
-            </p>
-            <p className="hub-hint">
-              Two portfolios, one person. Open either, or keep scrolling to read
-              about me first.
-            </p>
-          </div>
-
-          {/* The lens: the same words in the other portfolio's ground, shown
-              only inside a circle that follows the pointer. A copy for the eye
-              alone, so it is hidden from assistive tech and cannot be focused. */}
-          <div className="hub-alt hub-flip" aria-hidden="true" inert>
-            <div className="hub-wrap hub-hero-inner">
-              <p className="hub-name">quin ledesma</p>
-              <p className="hub-statement">
-                I design and build{" "}
-                <span className="hub-pick hub-pick--dev">digital products</span>
-                , and I make{" "}
-                <span className="hub-pick hub-pick--vis">pictures</span>.
-              </p>
-              <p className="hub-hint">
-                Two portfolios, one person. Open either, or keep scrolling to
-                read about me first.
-              </p>
-            </div>
-          </div>
-        </section>
-        )}
+        <SheetHero projects={projects} loading={loading} />
 
         {/* Both disciplines, interleaved. Decorative: the Work section below says
             the same thing in words. */}

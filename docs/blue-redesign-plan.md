@@ -31,11 +31,11 @@ says so, one at a time.
 
 ## Phases
 
-1. **Blue foundation.** Replace the acid yellow, lavender and mint tokens with
+1. **Blue foundation (done).** Replace the acid yellow, lavender and mint tokens with
    the brand blue and paper cream. Lavender also lives in the moon, stars and
    card borders (`src/index.css`), not only the accent token. Hub tokens are in
    `src/hub/hub.css`.
-2. **Hub.** Make the sheet hero the hub hero, remove the old hero and the
+2. **Hub (built, awaiting review and tests).** Make the sheet hero the hub hero, remove the old hero and the
    `variant` prop, redirect `/sheet` to `/`.
 3. **Edge by job.** Add marks to Product and hub sections (list below).
 4. **Visual edge.** Marker as blue ink block, masking tape, frame numbers, crop
