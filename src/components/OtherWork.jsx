@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionTitle } from "./ui/SectionTitle";
 import { cn } from "../utils/cn";
 import { useProjects } from "../shared/context/ProjectsContext";
 import { SERVICES, SERVICE_BY_ID } from "../data/services";
+import { pickFeaturedProjects } from "../utils/featuredProjects";
 
 const ALL_TAB = { id: "all", label: "All" };
 
@@ -14,12 +15,27 @@ function focusesOf(p) {
 }
 
 export function OtherWork() {
-  const { getOtherWorkProjects, loading } = useProjects();
+  const { getOtherWorkProjects, getFeaturedProjects, getProjectsByFocus, loading } =
+    useProjects();
+  const [searchParams] = useSearchParams();
   const [activeFilter, setActiveFilter] = useState("all");
 
   if (loading) return null;
 
   const otherWorkProjects = getOtherWorkProjects();
+
+  // Frame numbers continue where Featured Work stops, and a project keeps its
+  // number when a filter hides its neighbours: the number is a fact about the
+  // project, not about the current view.
+  const featuredCount = pickFeaturedProjects(
+    { getFeaturedProjects, getProjectsByFocus },
+    searchParams.get("focus"),
+  ).length;
+  const frameNumberOf = (project) =>
+    String(featuredCount + otherWorkProjects.indexOf(project) + 1).padStart(
+      3,
+      "0",
+    );
 
   // Only show focus tabs that have at least one showcase project.
   const visibleTabs = [
@@ -87,6 +103,9 @@ export function OtherWork() {
                 transition={{ duration: 0.3 }}
                 className="group relative aspect-square rounded-xl overflow-hidden card-hover motion-reduce:transform-none bg-bg-tertiary"
               >
+                <span className="frame-no bottom-2 left-3" aria-hidden="true">
+                  {frameNumberOf(project)}
+                </span>
                 <Link
                   to={`/work/${project.slug}`}
                   className="block w-full h-full"

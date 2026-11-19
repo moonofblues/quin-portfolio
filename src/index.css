@@ -759,8 +759,12 @@ img {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.7rem;
   letter-spacing: 0.06em;
+  line-height: 1.4;
+  /* A night chip behind the number, so it reads on a bright image as well as a
+     dark one. White on a light graphic was under 2:1 without it. */
+  padding: 0.05rem 0.4rem;
+  background: rgba(7, 9, 13, 0.75);
   color: #fff;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
 }
 @media print {
   .tape,

@@ -6,6 +6,7 @@ import { ProjectCard } from "./ProjectCard";
 import { Button } from "./ui/Button";
 import { useProjects } from "../shared/context/ProjectsContext";
 import { SERVICE_BY_ID } from "../data/services";
+import { pickFeaturedProjects } from "../utils/featuredProjects";
 
 export function FeaturedWork() {
   const { getFeaturedProjects, getProjectsByFocus, loading } = useProjects();
@@ -15,29 +16,15 @@ export function FeaturedWork() {
 
   if (loading) return null;
 
-  // Q8 rule (Phase 6): featured-in-focus first, then top up with the most
-  // recent projects in that focus, up to 6. Preserves the sortOrder the
-  // Sanity query already applies (sortOrder asc, _createdAt desc).
-  // Q9 (changed, ADR 0012): if the focus has no projects yet, show a "coming
-  // soon" card and no projects at all. It used to fall back to the general
-  // featured set, which put unrelated work (e.g. UI/UX) under a Focus the
-  // visitor had just picked.
-  let featuredProjects;
-  let comingSoon = false;
-
-  if (service) {
-    const inFocus = getProjectsByFocus(focusId);
-    if (inFocus.length === 0) {
-      comingSoon = true;
-      featuredProjects = [];
-    } else {
-      const featuredInFocus = inFocus.filter((p) => p.featured);
-      const restInFocus = inFocus.filter((p) => !p.featured);
-      featuredProjects = [...featuredInFocus, ...restInFocus].slice(0, 6);
-    }
-  } else {
-    featuredProjects = getFeaturedProjects().slice(0, 6);
-  }
+  // The selection rule lives in utils/featuredProjects.js, shared with Other
+  // Works so its frame numbers continue from here. Q9 (changed, ADR 0012): if
+  // the focus has no projects yet, show a "coming soon" card and no projects at
+  // all, not the general featured set.
+  const featuredProjects = pickFeaturedProjects(
+    { getFeaturedProjects, getProjectsByFocus },
+    focusId,
+  );
+  const comingSoon = Boolean(service) && featuredProjects.length === 0;
 
   return (
     <section id="work" className="py-20 md:py-28 relative">
