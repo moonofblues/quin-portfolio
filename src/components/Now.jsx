@@ -55,7 +55,7 @@ export function Now() {
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
           >
-            As of {formattedAsOf}
+            <span className="tape tape--inline">as of {formattedAsOf}</span>
           </motion.p>
         )}
 

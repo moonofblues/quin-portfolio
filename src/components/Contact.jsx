@@ -25,7 +25,9 @@ export function Contact() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <SectionTitle className="justify-center">Let's Work Together</SectionTitle>
+          <SectionTitle className="justify-center">
+            Let's <span className="marker">Work Together</span>
+          </SectionTitle>
 
           <p className="text-lg md:text-xl mb-8 text-text-secondary">
             Whether you have a project in mind or just want to chat about design

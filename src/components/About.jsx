@@ -36,7 +36,7 @@ export function About() {
               <div className="absolute inset-[-20px] rounded-full opacity-20 border border-accent" />
               <div className="absolute inset-[-40px] rounded-full opacity-10 border border-accent" />
 
-              <div className="aspect-square rounded-2xl overflow-hidden bg-bg-tertiary">
+              <div className="relative aspect-square rounded-2xl overflow-hidden bg-bg-tertiary">
                 <img
                   src={quinPortrait}
                   alt="Quin Ledesma"
@@ -47,6 +47,17 @@ export function About() {
                   fetchpriority="low"
                   decoding="async"
                 />
+                {/* Crop brackets frame the print. Inset so the rounded corners
+                    do not clip them. */}
+                <div
+                  className="absolute inset-3 pointer-events-none"
+                  aria-hidden="true"
+                >
+                  <span className="crop crop--tl" />
+                  <span className="crop crop--tr" />
+                  <span className="crop crop--bl" />
+                  <span className="crop crop--br" />
+                </div>
               </div>
             </div>
 
@@ -76,8 +87,12 @@ export function About() {
               </p>
               <p className="text-lg leading-relaxed mb-4 text-text-secondary">
                 Working in healthcare tech has taught me that good design isn't
-                about aesthetics alone — it's about reducing friction,
-                preventing errors, and respecting people's time. Every interface
+                about aesthetics alone — it's about{" "}
+                <span className="marker marker--run">
+                  reducing friction, preventing errors, and respecting people's
+                  time
+                </span>
+                . Every interface
                 I create aims to make someone's workday a little better.
               </p>
               <p className="text-lg leading-relaxed text-text-secondary">

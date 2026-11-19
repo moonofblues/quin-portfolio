@@ -710,6 +710,15 @@ img {
   color: var(--color-on-mark);
   transform: rotate(-1.2deg);
 }
+/* For a long phrase that wraps over several lines: a highlighter that follows
+   the text, instead of one rotated block. Always used with `.marker`. */
+.marker--run {
+  display: inline;
+  padding: 0.04em 0;
+  transform: none;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
 .tape {
   position: absolute;
   z-index: 2;

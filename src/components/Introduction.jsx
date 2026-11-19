@@ -15,8 +15,7 @@ export function Introduction() {
           <motion.p className="text-xl md:text-2xl lg:text-3xl leading-relaxed text-text-secondary">
             I began with visuals, but I stayed for the systems behind them. Now
             I{" "}
-            <span className="text-accent">
-              {" "}
+            <span className="marker marker--run">
               design with structure, build with intention, and test with a
               critical eye
             </span>{" "}
