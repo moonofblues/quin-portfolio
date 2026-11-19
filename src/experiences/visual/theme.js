@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect } from "react";
 
 /**
- * Lights down (ADR 0014). VisualLayout owns the light/dark state and gives
- * pages a way to ask for it. A page that shows work in true colour (a photo set
- * or a film) calls useNight(); a page that should stay on paper (graphic design,
- * the index) simply doesn't. The layout stays mounted between pages, so the
- * colour change fades instead of cutting.
+ * Lights down (ADR 0014, ADR 0021). The visitor's light/dark choice is the
+ * shared site theme (src/shared/siteTheme.js). A film page ignores it and always
+ * goes dark, so it calls useNight() to tell VisualLayout; the layout then hides
+ * the theme toggle, which would do nothing there. Every other page just follows
+ * the theme. The layout stays mounted between pages, so the colour change fades
+ * instead of cutting.
  */
 export const NightContext = createContext(() => {});
 

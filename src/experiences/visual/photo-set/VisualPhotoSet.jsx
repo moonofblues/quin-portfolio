@@ -2,19 +2,18 @@ import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useProjects } from "../../../shared/context/ProjectsContext";
 import { useProjectDetail } from "../../../shared/context/useProjectDetail";
-import { useNight } from "../theme";
 import { PhotoGallery } from "./PhotoGallery";
 import { ContactSheet } from "./ContactSheet";
 
 // No framer-motion on purpose: the page has no animations to configure, and the
 // first photo (the page's largest image) must never be delayed.
 /**
- * A photo set inside the Visual experience (ADR 0013, ADR 0014). The lights are
- * down: VisualLayout dims the page to blue-black on any work page, and the
- * photos show in true colour. The photos lead; the text around them is quiet.
+ * A photo set inside the Visual experience (ADR 0013, ADR 0014, ADR 0021). It
+ * follows the visitor's light/dark choice like every other Visual page, and the
+ * photos show in true colour on either ground. The photos lead; the text around
+ * them is quiet.
  */
 export function VisualPhotoSet() {
-  useNight();
   const { slug } = useParams();
   const { projects, getProjectBySlug, loading: listLoading } = useProjects();
   const { project: detail, loading: detailLoading } = useProjectDetail(slug);
@@ -70,7 +69,7 @@ export function VisualPhotoSet() {
 
       <header className="vp-head">
         <Link className="vp-back" to="/visual#photography">
-          ← lights up
+          ← all work
         </Link>
         <h1 className="vp-title">{card.title}</h1>
         {detail?.photoIntro && <p className="vp-intro">{detail.photoIntro}</p>}

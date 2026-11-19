@@ -6,6 +6,7 @@ import { mainExperienceOf, PRODUCT, VISUAL } from "../shared/experiences";
 import { TIMELINE } from "../shared/timeline";
 import { EMAIL, LOCATION_LINE, SOCIAL_LINKS } from "../shared/contact";
 import { Colophon } from "../shared/Colophon";
+import { toggleSiteTheme, useSiteTheme } from "../shared/siteTheme";
 import { DeskPhoto } from "./DeskPhoto";
 import { SheetHero } from "./SheetHero";
 import { DarkroomLoader } from "./DarkroomLoader";
@@ -20,7 +21,6 @@ import "./hub.css";
 
 const TITLE =
   "Quin Ledesma | Designer, developer, and the person behind the camera";
-const THEME_KEY = "hub-theme";
 
 // Visual's display and serif faces. Product's Krona One and Instrument Sans are
 // already loaded by index.html; these two load only when the hub (or Visual)
@@ -48,14 +48,6 @@ const TICKER = [
   ["product design", "dev"],
 ];
 
-function readTheme() {
-  try {
-    return localStorage.getItem(THEME_KEY) === "light" ? "light" : "night";
-  } catch {
-    return "night";
-  }
-}
-
 /** Featured first, then the order Studio gives. Only pieces with a thumbnail. */
 function pickSelected(projects, experience) {
   return projects
@@ -78,7 +70,7 @@ export function HubPage() {
 function HubSite() {
   const { hash } = useLocation();
   const { projects, loading } = useProjects();
-  const [theme, setTheme] = useState(readTheme);
+  const theme = useSiteTheme();
   // The darkroom loader opens the first visit of a session (ADR 0020). `ready`
   // is false while it is up, and the contact sheet starts developing when it
   // fades. Everyone else is ready at once.
@@ -124,16 +116,6 @@ function HubSite() {
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  const toggleTheme = () => {
-    const next = theme === "light" ? "night" : "light";
-    setTheme(next);
-    try {
-      localStorage.setItem(THEME_KEY, next);
-    } catch {
-      // Private window or blocked storage: the choice just won't be remembered.
-    }
-  };
-
   const digital = loading ? [] : pickSelected(projects, PRODUCT);
   const visual = loading ? [] : pickSelected(projects, VISUAL);
   // A project's number here is the one it has on the contact sheet above.
@@ -163,7 +145,7 @@ function HubSite() {
           <button
             type="button"
             className="hub-theme"
-            onClick={toggleTheme}
+            onClick={toggleSiteTheme}
             aria-label={
               theme === "light"
                 ? "Switch to night mode"

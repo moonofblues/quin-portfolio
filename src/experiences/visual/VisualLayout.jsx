@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { Moon, Sun } from "lucide-react";
+import { toggleSiteTheme, useSiteTheme } from "../../shared/siteTheme";
 import { NightContext } from "./theme";
 import "./visual.css";
 
@@ -15,12 +17,13 @@ const NIGHT = "#050818";
 
 export function VisualLayout({ children }) {
   const { pathname, hash } = useLocation();
-  // Lights down: a page that shows work in true colour (a photo set or a film)
-  // asks for it with useNight(), and the whole layout dims to blue-black. The
-  // index, About, Contact and graphic design pages stay on paper. The layout
-  // stays mounted between pages, so the colour change fades (see .v-root in
-  // visual.css) instead of cutting.
-  const [dark, setDark] = useState(false);
+  // Light or dark follows the one site-wide choice (ADR 0021). A film page
+  // ignores it: it asks for lights down with useNight() and the layout goes
+  // blue-black whatever the choice. The layout stays mounted between pages, so
+  // the colour change fades (see .v-root in visual.css) instead of cutting.
+  const theme = useSiteTheme();
+  const [lightsDown, setLightsDown] = useState(false);
+  const dark = lightsDown || theme === "night";
 
   useEffect(() => {
     if (document.getElementById(FONTS_ID)) return;
@@ -63,7 +66,7 @@ export function VisualLayout({ children }) {
   }, [pathname, hash]);
 
   return (
-    <NightContext.Provider value={setDark}>
+    <NightContext.Provider value={setLightsDown}>
     <div className={dark ? "v-root v-dark" : "v-root"}>
       <header className="v-bar">
         {/* "ql" returns to the portfolio hub (ADR 0016); "visual" stays here. */}
@@ -83,6 +86,23 @@ export function VisualLayout({ children }) {
           <Link className="v-xlink" to="/dev">
             design &amp; dev ↗
           </Link>
+          {/* A film page is always dark, so the switch would do nothing there. */}
+          {!lightsDown && (
+            <button
+              type="button"
+              className="v-theme"
+              onClick={toggleSiteTheme}
+              aria-label={
+                theme === "light" ? "Switch to night mode" : "Switch to light mode"
+              }
+            >
+              {theme === "light" ? (
+                <Moon size={18} aria-hidden="true" />
+              ) : (
+                <Sun size={18} aria-hidden="true" />
+              )}
+            </button>
+          )}
         </nav>
       </header>
       <main>{children}</main>
