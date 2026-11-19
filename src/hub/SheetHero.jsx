@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { pad, pickFrames } from "./frames";
 
@@ -23,6 +23,28 @@ export function SheetHero({ projects, loading }) {
   const picks = frames.filter((f) => f.project.featured).length;
   const current = active === null ? null : frames[active];
 
+  // The readout counts the frames as they develop, in step with the CSS delay
+  // (70ms a frame, see hub.css), then settles on the real totals. Under reduced
+  // motion it goes straight to the totals. Only the timers set state, never the
+  // effect body itself.
+  const total = frames.length;
+  const [developed, setDeveloped] = useState(0);
+  useEffect(() => {
+    if (total === 0) return undefined;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      const id = setTimeout(() => setDeveloped(total), 0);
+      return () => clearTimeout(id);
+    }
+    let n = 0;
+    const id = setInterval(() => {
+      n += 1;
+      setDeveloped(n);
+      if (n >= total) clearInterval(id);
+    }, 70);
+    return () => clearInterval(id);
+  }, [total]);
+
   return (
     <section className="sheet-hero" aria-labelledby="hub-name">
       <ul className="sheet-grid" aria-label="Frames from my work">
@@ -33,6 +55,7 @@ export function SheetHero({ projects, loading }) {
             data-side={frame.side}
             data-pick={frame.project.featured ? "true" : "false"}
             data-tilt={i % 4}
+            style={{ "--i": i }}
           >
             <Link
               className="sheet-frame"
@@ -58,7 +81,13 @@ export function SheetHero({ projects, loading }) {
             </Link>
             {/* Outside the link: the frame is dimmed and the tape must not be. */}
             {frame.project.featured && (
-              <span className="sheet-tape" aria-hidden="true">
+              <span
+                className="sheet-tape"
+                aria-hidden="true"
+                style={{
+                  "--p": frames.slice(0, i).filter((f) => f.project.featured).length,
+                }}
+              >
                 pick
               </span>
             )}
@@ -82,6 +111,10 @@ export function SheetHero({ projects, loading }) {
                 </b>{" "}
                 {current.project.title} · {current.side === "product" ? "digital" : "visual"}
               </>
+            ) : frames.length && developed < frames.length ? (
+              <b>
+                developing… {pad(developed)} / {pad(frames.length)}
+              </b>
             ) : frames.length ? (
               <>
                 <b>{pad(frames.length)} frames</b> {picks} picks · hover one to pull it out

@@ -961,6 +961,50 @@ html:has(.hub) {
   font-weight: 500;
 }
 
+/* Develop (ADR 0020). On arrival every frame starts as a flat block of the
+   brand blue, like an unexposed cyanotype, and comes up to its picture one
+   after another. Then the picks are taped, one at a time. It plays once, only
+   opacity and scale move, and it is off under reduced motion, which shows the
+   finished sheet. The name and statement never wait for it. */
+.sheet-cell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--h-mark);
+  opacity: 0;
+  pointer-events: none;
+  animation: sheet-develop 650ms var(--h-ease) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+@keyframes sheet-develop {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.sheet-tape {
+  animation: sheet-stick 320ms var(--h-ease) both;
+  animation-delay: calc(1.4s + var(--p, 0) * 140ms);
+}
+@keyframes sheet-stick {
+  from {
+    opacity: 0;
+    scale: 1.6;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet-cell::after,
+  .sheet-tape {
+    animation: none;
+  }
+}
+
 /* Crop brackets: the corner marks of a trimmed print. */
 .sheet-crop {
   position: absolute;

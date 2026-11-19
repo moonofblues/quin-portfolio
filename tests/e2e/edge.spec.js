@@ -6,6 +6,9 @@ const transparent = "rgba(0, 0, 0, 0)";
 
 test.describe("contact sheet hub (/)", () => {
   test("only the picks are taped, and the tape is not dimmed", async ({ page }) => {
+    // The tape sticks on during the develop animation. This test is about the
+    // finished state, so it asks for reduced motion, which skips the animation.
+    await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/");
     await expect(page.locator("a.sheet-frame").first()).toBeAttached();
     const picks = await page.locator('.sheet-cell[data-pick="true"]').count();
