@@ -40,6 +40,11 @@ export function InspectorSweep({ onDone }) {
 
     const show = () => {
       if (stopped) return;
+      // The real Inspect mode took over: step aside, never two panels at once.
+      if (document.querySelector("[data-inspector]:not(.inspect-sweep)")) {
+        stop();
+        return;
+      }
       const el = targets[index];
       if (!el || !el.isConnected) {
         stop();

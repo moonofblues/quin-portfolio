@@ -32,7 +32,23 @@ export function HeroSweep() {
       played = true;
       setRunning(true);
     }, SETTLE_MS);
-    return () => clearTimeout(timer);
+
+    // A visitor who already clicks, types or scrolls does not need a show. This
+    // also covers pressing Inspect before its panel has finished downloading.
+    const engaged = () => {
+      clearTimeout(timer);
+      played = true;
+    };
+    const passive = { passive: true, once: true };
+    window.addEventListener("pointerdown", engaged, passive);
+    window.addEventListener("scroll", engaged, passive);
+    window.addEventListener("keydown", engaged, { once: true });
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("pointerdown", engaged);
+      window.removeEventListener("scroll", engaged);
+      window.removeEventListener("keydown", engaged);
+    };
   }, []);
 
   if (!running) return null;
