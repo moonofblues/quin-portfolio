@@ -23,5 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
+# Playwright output
+test-results/
+playwright-report/
+
 # Claude Code worktrees (temporary side-workspaces — never commit)
 .claude/worktrees/
