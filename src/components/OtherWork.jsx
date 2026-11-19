@@ -105,7 +105,7 @@ export function OtherWork() {
                     </div>
                   )}
 
-                  {/* Hover/focus overlay: dark ground so the lavender title
+                  {/* Hover/focus overlay: dark ground so the blue title
                       and grey label stay readable (was near-white, ~2.2:1). */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center bg-bg-primary/85">
                     <span className="font-display text-sm text-accent mb-2">

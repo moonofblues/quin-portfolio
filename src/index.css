@@ -5,9 +5,10 @@
 
 @import "tailwindcss";
 
-/* Dark-only palette — 2026-09 redesign (ADR 0005). Lavender primary + mint
-   secondary on a near-black ground. There is no light mode and no `.dark`
-   class: these values live directly in `@theme`, applied unconditionally. */
+/* Dark palette — 2026-09 redesign (ADR 0005), recoloured by ADR 0019. Brand
+   blue primary + paper cream secondary on a near-black ground. There is no
+   light mode yet (phase 6 of docs/blue-redesign-plan.md) and no `.dark` class:
+   these values live directly in `@theme`, applied unconditionally. */
 @theme {
   --color-bg-primary: #07090d;   /* ground */
   --color-bg-secondary: #0e1219; /* surface */
@@ -22,24 +23,25 @@
 
   --color-on-accent: #07090d;
 
-  --color-accent: #a99ce4;           /* lavender — PRIMARY accent */
-  --color-accent-hover: #bbb0ec;
-  --color-accent-muted: #7e73b0;
-  --color-accent-subtle: rgba(169, 156, 228, 0.15);
-  --color-accent-secondary: #a8d5cd; /* mint — SECONDARY accent */
+  --color-accent: #6384ff;           /* brand blue — PRIMARY accent */
+  --color-accent-hover: #8099ff;
+  --color-accent-muted: #4d66cc;
+  --color-accent-subtle: rgba(99, 132, 255, 0.15);
+  --color-accent-secondary: #eee8d6; /* paper cream — SECONDARY, kept small */
 
-  --color-moon: #c9c4e0;
-  --color-moon-shadow: #6e6890;
+  --color-moon: #e4ddc7;
+  --color-moon-shadow: #8a846f;
 
-  --color-star: #a99ce4;
+  --color-star: #8ea2ff;
 
-  /* The one hot accent, used like a highlighter on a proof: marker blocks,
-     tape on picks, crop brackets. Lavender stays the primary accent. */
-  --color-mark: #d9ff3f;
+  /* The marker, used like a highlighter on a proof: marker blocks, tape on
+     picks, crop brackets. Same brand blue as the primary accent (ADR 0019);
+     the text on a marker stays night, since white on this blue is under 4.5:1. */
+  --color-mark: #6384ff;
   --color-on-mark: #07090d;
 
-  --color-border: rgba(169, 156, 228, 0.15);
-  --color-border-hover: rgba(169, 156, 228, 0.3);
+  --color-border: rgba(99, 132, 255, 0.15);
+  --color-border-hover: rgba(99, 132, 255, 0.3);
 
   --font-display: "Krona One", sans-serif;
   --font-body: "Instrument Sans", sans-serif;
@@ -63,7 +65,7 @@
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  --shadow-glow: 0 0 40px rgba(169, 156, 228, 0.15);
+  --shadow-glow: 0 0 40px rgba(99, 132, 255, 0.15);
 
   --transition-fast: 150ms ease;
   --transition-base: 200ms ease;
@@ -275,10 +277,10 @@ img {
 @keyframes pulse-glow {
   0%,
   100% {
-    box-shadow: 0 0 20px rgba(169, 156, 228, 0.3);
+    box-shadow: 0 0 20px rgba(99, 132, 255, 0.3);
   }
   50% {
-    box-shadow: 0 0 40px rgba(169, 156, 228, 0.5);
+    box-shadow: 0 0 40px rgba(99, 132, 255, 0.5);
   }
 }
 

@@ -55,8 +55,8 @@ const FIREFLIES = (() => {
     glowDelay: `-${pick(0, 8).toFixed(1)}s`,
     minOpacity: pick(0.05, 0.15).toFixed(2),
     maxOpacity: pick(0.3, 0.6).toFixed(2),
-    // Roughly a third mint, the rest lavender — the palette's two accents.
-    mint: rand() < 0.35,
+    // Roughly a third paper cream, the rest brand blue (ADR 0019).
+    cream: rand() < 0.35,
   }));
 })();
 
@@ -85,7 +85,7 @@ export function Fireflies({ className }) {
             "--ff-glow-delay": f.glowDelay,
             "--ff-min": f.minOpacity,
             "--ff-max": f.maxOpacity,
-            "--ff-color": f.mint
+            "--ff-color": f.cream
               ? "var(--color-accent-secondary)"
               : "var(--color-accent)",
           }}

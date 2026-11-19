@@ -6,17 +6,17 @@
      switchable; night is the default.
    - voice: Visual's Bricolage Grotesque and Instrument Serif, with Product's
      Instrument Sans for body copy.
-   - colour: Product's lavender marks Digital, Visual's ink blue marks Visual,
-     and each appears only where its own portfolio is named. */
+   - colour: one brand blue for both portfolios (ADR 0019). Digital and Visual
+     are told apart by their words, not by colour. */
 
 .hub {
   --h-bg: #07090d;
   --h-text: #f2f1ee;
   --h-muted: #9aa0ab;
   --h-rule: rgba(242, 241, 238, 0.16);
-  --h-dev: #a99ce4;
+  --h-dev: #6384ff;
   --h-vis: #6384ff;
-  --h-sel: rgba(169, 156, 228, 0.35);
+  --h-sel: rgba(99, 132, 255, 0.35);
   --h-pad: clamp(1.25rem, 4vw, 3rem);
   --h-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
   --h-serif: "Instrument Serif", Georgia, serif;
@@ -38,7 +38,7 @@
   --h-text: #0a1030;
   --h-muted: #4a4f66;
   --h-rule: rgba(10, 16, 48, 0.18);
-  --h-dev: #5646ab;
+  --h-dev: #0b2fb3;
   --h-vis: #0b2fb3;
   --h-sel: rgba(11, 47, 179, 0.25);
   color-scheme: light;
@@ -52,7 +52,7 @@
   --h-text: #0a1030;
   --h-muted: #4a4f66;
   --h-rule: rgba(10, 16, 48, 0.18);
-  --h-dev: #5646ab;
+  --h-dev: #0b2fb3;
   --h-vis: #0b2fb3;
   --h-sel: rgba(11, 47, 179, 0.25);
 }
@@ -61,9 +61,9 @@
   --h-text: #f2f1ee;
   --h-muted: #9aa0ab;
   --h-rule: rgba(242, 241, 238, 0.16);
-  --h-dev: #a99ce4;
+  --h-dev: #6384ff;
   --h-vis: #6384ff;
-  --h-sel: rgba(169, 156, 228, 0.35);
+  --h-sel: rgba(99, 132, 255, 0.35);
 }
 
 /* Anchor jumps glide, and stop gliding for people who ask for less motion. */
@@ -631,7 +631,7 @@ html:has(.hub) {
 .hub-practice--dev:is(:hover, :focus-within) {
   --h-text: #f2f1ee;
   --h-muted: #9aa0ab;
-  --h-dev: #a99ce4;
+  --h-dev: #6384ff;
 }
 .hub-practice--vis:is(:hover, :focus-within) {
   --h-text: #0a1030;
@@ -651,7 +651,7 @@ html:has(.hub) {
 /* 5 and 6 need scroll-driven animations (Chrome and Edge, Safari 26). Browsers
    without them simply show the finished state. */
 @supports (animation-timeline: view()) {
-  /* A hairline under the header, lavender to blue, that grows as you read. */
+  /* A hairline under the header, in the brand blue, that grows as you read. */
   .hub-bar::after {
     content: "";
     position: absolute;
@@ -659,7 +659,7 @@ html:has(.hub) {
     right: 0;
     bottom: -1px;
     height: 2px;
-    background: linear-gradient(90deg, var(--h-dev), var(--h-vis));
+    background: var(--h-vis);
     transform-origin: left center;
     animation: hub-draw linear both;
     animation-timeline: scroll(root block);
@@ -957,25 +957,25 @@ html:has(.hub) {
  * Edge (sheet variant only). One hot accent, the marker, used the way a
  * photographer marks a proof: highlighter blocks, tape on the picks, crop
  * brackets at the corners, a readout line that follows the pointer. Each mark
- * carries information (a pick, a frame number, a count). Lavender and blue
- * stay as the two portfolio colours.
+ * carries information (a pick, a frame number, a count). The marker is the
+ * brand blue (ADR 0019): text on it is night on a dark ground, cream on paper.
  * ------------------------------------------------------------------ */
 .hub {
-  --h-mark: #d9ff3f;
+  --h-mark: #6384ff;
   --h-on-mark: #07090d;
   --h-mono: "DM Mono", ui-monospace, monospace;
 }
 .hub[data-theme="light"] {
-  --h-mark: #ffe14d;
-  --h-on-mark: #0a1030;
+  --h-mark: #0b2fb3;
+  --h-on-mark: #eee8d6;
 }
 .hub[data-theme="night"] .hub-flip,
 .hub:not([data-theme]) .hub-flip {
-  --h-mark: #ffe14d;
-  --h-on-mark: #0a1030;
+  --h-mark: #0b2fb3;
+  --h-on-mark: #eee8d6;
 }
 .hub[data-theme="light"] .hub-flip {
-  --h-mark: #d9ff3f;
+  --h-mark: #6384ff;
   --h-on-mark: #07090d;
 }
 

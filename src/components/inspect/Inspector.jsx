@@ -19,7 +19,7 @@ function collectColourVariables(rules, found) {
   }
 }
 
-// Maps a computed colour string, e.g. "rgb(169, 156, 228)", to its token name.
+// Maps a computed colour string, e.g. "rgb(99, 132, 255)", to its token name.
 function readColourTokens() {
   const variables = new Map();
   for (const sheet of document.styleSheets) {
