@@ -473,6 +473,11 @@ html:has(.hub) {
   color: var(--h-muted);
   font-size: 0.9rem;
 }
+.hub-colophon {
+  margin: 0.75rem 0 0;
+  color: var(--h-muted);
+  font-size: 0.85rem;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .hub-pick::after {
@@ -689,5 +694,44 @@ html:has(.hub) {
   }
   .hub-hero {
     transition: none;
+  }
+}
+
+/* Print: the name, About, work history and contact on white, without the
+   chrome. The colour variables carry !important so they beat the Contact band's
+   flipped ground. */
+@media print {
+  .hub,
+  .hub .hub-flip {
+    --h-bg: #fff !important;
+    --h-text: #000 !important;
+    --h-muted: #444 !important;
+    --h-rule: #bbb !important;
+    --h-dev: #000 !important;
+    --h-vis: #000 !important;
+  }
+  .hub {
+    min-height: 0;
+  }
+  .hub-bar,
+  .hub-alt,
+  .hub-ticker,
+  .hub-portrait-wrap,
+  .hub-thumbs,
+  .hub-enter {
+    display: none;
+  }
+  .hub-about {
+    grid-template-columns: 1fr;
+  }
+  .hub-section,
+  .hub-contact {
+    padding-block: 1.5rem;
+  }
+  .hub-timeline li {
+    break-inside: avoid;
+  }
+  .hub-timeline li::before {
+    animation: none;
   }
 }

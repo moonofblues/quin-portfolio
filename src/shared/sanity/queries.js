@@ -19,7 +19,9 @@ const CARD_FIELDS = `
   status,
   sortOrder,
   tags,
-  "thumbnail": thumbnail.asset->url,
+  // A photo set with no thumbnail uses its first photo, so it still appears on
+  // the Visual index.
+  "thumbnail": coalesce(thumbnail.asset->url, photos[0].image.asset->url),
   description,
   impact,
   year
@@ -119,8 +121,18 @@ const DETAIL_FIELDS = `
     "color": image.asset->metadata.palette.dominant.background,
     alt,
     caption,
+    shot,
+    frame,
     highlight,
     recognition
+  },
+  rejects[] {
+    "url": image.asset->url,
+    "width": image.asset->metadata.dimensions.width,
+    "height": image.asset->metadata.dimensions.height,
+    alt,
+    reason,
+    frame
   },
   photoEmbeds[] { platform, url, embedCode, title },
   photoLink { url, label },

@@ -1,0 +1,68 @@
+/* Page inspector. Loaded only when the nav's inspect button is first pressed. */
+.inspect-box,
+.inspect-margin {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9998;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.inspect-box {
+  border: 1px solid var(--color-accent);
+  background: var(--color-accent-subtle);
+}
+.inspect-margin {
+  display: none;
+  border: 1px dashed var(--color-accent-muted);
+}
+
+.inspect-readout {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 9999;
+  width: min(20rem, calc(100vw - 2rem));
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border-hover);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  pointer-events: none;
+}
+.inspect-readout[data-side="right"] {
+  left: auto;
+  right: 1rem;
+}
+.inspect-name {
+  margin: 0 0 0.25rem;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+.inspect-readout dd {
+  margin: 0;
+}
+.inspect-row {
+  display: grid;
+  grid-template-columns: 6rem 1fr;
+  gap: 0.5rem;
+}
+.inspect-row dt {
+  color: var(--color-text-muted);
+}
+.inspect-row dd {
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+@media print {
+  .inspect-box,
+  .inspect-margin,
+  .inspect-readout {
+    display: none;
+  }
+}

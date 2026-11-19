@@ -4,6 +4,7 @@ import { useProjects } from "../../../shared/context/ProjectsContext";
 import { useProjectDetail } from "../../../shared/context/useProjectDetail";
 import { useNight } from "../theme";
 import { PhotoGallery } from "./PhotoGallery";
+import { ContactSheet } from "./ContactSheet";
 
 // No framer-motion on purpose: the page has no animations to configure, and the
 // first photo (the page's largest image) must never be delayed.
@@ -41,7 +42,7 @@ export function VisualPhotoSet() {
     return (
       <div className="vp-page">
         <h1 className="vp-title">not found.</h1>
-        <p className="vp-intro">That work doesn't exist, or it hasn't been published.</p>
+        <p className="vp-intro">Nothing at this address. It may have moved, or it was never published.</p>
         <Link className="vp-back" to="/visual#work">
           ← lights up
         </Link>
@@ -79,7 +80,7 @@ export function VisualPhotoSet() {
       <section aria-label="Photos">
         {!detail ? (
           <p className="vp-meta" aria-live="polite">
-            loading photos…
+            developing photos…
           </p>
         ) : (
           <PhotoGallery
@@ -89,6 +90,10 @@ export function VisualPhotoSet() {
           />
         )}
       </section>
+
+      {detail?.rejects?.length > 0 && (
+        <ContactSheet photos={photos} rejects={detail.rejects} />
+      )}
 
       {detail && (
         <footer className="vp-foot">

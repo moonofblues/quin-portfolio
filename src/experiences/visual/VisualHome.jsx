@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useProjects } from "../../shared/context/ProjectsContext";
 import { VISUAL, mainExperienceOf } from "../../shared/experiences";
+import { Colophon } from "../../shared/Colophon";
 import quinPortrait from "../../assets/quin-portrait.webp";
 import { Frame } from "./Frame";
 import {
@@ -260,6 +261,10 @@ export function VisualHome() {
           <span>© {year} quin ledesma</span>
           <Link to="/dev">also by quin: design &amp; development ↗</Link>
         </div>
+        <Colophon
+          fonts={["Bricolage Grotesque", "Instrument Serif", "DM Mono"]}
+          className="v-colophon"
+        />
       </section>
     </>
   );

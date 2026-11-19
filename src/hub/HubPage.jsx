@@ -5,6 +5,7 @@ import { useProjects } from "../shared/context/ProjectsContext";
 import { mainExperienceOf, PRODUCT, VISUAL } from "../shared/experiences";
 import { TIMELINE } from "../shared/timeline";
 import { EMAIL, LOCATION_LINE, SOCIAL_LINKS } from "../shared/contact";
+import { Colophon } from "../shared/Colophon";
 import quinPortrait from "../assets/quin-portrait.webp";
 import "./hub.css";
 
@@ -376,6 +377,10 @@ function HubSite() {
               <span>{LOCATION_LINE}</span>
               <span>&copy; {new Date().getFullYear()} Quin Ledesma</span>
             </div>
+            <Colophon
+              fonts={["Bricolage Grotesque", "Instrument Serif", "Instrument Sans"]}
+              className="hub-colophon"
+            />
           </div>
         </section>
       </main>

@@ -58,10 +58,10 @@ export function FeaturedWork() {
         {comingSoon ? (
           <div className="rounded-2xl border border-bg-tertiary bg-bg-secondary p-8 md:p-12 text-center">
             <p className="font-display text-xl md:text-2xl text-text-primary mb-3">
-              {service.label} work is coming soon
+              No {service.label} projects published yet.
             </p>
             <p className="text-text-secondary mb-6">
-              Nothing is published under {service.label} yet.
+              The rest of my work is in the full list.
             </p>
             <Link to="/work">
               <Button variant="ghost">Browse all work</Button>

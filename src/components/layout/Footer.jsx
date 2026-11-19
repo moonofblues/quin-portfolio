@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { cn } from "../../utils/cn";
+import { Colophon } from "../../shared/Colophon";
 
 const footerLinks = [
   { label: "Work", href: "/work" },
@@ -36,6 +37,10 @@ export function Footer() {
             © {currentYear} Quin Ledesma
           </p>
         </div>
+        <Colophon
+          fonts={["Krona One", "Instrument Sans"]}
+          className="mt-6 text-center text-xs text-text-muted"
+        />
       </div>
     </footer>
   );

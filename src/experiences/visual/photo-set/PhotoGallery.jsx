@@ -81,6 +81,7 @@ export function PhotoGallery({ photos, embeds, photoLink }) {
         width: p.width,
         height: p.height,
         caption: p.caption,
+        shot: p.shot,
         recognition: p.highlight ? p.recognition : undefined,
       })),
     [ordered],

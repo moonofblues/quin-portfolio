@@ -727,6 +727,21 @@ export const projectSchema = {
             },
             { name: "caption", title: "Caption (optional)", type: "string" },
             {
+              name: "shot",
+              title: "Shot details (optional)",
+              type: "string",
+              description:
+                "A line under the photo, e.g. 'X-S20 · Meike 33mm f/1.8 · 1/250 · f/2.8 · ISO 400'. Type it as you want it to read.",
+            },
+            {
+              name: "frame",
+              title: "Frame number (optional)",
+              type: "number",
+              description:
+                "Where this frame fell in the shoot (1 is the first shot). Only used by the contact sheet, to put picks and rejects in shoot order.",
+              validation: (R) => R.integer().min(1),
+            },
+            {
               name: "highlight",
               title: "Highlight this photo",
               type: "boolean",
@@ -768,6 +783,53 @@ export const projectSchema = {
             ? "Highlights work best with 1 to 3 photos. With more, they stop standing out."
             : true,
         ).warning(),
+      ],
+    },
+    {
+      name: "rejects",
+      group: "photos",
+      title: "Frames you didn't pick (optional)",
+      type: "array",
+      description:
+        "Shows a contact sheet at the bottom of the page: every frame from the shoot, the photos above ringed as your picks and these dimmed with your reason. Give each a frame number (and the picks above too) to keep shoot order.",
+      hidden: ({ document }) => document?.type !== "photo-set",
+      of: [
+        {
+          type: "object",
+          name: "reject",
+          fields: [
+            {
+              name: "image",
+              title: "Frame",
+              type: "image",
+              validation: (R) => R.required(),
+            },
+            {
+              name: "alt",
+              title: "Alt text",
+              type: "string",
+              description: "Describes the frame for screen readers.",
+              validation: (R) => R.required(),
+            },
+            {
+              name: "reason",
+              title: "Why it didn't make it",
+              type: "string",
+              description: "One short line, e.g. 'Soft focus' or 'The frame after it is better'.",
+            },
+            {
+              name: "frame",
+              title: "Frame number (optional)",
+              type: "number",
+              description: "Where this frame fell in the shoot (1 is the first shot).",
+              validation: (R) => R.integer().min(1),
+            },
+          ],
+          preview: {
+            select: { title: "reason", subtitle: "alt", media: "image" },
+            prepare: ({ title, subtitle, media }) => ({ title: title || subtitle, media }),
+          },
+        },
       ],
     },
     {

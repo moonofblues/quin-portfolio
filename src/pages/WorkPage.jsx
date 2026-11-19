@@ -226,7 +226,7 @@ export function WorkPage() {
                 ? "No projects in this category yet."
                 : activeFocus === "all"
                 ? "No projects found."
-                : "No projects in this focus yet — check back soon."}
+                : "Nothing published under this focus yet."}
             </p>
           </motion.div>
         )}

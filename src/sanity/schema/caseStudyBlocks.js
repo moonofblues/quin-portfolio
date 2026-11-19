@@ -1,3 +1,5 @@
+import { PinPlacerInput } from "../inputs/PinPlacerInput";
+
 // Case study v2 building pieces (ADR 0011). Shared blocks are defined once
 // here and reused by the four typed sections, which `project.sections[]`
 // lists in story order. Every new *kind* of section needs a type here plus a
@@ -84,7 +86,7 @@ export const caseStudyImage = {
 
 // ── Blocks ──────────────────────────────────────────────────────────────
 
-const IMAGE_COUNT = { single: 1, pair: 2, annotated: 1 };
+const IMAGE_COUNT = { single: 1, pair: 2, annotated: 1, compare: 2 };
 
 export const richTextBlock = {
   name: "richTextBlock",
@@ -121,6 +123,7 @@ export const mediaBlock = {
           { title: "Single image", value: "single" },
           { title: "Side-by-side pair (e.g. before / after)", value: "pair" },
           { title: "Annotated image (numbered legend)", value: "annotated" },
+          { title: "Before / after slider (visitor drags to compare; first image is before)", value: "compare" },
         ],
         layout: "radio",
       },
@@ -143,6 +146,37 @@ export const mediaBlock = {
         }),
     },
     {
+      name: "pins",
+      title: "Pins on the image (optional)",
+      type: "array",
+      description:
+        "Annotated layout only. Click the image to drop numbered pins, one per legend line. Visitors can hover or tap a pin to see its legend line highlighted.",
+      hidden: ({ parent }) => parent?.layout !== "annotated",
+      components: { input: PinPlacerInput },
+      of: [
+        {
+          type: "object",
+          name: "pin",
+          fields: [
+            { name: "x", title: "Across (%)", type: "number", validation: (R) => R.required().min(0).max(100) },
+            { name: "y", title: "Down (%)", type: "number", validation: (R) => R.required().min(0).max(100) },
+          ],
+          preview: {
+            select: { x: "x", y: "y" },
+            prepare: ({ x, y }) => ({ title: `${x}% across, ${y}% down` }),
+          },
+        },
+      ],
+      validation: (R) =>
+        R.custom((pins, context) => {
+          const legend = context.parent?.legend?.length ?? 0;
+          const count = pins?.length ?? 0;
+          return count === 0 || count === legend
+            ? true
+            : `${count} pin${count === 1 ? "" : "s"} but ${legend} legend line${legend === 1 ? "" : "s"}. Each pin needs a legend line.`;
+        }).warning(),
+    },
+    {
       name: "legend",
       title: "Numbered legend (optional)",
       type: "array",
@@ -154,7 +188,12 @@ export const mediaBlock = {
   preview: {
     select: { layout: "layout", media: "images.0", caption: "images.0.caption" },
     prepare({ layout, media, caption }) {
-      const names = { single: "Image", pair: "Image pair", annotated: "Annotated image" };
+      const names = {
+        single: "Image",
+        pair: "Image pair",
+        annotated: "Annotated image",
+        compare: "Before / after slider",
+      };
       return { title: caption || names[layout] || "Media", subtitle: names[layout], media };
     },
   },

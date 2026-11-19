@@ -80,8 +80,11 @@ export function CaseStudyPage() {
       <div className="min-h-screen pt-24 flex items-center justify-center">
         <div className="text-center">
           <h1 className="font-display text-2xl mb-4 text-text-primary">
-            Project not found
+            No project at this address
           </h1>
+          <p className="mb-6 text-text-secondary">
+            It may have moved, or it was never published.
+          </p>
           <Link to="/work">
             <Button>Back to Work</Button>
           </Link>

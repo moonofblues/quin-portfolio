@@ -26,7 +26,7 @@ export function VisualWork() {
     return (
       <div className="vp-page">
         <h1 className="vp-title">not found.</h1>
-        <p className="vp-intro">That work doesn't exist, or it hasn't been published.</p>
+        <p className="vp-intro">Nothing at this address. It may have moved, or it was never published.</p>
         <Link className="vp-back" to="/visual#work">
           ← lights up
         </Link>

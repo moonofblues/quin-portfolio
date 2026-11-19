@@ -23,6 +23,10 @@ const CaseStudyPage = lazy(() =>
   import("./pages/CaseStudyPage").then((m) => ({ default: m.CaseStudyPage })),
 );
 
+const NotFoundPage = lazy(() =>
+  import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })),
+);
+
 // Case study v2 (ADR 0011) is the default page for case studies. The old
 // CaseStudyPage is kept only for Showcase-type projects until that branch is
 // moved out of it.
@@ -107,6 +111,7 @@ function App() {
                       <Route path="/dev" element={<HomePage />} />
                       <Route path="/work" element={<WorkPage />} />
                       <Route path="/work/:slug" element={<CaseStudyRoute />} />
+                      <Route path="*" element={<NotFoundPage />} />
                     </Routes>
                   </Suspense>
                 </Layout>

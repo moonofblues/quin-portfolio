@@ -85,6 +85,9 @@ export function ImageLightbox({ images, startIndex = 0, onClose }) {
         {image.caption && (
           <p className="mt-3 text-center text-sm leading-relaxed text-white/70">{image.caption}</p>
         )}
+        {image.shot && (
+          <p className="mt-2 text-center font-mono text-xs text-white/60">{image.shot}</p>
+        )}
       </div>
     </LightboxShell>
   );

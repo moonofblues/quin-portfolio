@@ -78,6 +78,7 @@ export function PhotoFrame({ photo, index, total, kind, onOpen }) {
           {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
         </span>
         {photo.caption && <span className="vp-text">{photo.caption}</span>}
+        {photo.shot && <span className="vp-shot">{photo.shot}</span>}
       </figcaption>
     </figure>
   );

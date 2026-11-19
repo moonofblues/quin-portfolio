@@ -212,12 +212,14 @@ body {
   text-decoration: none;
 } */
 
-/* Button Reset */
-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
+/* Button Reset. In @layer base so Tailwind utilities (bg-*, border-*) win on
+   buttons; unlayered, this rule beat every utility. Tailwind's own reset
+   already clears the background and border. */
+@layer base {
+  button {
+    cursor: pointer;
+    font-family: inherit;
+  }
 }
 
 /* Image Reset */
@@ -641,4 +643,50 @@ img {
 
 [data-closing="true"] .lightbox-panel {
   animation: lightbox-panel-out 160ms ease-in forwards;
+}
+
+/* Print: the Product palette is light text on near-black, which prints as
+   blank paper. Tailwind utilities read these variables, so redefining them is
+   enough. */
+@media print {
+  :root {
+    --color-bg-primary: #fff;
+    --color-bg-secondary: #fff;
+    --color-bg-tertiary: #eee;
+    --color-bg-elevated: #fff;
+    --color-bg-card: #fff;
+    --color-text-primary: #000;
+    --color-text-secondary: #333;
+    --color-text-muted: #444;
+    --color-accent: #000;
+    --color-accent-secondary: #000;
+  }
+  .fireflies,
+  .cursor-layer,
+  nav.fixed,
+  [aria-hidden="true"],
+  img,
+  picture,
+  video,
+  iframe {
+    display: none !important;
+  }
+  /* The page is long on screen mostly because of full-height sections, deep
+     padding and pictures. Smaller type and tight sections keep it short. */
+  :root:not(:has(.hub)) {
+    font-size: 10pt;
+  }
+  :root:not(:has(.hub)) .min-h-screen {
+    min-height: 0 !important;
+  }
+  :root:not(:has(.hub)) main section,
+  :root:not(:has(.hub)) .section {
+    padding-block: 1rem !important;
+  }
+  /* Scroll reveals start at opacity 0 and only play when seen, so unseen
+     sections would print blank. */
+  [style*="opacity"] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }

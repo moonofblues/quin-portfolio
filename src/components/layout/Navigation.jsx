@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { SERVICE_BY_ID } from "../../data/services";
+import { InspectToggle } from "../inspect/InspectToggle";
 
 const navLinks = [
   // The Product homepage is /dev; / is the portfolio hub (ADR 0016), reached
@@ -108,6 +109,7 @@ export function Navigation() {
                 </button>
               </span>
             )}
+            <InspectToggle />
           </div>
 
           <div className="flex items-center gap-4">
