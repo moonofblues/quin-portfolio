@@ -24,7 +24,7 @@ const THEME_KEY = "hub-theme";
 // opens, so Product-only visitors never download them (ADR 0014).
 const FONTS_ID = "hub-fonts";
 const FONTS_HREF =
-  "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Instrument+Serif:ital@0;1&display=swap";
+  "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap";
 
 // Sanity resizes images on the fly (?w=). 640px covers a third-width thumbnail
 // at 2x density.
@@ -164,7 +164,7 @@ function HubSite({ variant }) {
   const visual = loading ? [] : pickSelected(projects, VISUAL);
 
   return (
-    <div className="hub" data-theme={theme}>
+    <div className="hub" data-theme={theme} data-variant={variant}>
       <header className="hub-bar">
         <a
           className="hub-brand"

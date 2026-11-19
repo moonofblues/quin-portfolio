@@ -15,6 +15,15 @@ export function ProjectCard({ project, index = 0 }) {
     >
       <Link to={`/work/${project.slug}`} className="flex flex-col h-full">
         <div className="relative aspect-[16/9] overflow-hidden">
+          {/* Picks are taped and every card is a numbered frame, like a proof. */}
+          {project.featured && (
+            <span className="tape left-3 top-3" aria-hidden="true">
+              pick
+            </span>
+          )}
+          <span className="frame-no bottom-2 left-3" aria-hidden="true">
+            {String(index + 1).padStart(3, "0")}
+          </span>
           <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-105">
             {project.thumbnail ? (
               <img

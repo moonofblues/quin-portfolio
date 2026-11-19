@@ -953,3 +953,202 @@ html:has(.hub) {
     display: none;
   }
 }
+/* ------------------------------------------------------------------ *
+ * Edge (sheet variant only). One hot accent, the marker, used the way a
+ * photographer marks a proof: highlighter blocks, tape on the picks, crop
+ * brackets at the corners, a readout line that follows the pointer. Each mark
+ * carries information (a pick, a frame number, a count). Lavender and blue
+ * stay as the two portfolio colours.
+ * ------------------------------------------------------------------ */
+.hub {
+  --h-mark: #d9ff3f;
+  --h-on-mark: #07090d;
+  --h-mono: "DM Mono", ui-monospace, monospace;
+}
+.hub[data-theme="light"] {
+  --h-mark: #ffe14d;
+  --h-on-mark: #0a1030;
+}
+.hub[data-theme="night"] .hub-flip,
+.hub:not([data-theme]) .hub-flip {
+  --h-mark: #ffe14d;
+  --h-on-mark: #0a1030;
+}
+.hub[data-theme="light"] .hub-flip {
+  --h-mark: #d9ff3f;
+  --h-on-mark: #07090d;
+}
+
+/* Readout: follows the frame under the pointer. */
+.sheet-readout {
+  min-height: 1.5em;
+  margin: 0 0 1.25rem;
+  font-family: var(--h-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--h-muted);
+}
+.sheet-readout b {
+  display: inline-block;
+  margin-right: 0.6em;
+  padding: 0.12em 0.55em;
+  background: var(--h-mark);
+  color: var(--h-on-mark);
+  font-weight: 500;
+}
+
+/* Crop brackets: the corner marks of a trimmed print. */
+.sheet-crop {
+  position: absolute;
+  z-index: 2;
+  width: 1.6rem;
+  height: 1.6rem;
+  pointer-events: none;
+  border: 0 solid var(--h-mark);
+}
+.sheet-crop--tl {
+  top: 0.75rem;
+  left: 0.75rem;
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+.sheet-crop--tr {
+  top: 0.75rem;
+  right: 0.75rem;
+  border-top-width: 2px;
+  border-right-width: 2px;
+}
+.sheet-crop--bl {
+  bottom: 0.75rem;
+  left: 0.75rem;
+  border-bottom-width: 2px;
+  border-left-width: 2px;
+}
+.sheet-crop--br {
+  right: 0.75rem;
+  bottom: 0.75rem;
+  border-right-width: 2px;
+  border-bottom-width: 2px;
+}
+
+/* The two doors become highlighter blocks, slightly off the line. */
+.sheet-text .hub-pick {
+  display: inline-block;
+  padding: 0 0.2em;
+  transition: transform 180ms var(--h-ease);
+}
+.sheet-text .hub-pick::after {
+  display: none;
+}
+.sheet-text .hub-pick--dev {
+  background: var(--h-dev);
+  color: #07090d;
+  transform: rotate(-1.4deg);
+}
+.sheet-text .hub-pick--vis {
+  background: var(--h-vis);
+  color: #07090d;
+  transform: rotate(1.1deg);
+}
+.hub[data-theme="light"] .sheet-text .hub-pick--dev,
+.hub[data-theme="light"] .sheet-text .hub-pick--vis {
+  color: #fff;
+}
+.sheet-text .hub-pick:hover,
+.sheet-text .hub-pick:focus-visible {
+  transform: rotate(0deg) translateY(-3px);
+}
+
+/* A pick is taped. */
+.sheet-tape {
+  position: absolute;
+  top: -0.6rem;
+  left: -0.5rem;
+  z-index: 2;
+  padding: 0.15rem 0.65rem;
+  background: var(--h-mark);
+  color: var(--h-on-mark);
+  font-family: var(--h-mono);
+  font-size: 0.68rem;
+  transform: rotate(-5deg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* Frames sit a little off the grid, the way prints do on a sheet. */
+.sheet-frame {
+  transition:
+    opacity 200ms linear,
+    transform 240ms var(--h-ease),
+    rotate 240ms var(--h-ease);
+}
+.sheet-cell[data-tilt="1"] .sheet-frame {
+  rotate: -0.9deg;
+}
+.sheet-cell[data-tilt="3"] .sheet-frame {
+  rotate: 0.8deg;
+}
+.sheet-frame:hover,
+.sheet-frame:focus-visible {
+  rotate: 0deg;
+}
+
+/* Rest of the page, in the same hand. */
+.hub[data-variant="sheet"] main {
+  counter-reset: frame 0;
+}
+.hub[data-variant="sheet"] .hub-h2 {
+  display: inline-block;
+  padding: 0 0.22em 0.06em;
+  background: var(--h-mark);
+  color: var(--h-on-mark);
+  transform: rotate(-1.2deg);
+}
+.hub[data-variant="sheet"] .hub-h2::before {
+  counter-increment: frame;
+  content: counter(frame, decimal-leading-zero);
+  margin-right: 0.5em;
+  vertical-align: top;
+  font: 500 0.8rem/1.7 var(--h-mono);
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+}
+.hub[data-variant="sheet"] .hub-nav {
+  counter-reset: nav;
+}
+.hub[data-variant="sheet"] .hub-nav a::before {
+  counter-increment: nav;
+  content: counter(nav, decimal-leading-zero);
+  margin-right: 0.4em;
+  color: var(--h-mark);
+  font: 500 0.68rem/1 var(--h-mono);
+}
+.hub[data-variant="sheet"] .hub-ticker {
+  margin-block: 1.75rem;
+  border: 0;
+  background: var(--h-mark);
+  transform: rotate(-1deg) scale(1.03);
+}
+.hub[data-variant="sheet"] .hub-ticker span {
+  color: var(--h-on-mark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-frame,
+  .sheet-text .hub-pick {
+    transition: none;
+  }
+  .sheet-text .hub-pick:hover,
+  .sheet-text .hub-pick:focus-visible {
+    transform: rotate(-1deg);
+  }
+}
+@media print {
+  .sheet-crop,
+  .sheet-readout,
+  .sheet-tape {
+    display: none;
+  }
+}
+.sheet-nobreak {
+  white-space: nowrap;
+}

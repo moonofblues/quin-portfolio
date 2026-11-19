@@ -56,7 +56,14 @@ export function CaseStudyHero({ project, detail, id }) {
           Back to Work
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_20rem] gap-10 lg:gap-16 items-start">
+        <div className="relative grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_20rem] gap-10 lg:gap-16 items-start">
+          {/* Crop brackets around the opening, like a trimmed print. */}
+          <div className="pointer-events-none absolute -inset-4 hidden md:block" aria-hidden="true">
+            <span className="crop crop--tl" />
+            <span className="crop crop--tr" />
+            <span className="crop crop--bl" />
+            <span className="crop crop--br" />
+          </div>
           <div>
             {project.tags?.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-8">
@@ -110,9 +117,9 @@ export function CaseStudyHero({ project, detail, id }) {
                     <dt className="font-display text-[11px] uppercase tracking-[0.14em] text-text-muted">
                       Status
                     </dt>
-                    <dd className="mt-2 inline-flex items-center gap-2 rounded-full border border-accent px-3.5 py-1.5 text-sm font-semibold text-accent">
-                      <span className="h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
-                      {detail.projectStatus}
+                    <dd className="mt-3">
+                      {/* Taped on, like a label on a print. The status is real. */}
+                      <span className="tape tape--inline">{detail.projectStatus}</span>
                     </dd>
                   </div>
                 )}

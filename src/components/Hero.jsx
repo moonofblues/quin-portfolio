@@ -14,7 +14,7 @@ import erpDashboard from "../assets/erp-dashboard.webp";
 
 const DEFAULT_HEADLINE = [
   "Designing Systems and Visuals That",
-  <span className="text-gradient">Actually Work</span>,
+  <span className="marker">Actually Work</span>,
 ];
 const DEFAULT_DESCRIPTION =
   "I'm a designer who codes. In healthcare tech I design interfaces that cut friction and prevent errors, then build them.";
@@ -68,7 +68,7 @@ export function Hero() {
         <>
           {parseHeadline(service.heroHeadline).map((p, i) =>
             p.gradient ? (
-              <span key={i} className="text-gradient">
+              <span key={i} className="marker">
                 {p.text}
               </span>
             ) : (
@@ -88,6 +88,17 @@ export function Hero() {
       aria-label="hero section"
     >
       <div className="absolute inset-0 bg-gradient-radial" />
+
+      {/* Crop brackets: the corner marks of a trimmed print. Below the fixed nav. */}
+      <div
+        className="pointer-events-none absolute inset-x-4 bottom-4 top-24 z-10 hidden sm:block"
+        aria-hidden="true"
+      >
+        <span className="crop crop--tl" />
+        <span className="crop crop--tr" />
+        <span className="crop crop--bl" />
+        <span className="crop crop--br" />
+      </div>
 
       <Moon
         // Dimmed so white text stays readable wherever the moon sits behind it.
@@ -224,6 +235,9 @@ export function Hero() {
           transition={{ duration: 0.55, delay: 0.2, ease: EASE_OUT }}
           style={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.4)" }}
         >
+          <span className="tape left-3 top-3" aria-hidden="true">
+            adzu portal
+          </span>
           <div className="aspect-video">
             <img
               src={adzuPortal}
@@ -245,6 +259,9 @@ export function Hero() {
           transition={{ duration: 0.55, delay: 0.1, ease: EASE_OUT }}
           style={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)" }}
         >
+          <span className="tape left-3 top-3" aria-hidden="true">
+            zcmc website
+          </span>
           <div className="aspect-video">
             <img
               src={zcmcWebsiteDark}
@@ -264,6 +281,9 @@ export function Hero() {
           transition={{ duration: 0.55, delay: 0.25, ease: EASE_OUT }}
           style={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.4)" }}
         >
+          <span className="tape left-3 top-3" aria-hidden="true">
+            erp dashboard
+          </span>
           <div className="aspect-video">
             <img
               src={erpDashboard}

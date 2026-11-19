@@ -251,3 +251,22 @@ Introduced by [ADR 0017](adr/0017-show-the-skill-features-and-e2e-tests.md).
 
 - **Printer's marks** — the crop marks and tint strip around a graphic design
   piece on the Visual page.
+
+## Contact sheet concept
+
+Introduced by [ADR 0018](adr/0018-contact-sheet-concept-and-edge-layer.md).
+
+- **Contact sheet** (as a concept) — the site as one sheet of numbered frames,
+  each a project. Not to be confused with the photo set **Contact sheet** above,
+  which shows every frame from one shoot.
+
+- **Marker** — the one hot accent: a highlighter yellow-green used for marker
+  blocks, tape and crop brackets. `.marker`, `.tape`, `.crop` in `index.css`.
+
+- **Tape** — a tilted label stuck on a frame: "pick", a screenshot's name, or a
+  project's real status.
+
+- **Crop brackets** — four corner marks that frame a trimmed print.
+
+- **Readout** — the monospace line on the sheet hero that shows the frame under
+  the pointer, or the real counts when nothing is hovered.
