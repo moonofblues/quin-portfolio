@@ -20,12 +20,23 @@ function Frame({ image, onExpand, pins, legend, active, onActivate }) {
   );
 
   return (
-    <div>
-      {image.label && (
-        <p className="inline-flex mb-3 px-3 py-1 rounded-full bg-bg-tertiary font-display text-[11px] uppercase tracking-widest text-accent">
-          {image.label}
-        </p>
-      )}
+    <div className={image.label ? "pt-3" : undefined}>
+      <div className="relative">
+        {/* The screenshot's name is taped to the frame, and crop brackets sit
+            just outside it, like the marks on a trimmed print. Outside, so they
+            never cover the Expand button or the pins. */}
+        {image.label && (
+          <p className="tape -top-3 left-8">{image.label}</p>
+        )}
+        <div
+          className="pointer-events-none absolute -inset-2"
+          aria-hidden="true"
+        >
+          <span className="crop crop--tl" />
+          <span className="crop crop--tr" />
+          <span className="crop crop--bl" />
+          <span className="crop crop--br" />
+        </div>
       <div className="relative rounded-xl overflow-hidden border border-border shadow-xl bg-white">
         {image.blurred && (
           <p className="absolute left-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-black/70 px-3 py-1 text-xs text-white">
@@ -79,6 +90,7 @@ function Frame({ image, onExpand, pins, legend, active, onActivate }) {
             {i + 1}
           </button>
         ))}
+      </div>
       </div>
     </div>
   );
