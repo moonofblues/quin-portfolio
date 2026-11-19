@@ -84,7 +84,13 @@ export function VisualGraphic() {
       <section aria-label="Pieces">
         <div className="vg-cols" data-count={Math.min(images.length, 2)}>
           {images.map((img, i) => (
-            <figure className="vg-fig" key={img.url}>
+            // No piece is taller than 80% of the screen (ADR 0021): the width cap
+            // comes from the piece's own shape, plus the 2rem print margin.
+            <figure
+              className="vg-fig"
+              key={img.url}
+              style={{ maxWidth: `calc(80svh * ${img.width / img.height} + 2rem)` }}
+            >
               <button
                 type="button"
                 className="vg-btn"

@@ -25,16 +25,16 @@ export function PhotoFrame({ photo, index, total, kind, onOpen }) {
   // The stamp only shows on highlighted photos that have recognition text.
   const recognition = photo.highlight ? photo.recognition : undefined;
 
-  // A solo portrait is limited to 85% of the screen height, so it fits on one
-  // screen. Width is worked out from the photo's shape so the box keeps its
-  // proportions instead of being cropped or stretched.
-  const soloStyle =
-    kind === "solo"
-      ? { width: `min(100%, calc(85vh * ${photo.width / photo.height}))` }
-      : undefined;
+  // No photo is taller than 80% of the screen (ADR 0021), so a whole picture
+  // always fits without scrolling. The width limit is worked out from the
+  // photo's shape, so the box keeps its proportions instead of being cropped
+  // or stretched. It is a max-width, so the row layout still decides the rest.
+  const capStyle = {
+    maxWidth: `calc(80svh * ${photo.width / photo.height})`,
+  };
 
   return (
-    <figure className="vp-figure" style={soloStyle}>
+    <figure className="vp-figure" style={capStyle}>
       <button
         type="button"
         onClick={() => onOpen(index)}

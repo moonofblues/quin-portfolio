@@ -166,10 +166,14 @@
 .v-ghead .v-mono { white-space: nowrap; }
 .v-gnote { max-width: 38rem; margin: -0.6rem 0 1.8rem; font-family: var(--v-serif); font-style: italic; font-size: 1.35rem; line-height: 1.35; color: var(--v-soft); }
 .v-film { display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(0.9rem, 1.8vw, 1.6rem); }
-.v-film .v-item { grid-column: span 6; }
-.v-film .v-item:first-child { grid-column: span 8; }
+.v-film .v-item { grid-column: span 4; }
+.v-film .v-item:first-child { grid-column: span 6; }
 .v-film .v-frame { aspect-ratio: 16 / 9; }
+/* Work cards (ADR 0021): 4 columns on wide screens, 3 on laptops, 2 on tablets,
+   and no card taller than 60% of the screen. */
 .v-cols { column-count: 3; column-gap: clamp(0.9rem, 1.8vw, 1.6rem); }
+@media (min-width: 1280px) { .v-cols { column-count: 4; } }
+.v-cols .v-frame { max-height: 60svh; }
 .v-cols .v-item { break-inside: avoid; margin-bottom: clamp(0.9rem, 1.8vw, 1.6rem); }
 @media (max-width: 900px) {
   .v-cols { column-count: 2; }
@@ -297,6 +301,8 @@
   .vp-row[data-kind="solo"][data-side="end"] { justify-content: flex-end; padding-left: 0; padding-right: clamp(0rem, 6vw, 6rem); }
 }
 .vp-figure { margin: 0; width: 100%; }
+/* The first photo is centred when the height cap makes it narrower than the page. */
+.vp-row[data-kind="opener"] .vp-figure { margin-inline: auto; }
 .vp-photo-btn { display: block; width: 100%; padding: 0; border: 0; background: none; font: inherit; cursor: zoom-in; border-radius: 2px; }
 .vp-photo-btn:focus-visible { outline: 2px solid var(--v-soft); outline-offset: 4px; }
 .vp-photo { position: relative; display: block; overflow: hidden; }
@@ -347,7 +353,7 @@
 /* ── graphic design page: follows the theme like every other page; each piece sits on its own cream print mount ── */
 .vg-cols { column-count: 2; column-gap: clamp(1rem, 2vw, 2rem); }
 .vg-cols[data-count="1"] { column-count: 1; max-width: 56rem; }
-.vg-fig { margin: 0 0 clamp(0.5rem, 1vw, 1rem); padding: 1rem; break-inside: avoid; }
+.vg-fig { margin: 0 auto clamp(0.5rem, 1vw, 1rem); padding: 1rem; break-inside: avoid; }
 .vg-btn { position: relative; display: block; width: 100%; padding: 0; border: 0; background: var(--paper-2); cursor: zoom-in; }
 /* Print marks: crop marks at the four corners and a tint strip above the
    piece, as on a printer's proof. The padding on .vg-fig is the margin they
