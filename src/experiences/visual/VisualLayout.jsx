@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Moon, Sun } from "lucide-react";
-import { toggleSiteTheme, useSiteTheme } from "../../shared/siteTheme";
+import { setSiteTheme, toggleSiteTheme, useSiteTheme } from "../../shared/siteTheme";
 import { NightContext } from "./theme";
 import "./visual.css";
 
@@ -24,6 +24,14 @@ export function VisualLayout({ children }) {
   const theme = useSiteTheme();
   const [lightsDown, setLightsDown] = useState(false);
   const dark = lightsDown || theme === "night";
+
+  // Visual always opens in light mode, whatever was chosen before. This runs
+  // once, on arrival (the layout stays mounted between Visual pages), and the
+  // toggle still works afterwards. useLayoutEffect runs before the first paint
+  // so there is no dark flash.
+  useLayoutEffect(() => {
+    setSiteTheme("light");
+  }, []);
 
   useEffect(() => {
     if (document.getElementById(FONTS_ID)) return;

@@ -48,6 +48,19 @@ export function useSiteTheme() {
   return useSyncExternalStore(subscribe, read, () => "night");
 }
 
+/** Sets the theme to "light" or "night" directly (the toggle only flips it). */
+export function setSiteTheme(next) {
+  const value = next === "light" ? "light" : "night";
+  if (read() === value) return;
+  current = value;
+  try {
+    localStorage.setItem(THEME_KEY, current);
+  } catch {
+    // Private window or blocked storage: it holds until the tab closes.
+  }
+  emit();
+}
+
 export function toggleSiteTheme() {
   current = read() === "light" ? "night" : "light";
   try {
